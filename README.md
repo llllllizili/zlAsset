@@ -14,6 +14,7 @@ pip3 install -U celery[redis]
 
 
 在项目下 启动work和beat
+
 `export PYTHONOPTIMIZE=1 && celery -A 项目 worker -l info -B`
 
 
