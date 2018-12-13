@@ -1,0 +1,10 @@
+# os
+centos7
+
+# ptyhon
+python3.6.6
+
+# yum
+sshpass
+ipmitool
+net-snmp-utils
