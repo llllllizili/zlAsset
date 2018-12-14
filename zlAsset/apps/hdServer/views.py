@@ -8,6 +8,13 @@ import time
 import json
 from .hddata import SyncHdInfo
 
+def test(request):
+    test = 'this is hdServer test'
+    return render(request, 'hdServer/test.html', {'test': test})
+
+
+def index(request):
+    return render(request, 'hdServer/index.html')
 
 def get_hd_info(request):
     '''

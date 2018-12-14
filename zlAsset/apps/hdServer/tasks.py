@@ -9,7 +9,7 @@ import time
 
 @shared_task
 def add(x, y):
-    time.sleep(30)
+    time.sleep(10)
     return int(x) + int(y)
 
 

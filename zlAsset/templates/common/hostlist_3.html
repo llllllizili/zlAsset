@@ -1,0 +1,36 @@
+{% extends 'zlcmdb/base.html' %}
+{% block title %}主机{% endblock %}
+{% block page_head %}主机列表{% endblock %}
+{% block content %}
+          <div class="box">
+            <div class="box-body">
+              <table id="hostlist_3" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>主机</th>
+                    <th>IP</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                
+                <tbody>
+                {% for hostinfo in hostlist_3 %}
+                <tr>
+                <td>{{ hostinfo.hostid }}</td>
+                <td>{{ hostinfo.hostname }}</td>
+                <td>{{ hostinfo.ipaddr }}</td>
+                <td>
+                <button type="button" class="btn btn-info" data-toggle="modal"><a href="#">删除</a></button>
+                <button type="button" class="btn btn-info" data-toggle="modal"><a href="#">修改</a></button>
+                </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+             
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+{% endblock %}

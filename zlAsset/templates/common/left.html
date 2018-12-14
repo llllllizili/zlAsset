@@ -1,0 +1,57 @@
+  <aside class="main-sidebar">
+    <section class="sidebar">
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">测试页</li>
+        <li><a href="{% url 'hdServer_test' %}"><i class="fa fa-link"></i> <span>test</span></a></li>
+
+        <li class="header">应用页</li>
+        <li><a href="#"><i class="fa fa-link"></i> <span>index</span></a></li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-link"></i> <span>资源/资产</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{% url 'hdServer_index' %}">服务器</a></li>
+            <li><a href="#">网络设备</a></li>
+            <li><a href="#">操作系统</a></li>
+          </ul>
+        </li>
+
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-pie-chart"></i>
+            <span>任务执行</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="#}"><i class="fa fa-circle-o"></i> 执行命令</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> 执行脚本</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>脚本管理</a></li>
+
+          </ul>
+        </li>
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>虚机管理</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="#"><i class="fa fa-circle-o"></i> 新建虚拟</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> 其他</a></li>
+
+          </ul>
+        </li>
+
+      </ul>
+    </section>
+  </aside>

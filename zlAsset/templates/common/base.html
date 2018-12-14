@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{% block title %}zlAsset{% endblock %}</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  {% include 'common/css.html' %}
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        {% include 'common/top.html' %}
+        {% include 'common/left.html' %}
+      <div class="content-wrapper">
+        <section class="content-header">
+          <h1>
+          {% block page_head %}
+            默认页面头部描述block page_head
+          {% endblock %}
+
+          </h1>
+        </section>
+        <section class="content container-fluid">
+        {% block content %}
+        默认页面内容block content
+        {% endblock %}
+        </section>
+      </div>
+      <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+        其他信息
+        </div>
+        <strong>Copyright &copy; 2018 <a href="#">ZILI</a>.</strong>
+      </footer>
+    </div>
+{% include 'common/js.html' %}
+
+<!-- 自定义JS -->
+{% block js %}{% endblock %}
+</body>
+</html>

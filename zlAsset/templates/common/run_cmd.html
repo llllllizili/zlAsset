@@ -1,0 +1,45 @@
+{% extends 'zlcmdb/base.html' %}
+{% block title %}脚本{% endblock %}
+{% block page_head %} 执行命令 {% endblock %}
+{% block content %}
+<div class="col-md-6">
+    <div class="box box-danger">
+      <form role="form" action="{% url 'run_cmd_action' %}" method="post">{% csrf_token %}
+        <!-- Select multiple-->
+        <div class="form-group">
+          <label>选择主机(测试机为 192.168.1.55: root / centos)</label>
+          <select class="form-control"  name="host">
+            {% for hostinfo in hostlist_3 %}
+            <option value ='{{ hostinfo.ipaddr }}'>{{ hostinfo.ipaddr }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- text input -->
+        <div class="form-group">
+          <label>输入命令</label>
+          <input type="text" class="form-control" placeholder="Command ..."  value ='' name="cmd">
+        </div>
+
+        <div class="form-group">
+          <label>用户名</label>
+          <input type="text" class="form-control" placeholder="Username ..."  value='' name="username">
+        </div>
+
+        <div class="form-group">
+          <label>密码</label>
+          <input type="password" class="form-control" id="inputPassword3" placeholder="Password" value='' name="password">
+        </div>
+        <tr>
+        <th><input type="submit" value="执行" name="exec_cmd"></th>
+        <tr>
+      </form>
+    </div>
+</div>
+
+<div class="col-md-6">
+    <div class="box box-danger">
+      {{ res }}
+    </div>
+</div>
+{% endblock %}

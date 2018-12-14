@@ -1,0 +1,55 @@
+{% extends 'common/base.html' %}
+{% block title %} index {% endblock %}
+{% block page_head %}This is cmdb-index (首页)同步未做去重,每次同步都会叠加{% endblock %}
+
+{% block content %}
+    <div class="col-md-8">
+    <div class="box box-primary">
+    <h2>同步Vcenter</h2>注:实际上应该保留用户的录入信息,为后续新建虚机做备用,目前代码内,内置了单个vcenter账号
+      <!--<form role="form" action="{% url 'vc_sync' %}" method="post">{% csrf_token %}-->
+      <form role="form" action="#" method="post">{% csrf_token %}
+        <!-- right-->
+        <div class="form-group">
+          <label>VC地址</label>
+          <input type="text" class="form-control" placeholder="IPaddress ..."  value='' name="ip">
+        </div>
+        <div class="form-group">
+          <label>用户名</label>
+          <input type="text" class="form-control" placeholder="username ..."  value='' name="username">
+        </div>
+        <div class="form-group">
+          <label>密码</label>
+          <input type="password" class="form-control" placeholder="password ..."  value='' name="password">
+        </div>
+        <div class="form-group">
+        <div align="center" ><input type="submit" value="同步信息" name="new_vm" class="btn btn-primary" ></div>
+      </form>
+    </div>
+    </div>
+
+
+    <div class="box box-primary">
+        <h2>同步ZBX主机信息</h2>
+        注:同上
+          <form role="form" action="#" method="post">{% csrf_token %}
+            <!-- right-->
+            <div class="form-group">
+              <label>ZBX地址</label>
+              <input type="text" class="form-control" placeholder="IPaddress ..."  value='' name="ip">
+            </div>
+            <div class="form-group">
+              <label>用户名</label>
+              <input type="text" class="form-control" placeholder="username ..."  value='' name="username">
+            </div>
+            <div class="form-group">
+              <label>密码</label>
+              <input type="password" class="form-control" placeholder="password ..."  value='' name="password">
+            </div>
+            <div class="form-group">
+            <div align="center" ><input type="submit" value="同步信息" name="new_vm" class="btn btn-primary" ></div>
+          </form>
+        </div>
+    </div>
+
+{% endblock %}
+

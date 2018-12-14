@@ -28,16 +28,24 @@ def debug_task(self):
 
 
 
-# #定时任务
-# from celery.schedules import crontab
-# from datetime import timedelta
+#定时任务 #成功
+from celery.schedules import crontab
+from datetime import timedelta
 
-# app.conf.update(
-#     CELERYBEAT_SCHEDULE = {
-#         'sum-task': {
-#             'task': 'apps.hdServer.tasks.add',
-#             'schedule':  timedelta(seconds=10),
-#             'args': (5, 6)
-#         }
-#     }
-# )
+app.conf.update(
+    CELERYBEAT_SCHEDULE = {
+        # 周期任务. 两种方式
+        # 一小时一次
+        'sum-task': {
+            'task': 'hdServer.tasks.add', #应用下的tasks
+            'schedule':  timedelta(seconds=3600),
+            'args': (3000, 600)
+        },
+        # 2h 一次
+        'task-one': {
+            'task': 'hdServer.tasks.add',
+            'schedule': 7200.0, # 每5秒执行一次
+            'args': (7000,200)
+        }
+    }
+)
