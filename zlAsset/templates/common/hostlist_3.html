@@ -1,4 +1,4 @@
-{% extends 'zlcmdb/base.html' %}
+{% extends 'common/base.html' %}
 {% block title %}主机{% endblock %}
 {% block page_head %}主机列表{% endblock %}
 {% block content %}
@@ -13,7 +13,7 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                
+
                 <tbody>
                 {% for hostinfo in hostlist_3 %}
                 <tr>
@@ -28,7 +28,7 @@
                 {% endfor %}
                 </tbody>
               </table>
-             
+
             </div>
             <!-- /.box-body -->
           </div>
