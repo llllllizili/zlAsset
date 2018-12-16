@@ -81,6 +81,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'zlAsset.wsgi.application'
 
+# auth
+LOGIN_URL = '/login/'
+
 #session
 SESSION_COOKIE_AGE = 60*30  #30min
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
@@ -148,13 +151,10 @@ CELERYD_MAX_TASKS_PER_CHILD = 3 #  每个worker最多执行3个任务就会被�
 #LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
-
 USE_L10N = True
-
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

@@ -1,5 +1,5 @@
   <header class="main-header">
-    <a href="#" class="logo">
+    <a href="{% url 'index_index' %}" class="logo">
       <span class="logo-mini"><b>ZL</b></span>
       <span class="logo-lg"><b>zl</b>Asset</span>
     </a>
@@ -12,19 +12,20 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="/static/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">姓名</span>
+              <span class="hidden-xs">{{ request.user }}</span>
             </a>
             <ul class="dropdown-menu">
               <li class="user-header">
                 <img src="/static/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                <p>岗位<small>XXXX</small></p>
+<!--                <p>岗位<small>XXXX</small></p> -->
               </li>
+
               <li class="user-footer">
                 <div class="pull-left">
                   <a href="#" class="btn btn-default btn-flat">个人信息</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">登出系统</a>
+                  <a href="{% url 'index_logout' %}" class="btn btn-default btn-flat">登出系统</a>
                 </div>
               </li>
             </ul>

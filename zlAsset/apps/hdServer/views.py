@@ -2,17 +2,21 @@
 from django.shortcuts import render,HttpResponse
 from urllib.parse import quote, unquote
 
+# FBV(function base views) 登录校验
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 import time
 import json
 from .hddata import SyncHdInfo
 
+@login_required(login_url='/login/')
 def test(request):
     test = 'this is hdServer test'
     return render(request, 'hdServer/test.html', {'test': test})
 
 
+@login_required(login_url='/login/')
 def index(request):
     return render(request, 'hdServer/index.html')
 
