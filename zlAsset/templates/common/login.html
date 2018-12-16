@@ -24,16 +24,18 @@
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <p class="login-box-msg">欢迎使用, 数据无价, 谨慎操作</p>
+    <p class="login-box-msg">欢迎使用, 谨慎操作</p>
 
     <form action="{% url 'index_login' %}" method="post">
       <div class="form-group has-feedback">
         <input type="text"  class="form-control" placeholder="Username" name='username'>
         <span class="glyphicon glyphicon-user form-control-feedback" ></span>
+        <p><span>{{ form_error.username }}</span></p>
       </div>
       <div class="form-group has-feedback">
         <input type="password" class="form-control" placeholder="Password" name='password'>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <p><span>{{ form_error.password }}</span></p>
       </div>
       <div class="row">
         <div class="col-xs-8">

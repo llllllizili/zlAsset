@@ -81,6 +81,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'zlAsset.wsgi.application'
 
+#session
+SESSION_COOKIE_AGE = 60*30  #30min
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
