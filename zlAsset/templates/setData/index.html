@@ -1,0 +1,14 @@
+{% extends 'common/base.html' %}
+{% block title %} hdServer index {% endblock %}
+{% block page_head %}This is hdServer{% endblock %}
+
+{% block content %}
+    <div class="col-md-8">
+    <div class="box box-primary">
+    <h2>brand</h2>
+    <a href="{% url 'create_brand' %}"><i class="fa fa-circle-o"></i> 添加品牌</a></li>
+    </div>
+    </div>
+
+{% endblock %}
+

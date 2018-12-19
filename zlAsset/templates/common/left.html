@@ -8,15 +8,15 @@
         <li><a href="#"><i class="fa fa-link"></i> <span>index</span></a></li>
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-link"></i> <span>资源/资产</span>
+            <i class="fa fa-link"></i> <span>资产</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{% url 'hdServer_index' %}">服务器</a></li>
-            <li><a href="#">网络设备</a></li>
-            <li><a href="#">操作系统</a></li>
+            <li><a href="{% url 'hdServer_index' %}"><i class="fa fa-circle-o"></i>服务器</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>网络设备</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>操作系统</a></li>
           </ul>
         </li>
 
@@ -33,6 +33,22 @@
             <li><a href="#}"><i class="fa fa-circle-o"></i> 执行命令</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i> 执行脚本</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>脚本管理</a></li>
+
+          </ul>
+        </li>
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-pie-chart"></i>
+            <span>设置</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="#}"><i class="fa fa-circle-o"></i> 用户设置</a></li>
+            <li><a href="{% url 'setData_index' %}"><i class="fa fa-circle-o"></i> 资产设置</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>其他设置</a></li>
 
           </ul>
         </li>
