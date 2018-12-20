@@ -3,19 +3,21 @@
 {% block page_head %}创建品牌{% endblock %}
 
 {% block content %}
-    <div class="col-md-8">
+<div class="col-md-8">
     <div class="box box-primary">
-      <form role="form" action="{% url 'setData_create_brand_action' %}" method="post">
-        <!-- right-->
+    <form role="form" action="{% url 'setData_create_brand_action' %}" method="post">
         <div class="form-group">
           <label>品牌名称</label>
           <input type="text" class="form-control" placeholder="请输入..."  value='' name="name">
         </div>
         <div class="form-group">
-        <div align="center" ><input type="submit" value="创建" name="create" class="btn btn-primary" ></div>
-
+          <div align="center" >
+            <input type="submit" value="创建" name="create" class="btn btn-primary" >
+          </div>
+        </div>
+    </form>
     </div>
-    </div>
+</div>
 
 {% endblock %}
 

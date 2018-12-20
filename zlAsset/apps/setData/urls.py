@@ -9,6 +9,5 @@ from . import views
 
 urlpatterns = [
     path('',views.index,name='setData_index'),
-    path('create_brand/',views.create_brand,name='setData_create_brand'),
     path('create_brand_action/',views.create_brand_action,name='setData_create_brand_action'),
 ]+ static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)

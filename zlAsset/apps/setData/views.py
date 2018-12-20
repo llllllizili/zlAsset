@@ -41,10 +41,10 @@ def create_brand_action(request):
                     create_time=un_time,
                     who_create=request.user.username
                     )
-            return render(request,'setData/brand.html')
+            return render(request,'setData/index.html')
         else:
             error = form.errors
-            return render(request,'setData/brand.html')
+            return render(request,'setData/index.html')
     else:
         return HttpResponse ('不支持GET请求')
 
