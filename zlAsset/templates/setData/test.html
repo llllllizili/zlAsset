@@ -1,0 +1,36 @@
+{% extends 'common/base.html' %}
+{% block title %}主机{% endblock %}
+{% block page_head %}主机列表{% endblock %}
+{% block content %}
+          <div class="box">
+            <div class="box-body">
+              <table id="brand_list" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>品牌</th>
+                    <th>新加时间</th>
+                    <th>添加人</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for brand in brand_data %}
+                <tr>
+                <td>{{ brand.name }}</td>
+                <td>{{ brand.create_time }}</td>
+                <td>{{ brand.who_create }}</td>
+                <td>
+                <button type="button" class="btn btn-info" data-toggle="modal"><a href="#">删除</a></button>
+                <button type="button" class="btn btn-info" data-toggle="modal"><a href="#">修改</a></button>
+                </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+{% endblock %}

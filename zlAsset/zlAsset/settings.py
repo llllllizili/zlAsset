@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_results',
+    'rest_framework',
     'index',
     'hdServer',
     'netDevices',
@@ -85,7 +86,7 @@ WSGI_APPLICATION = 'zlAsset.wsgi.application'
 LOGIN_URL = '/login/'
 
 #session
-SESSION_COOKIE_AGE = 60*30  #30min
+SESSION_COOKIE_AGE = 60*60*24  #30min
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 
@@ -143,6 +144,15 @@ CELERY_RESULT_SERIALIZER = 'json' # 结果序列化
 CELERY_ACCEPT_CONTENT = ['json'] # 指定接受的内容类型
 CELERYD_MAX_TASKS_PER_CHILD = 3 #  每个worker最多执行3个任务就会被销毁，可防止内存泄露
 #CELERY_ENABLE_UTC = False
+
+
+#serializer
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
+
 
 
 # Internationalization
