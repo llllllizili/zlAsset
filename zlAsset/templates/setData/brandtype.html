@@ -1,0 +1,134 @@
+{% extends 'common/base.html' %}
+{% block title %}主机{% endblock %}
+{% block page_head %} {% endblock %}
+{% block content %}
+<div class="col-md-2">
+  <div class="box box-solid">
+    <div class="box-header with-border">
+      <h3 class="box-title">资源设置</h3>
+    </div>
+    <div class="box-body no-padding">
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="{% url 'setData_get_brand' %}"><i class="fa fa-hand-peace-o"></i> 品牌</a></li>
+        <li class='active'><a href="#"><i class="fa fa-hand-peace-o"></i> 型号</a></li>
+        <li><a href="#"><i class="fa fa-hand-peace-o"></i> 数据中心</a></li>
+        <li><a href="#"><i class="fa fa-hand-peace-o"></i> 许可证 </a></li>
+        <li><a href="#zilic" data-toggle="tab">zilic</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="active tab-pane" id="zilia">
+    <div class="post">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box-body">
+          <button type="button" id='getoption' class="btn btn-block btn-primary" data-toggle="modal" data-target="#create-brand">
+            添加型号
+          </button>
+          </div>
+          </div>
+        </div>
+        <div class="modal fade" id="create-brand">
+        <div class="modal-dialog ">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">添加型号</h4>
+            </div>
+            <div class="modal-body">
+            <form role="form" action="{% url 'setData_create_brandtype' %}" method="post">
+              <div class="form-group">
+                <label>品牌</label>
+                <select class="form-control" id="addoption" name=brand>
+                  <option></option>
+                </select>
+                <p><span>{{ form_error.brand }}</span></p>
+                <label>型号</label>
+                <input type="text" class="form-control" name=brandtype placeholder="请填写...">
+                <p><span>{{ form_error.brandtype }}</span></p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+                  <input type="submit" value="创建" name="create" class="btn btn-primary" >
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="col-md-10">
+  <div class="box box-primary">
+    <div class="box-body no-padding">
+      <div class="table-responsive mailbox-messages">
+        <div class="box-body">
+          <table id="brandtype_data" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th>id</th>
+              <th>品牌</th>
+              <th>型号</th>
+              <th>添加时间</th>
+              <th>添加人</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for brandtype in brandtype_data %}
+            <tr >
+              <td id="brandtype_brand_name" >{{ brandtype.id }}</td>
+              <td id="brandtype_brand_name">{{ brandtype.brand_name }}</td>
+              <td id="brandtype_name">{{ brandtype.name }}</td>
+              <td id="brandtype_create_time">{{ brandtype.create_time }}</td>
+              <td id="brandtype_who_create">{{ brandtype.who_create }}</td>
+              <td>
+              <a href="#"><i class="fa fa-minus-square"></i></a>
+              <input type="submit"  name="create" class="btn btn btn-info" >
+              </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    $(function () {
+      $('#brandtype_data').DataTable()
+    })
+
+    $("#getoption").click(function(){
+      $.ajax({
+        type: "GET",
+        url: "/setData/api/get_brand/",
+        dataType : "json", // 指定返回类型
+        //data: {xxx:"yyy"}, // 传递到后台的参数
+        success: function(data){
+          //var brand_data = JSON.parse(data.brandtype_data)
+          var brand_data = data
+          console.info( "data：" + brand_data + "--length:" + brand_data.length );
+          var option=null;
+          for (var i =0;i<brand_data.length;i++){
+            option +="<option + value="+brand_data[i].id+">"+brand_data[i].name+"</option>"
+          }
+          $("#addoption").append(option);
+          },
+        error : function(){
+        alert("setData数据获取出现问题");
+        }
+      });
+    });
+</script>
+{% endblock %}

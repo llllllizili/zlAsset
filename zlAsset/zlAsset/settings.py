@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'zlAsset.wsgi.application'
 LOGIN_URL = '/login/'
 
 #session
-SESSION_COOKIE_AGE = 60*60*24  #30min
+SESSION_COOKIE_AGE = 600*60  #30min
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 

@@ -1,36 +1,239 @@
 {% extends 'common/base.html' %}
-{% block title %}主机{% endblock %}
-{% block page_head %}主机列表{% endblock %}
+{% block title %} setData index {% endblock %}
+{% block page_head %} {% endblock %}
+
 {% block content %}
-          <div class="box">
+
+<div class="col-md-12">
+  <div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+      <li class='active'><a href="#zilia" id='brand' data-toggle="tab">品牌</a></li>
+      <!-- <li><a href="#zilib" id='brandtype' data-toggle="tab">型号</a></li> -->
+      <li><a href="{% url 'setData_get_brandtype' %}" id='brandtype' data-toggle="tab">型号</a></li>
+      <li><a href="#zilic" data-toggle="tab">许可证</a></li>
+      <li><a href="#zilid" data-toggle="tab">数据中心</a></li>
+      <li><a href="#zilie" data-toggle="tab">zilie</a></li>
+    </ul>
+    <div class="tab-content">
+<!-- 品牌 -->
+      <div class="active tab-pane" id="zilia">
+        <div class="post">
+            <div class="row">
+            <div class="col-xs-12">
             <div class="box-body">
-              <table id="brand_list" class="table table-bordered table-striped">
+              <button type="button" class="btn btn-default" data-toggle="modal" data-target="#create-brand">
+                添加品牌
+              </button>
+            </div>
+            </div>
+            </div>
+            <div class="modal fade" id="create-brand">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">添加品牌</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" action="{% url 'setData_create_brand' %}" method="post">
+                            <div class="form-group">
+                              <label>品牌名称</label>
+                              <input type="text" class="form-control" placeholder="请输入..."  value='' name="name">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+                                <input type="submit" value="创建" name="create" class="btn btn-primary" >
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+            <div class="box-body">
+              <table id="brand_data" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>品牌</th>
-                    <th>新加时间</th>
-                    <th>添加人</th>
-                    <th>操作</th>
+                  <th>品牌</th>
+                  <th>新加时间</th>
+                  <th>添加人</th>
+                  <th>操作</th>
                 </tr>
                 </thead>
-
                 <tbody>
                 {% for brand in brand_data %}
                 <tr>
-                <td>{{ brand.name }}</td>
-                <td>{{ brand.create_time }}</td>
-                <td>{{ brand.who_create }}</td>
-                <td>
-                <button type="button" class="btn btn-info" data-toggle="modal"><a href="#">删除</a></button>
-                <button type="button" class="btn btn-info" data-toggle="modal"><a href="#">修改</a></button>
-                </td>
+                  <td>{{ brand.name }}</td>
+                  <td>{{ brand.create_time }}</td>
+                  <td>{{ brand.who_create }}</td>
+                  <td>
+                  <button type="button" class="btn btn-info" data-toggle="modal"><a href="#">删除</a></button>
+                  <button type="button" class="btn btn-info" data-toggle="modal"><a href="#">修改</a></button>
+                  </td>
                 </tr>
                 {% endfor %}
                 </tbody>
               </table>
-
             </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
+
+
+
+
+        </div>
+      </div>
+<!-- 品牌 -->
+
+      <!-- brandtype -->
+      <div class="tab-pane" id='zilib'>
+        <div class="post">
+            <div class="row">
+            <div class="col-xs-12">
+            <div class="box-body">
+              <button type="button" class="btn btn-default" data-toggle="modal" data-target="#create-brandtype">
+                添加型号
+              </button>
+            </div>
+            </div>
+            </div>
+            <div class="modal fade" id="create-brandtype">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">添加型号</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" action="#" method="post">
+                            <div class="form-group">
+                              <label>品牌名称</label>
+                              <input type="text" class="form-control" placeholder="请输入..."  value='' name="name">
+                            </div>
+                            <div class="form-group">
+                              <label>品牌型号</label>
+                              <input type="text" class="form-control" placeholder="请输入..."  value='' name="name">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+                                <input type="submit" value="创建" name="create" class="btn btn-primary" >
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+            <div class="box-body">
+              <table id="brandtype_data" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>品牌</th>
+                  <th>型号</th>
+                  <th>添加时间</th>
+                  <th>添加人</th>
+                  <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id='zzz'>
+                <!-- <tr >
+                  <td id="brandtype_brand_name">{{ brandtype.brand_name }}</td>
+                  <td id="brandtype_name">{{ brandtype.name }}</td>
+                  <td id="brandtype_create_time">{{ brandtype.create_time }}</td>
+                  <td id="brandtype_who_create">{{ brandtype.who_create }}</td>
+                  <td>
+                  <button type="button" class="btn btn-info" data-toggle="modal"><a href="#">删除</a></button>
+                  <button type="button" class="btn btn-info" data-toggle="modal"><a href="#">修改</a></button>
+                  </td>
+                </tr> -->
+                </tbody>
+              </table>
+            </div>
+        </div>
+      </div>
+      <!-- brandtype -->
+
+
+      <!-- zilic -->
+      <div class="tab-pane" id="zilic">
+        <input type="email" class="form-control" id="inputEmail" placeholder="zilic ajax">
+      </div>
+      <!-- zilic -->
+
+      <!-- zilid-->
+      <div class="tab-pane" id="zilid">
+        <input type="email" class="form-control" id="inputEmail" placeholder="zilid ajax">
+      </div>
+      <!-- zilid -->
+
+      <!-- zilie -->
+      <div class="tab-pane" id="zilie">
+        <input type="email" class="form-control" id="inputEmail" placeholder="zilie ajax">
+      </div>
+      <!-- zilie -->
+
+    </div>
+  </div>
+</div>
+
 {% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+  //表格排序搜索等
+  $(function () {
+    $('#brand_data').DataTable()
+  })
+  //型号带搜索后ajax无法触发
+  // $(function () {
+  //   $('#brandtype_data').DataTable()
+  // })
+
+
+
+  $(function(){
+
+      $("#brand").click(function(){
+        $.get("{% url 'setData_get_brand' %}");
+        });
+
+      // $("#brandtype").click(function(){
+      //   $.ajax({
+      //     type: "GET",
+      //     url: "{% url 'setData_get_brandtype' %}",
+      //     dataType : "json", // 指定返回类型
+      //     //data: {xxx:"yyy"}, // 传递到后台的参数
+      //     success: function(data){
+      //       var brand_data = JSON.parse(data.brandtype_data)
+      //       console.info( "data：" + brand_data + "--length:" + brand_data.length );
+      //       var trBody=null;
+      //       for (var i =0;i<brand_data.length;i++){
+      //         trBody += "<tr>"+
+      //                   "<td>" + brand_data[i].fields.brand_name + "</td>" +
+      //                   "<td>" + brand_data[i].fields.name + "</td>" +
+      //                   "<td>" + brand_data[i].fields.create_time + "</td>" +
+      //                   "<td>" + brand_data[i].fields.who_create + "</td>" +
+      //                   "<td>" + "<button type='button' class='btn btn-info' data-toggle='modal'><a href='#'>删除</a></button><button type='button' class='btn btn-info' data-toggle='modal'><a href='#'>修改</a></button>"+ "</td>" +
+      //                   "</tr>"
+      //       }
+      //       $("#zzz").append(trBody);
+      //       },
+      //     error : function(){
+      //     alert("setData数据获取出现问题");
+      //     }
+      //   });
+      // });
+  });
+
+
+
+
+</script>
+
+{% endblock %}
+
+   <!--  <a href="{% url 'setData_modify_brand' id=brandtype.id %}"><i class="fa fa-pencil-square"></i></a> -->

@@ -6,7 +6,8 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    path('',views.index,name='index_index'),
+    path('',views.index,name='index_home'),
+    path('test/',views.test,name='index_test'),
     path('index/',views.index,name='index_index'),
     path('login/',views.login,name='index_login'),
     path('logout/',views.login,name='index_logout'),
