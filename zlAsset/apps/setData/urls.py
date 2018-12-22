@@ -2,12 +2,28 @@
 # Author: zili
 
 from django.urls import path,include
+from django.conf.urls import url
 #静态文件
 from django.conf.urls.static import static
 from django.conf import settings
 from . import views
+from . import api as api_views
+
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+
+#api
+
+# /setData/api/get_brandtype/
+# setData/index.html
+router.register('get_brandtype',api_views.BrandTypeData,base_name='setData_get_brandtype_api')
 
 urlpatterns = [
     path('',views.index,name='setData_index'),
-    path('create_brand_action/',views.create_brand_action,name='setData_create_brand_action'),
+    path('create_brand/',views.create_brand,name='setData_create_brand'),
+    path('get_brand/',views.get_brand,name='setData_get_brand'),
+    path('get_brandtype/',views.get_brandtype,name='setData_get_brandtype'),
+
+    #api
+    url(r'^api/', include(router.urls)),
 ]+ static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
