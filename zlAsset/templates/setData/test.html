@@ -201,32 +201,32 @@
         $.get("{% url 'setData_get_brand' %}");
         });
 
-      // $("#brandtype").click(function(){
-      //   $.ajax({
-      //     type: "GET",
-      //     url: "{% url 'setData_get_brandtype' %}",
-      //     dataType : "json", // 指定返回类型
-      //     //data: {xxx:"yyy"}, // 传递到后台的参数
-      //     success: function(data){
-      //       var brand_data = JSON.parse(data.brandtype_data)
-      //       console.info( "data：" + brand_data + "--length:" + brand_data.length );
-      //       var trBody=null;
-      //       for (var i =0;i<brand_data.length;i++){
-      //         trBody += "<tr>"+
-      //                   "<td>" + brand_data[i].fields.brand_name + "</td>" +
-      //                   "<td>" + brand_data[i].fields.name + "</td>" +
-      //                   "<td>" + brand_data[i].fields.create_time + "</td>" +
-      //                   "<td>" + brand_data[i].fields.who_create + "</td>" +
-      //                   "<td>" + "<button type='button' class='btn btn-info' data-toggle='modal'><a href='#'>删除</a></button><button type='button' class='btn btn-info' data-toggle='modal'><a href='#'>修改</a></button>"+ "</td>" +
-      //                   "</tr>"
-      //       }
-      //       $("#zzz").append(trBody);
-      //       },
-      //     error : function(){
-      //     alert("setData数据获取出现问题");
-      //     }
-      //   });
-      // });
+      $("#brandtype").click(function(){
+        $.ajax({
+          type: "GET",
+          url: "{% url 'setData_get_brandtype' %}",
+          dataType : "json", // 指定返回类型
+          //data: {xxx:"yyy"}, // 传递到后台的参数
+          success: function(data){
+            var brand_data = JSON.parse(data.brandtype_data)
+            console.info( "data：" + brand_data + "--length:" + brand_data.length );
+            var trBody=null;
+            for (var i =0;i<brand_data.length;i++){
+              trBody += "<tr>"+
+                        "<td>" + brand_data[i].fields.brand_name + "</td>" +
+                        "<td>" + brand_data[i].fields.name + "</td>" +
+                        "<td>" + brand_data[i].fields.create_time + "</td>" +
+                        "<td>" + brand_data[i].fields.who_create + "</td>" +
+                        "<td>" + "<button type='button' class='btn btn-info' data-toggle='modal'><a href='#'>删除</a></button><button type='button' class='btn btn-info' data-toggle='modal'><a href='#'>修改</a></button>"+ "</td>" +
+                        "</tr>"
+            }
+            $("#zzz").append(trBody);
+            },
+          error : function(){
+          alert("setData数据获取出现问题");
+          }
+        });
+      });
   });
 
 
