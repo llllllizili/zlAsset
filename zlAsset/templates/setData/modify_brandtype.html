@@ -1,0 +1,96 @@
+{% extends 'common/base.html' %}
+{% block title %} create_brand {% endblock %}
+{% block page_head %} {% endblock %}
+
+{% block content %}
+
+<div class="col-md-2">
+  <div class="box box-solid">
+    <div class="box-header with-border">
+      <h3 class="box-title">资源设置</h3>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+    </div>
+    <div class="box-body no-padding">
+      <ul class="nav nav-pills nav-stacked">
+        <li class='active'><a href="{% url 'setData_get_brand' %}"><i class="fa fa-hand-peace-o"></i> 品牌</a></li>
+        <li><a href="{% url 'setData_get_brandtype' %}"><i class="fa fa-hand-peace-o"></i> 型号</a></li>
+        <li><a href="#"><i class="fa fa-hand-peace-o"></i> 数据中心</a></li>
+        <li><a href="#"><i class="fa fa-hand-peace-o"></i> 许可证 </a></li>
+        <li><a href="#zilic" data-toggle="tab">zilic</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6">
+<div class="box box-info">
+  <div class="box-header with-border">
+    <h3 class="box-title">修改型号</h3>
+  </div>
+  <div class="login-box-body">
+    <form action="{% url 'setData_modify_brandtype_action' %}" method="post">
+      <div class="form-group">
+        <input type="hidden"  class="form-control" value={{ brandtype_data.id }} name='id'>
+        <label>品牌</label>
+          <select class="form-control" id="addoption" name=brand>
+            <option  value={{ brandtype_data.brand_name }}>{{ brandtype_data.brand_name }}</option>
+          </select>
+          <label>型号</label>
+            <input type="text" class="form-control" name=brandtype value="{{ brandtype_data.name }}">
+      </div>
+        <div class="row">
+        <div class="box-footer">
+          <a href="{% url 'setData_get_brandtype' %}">取消</a>
+          <button type="submit" class="btn btn-info pull-right">修改</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    function del() {
+      var msg = "您确定要删除吗？";
+        if (confirm(msg)==true){
+          return true;
+        }else{
+          return false;
+      }
+    }
+    $(function () {
+      $('#brandtype_data').DataTable()
+    })
+
+    // $("#getoption").click(function(){
+      $.ajax({
+        type: "GET",
+        url: "/setData/api/get_brand/",
+        dataType : "json", // 指定返回类型
+        //data: {xxx:"yyy"}, // 传递到后台的参数
+        success: function(data){
+          //var brand_data = JSON.parse(data.brandtype_data)
+          var brand_data = data
+          // console.info( "data：" + brand_data + "--length:" + brand_data.length );
+          var option=null;
+          for (var i =0;i<brand_data.length;i++){
+            option +="<option + value="+brand_data[i].name+">"+brand_data[i].name+"</option>"
+          }
+          $("#addoption").append(option);
+          },
+        error : function(){
+          alert("setData数据获取出现问题");
+        }
+      });
+    // });
+</script>
+{% endblock %}

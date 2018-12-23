@@ -1,15 +1,19 @@
 {% extends 'common/base.html' %}
-{% block title %}主机{% endblock %}
+{% block title %}主页-品牌{% endblock %}
 {% block page_head %} {% endblock %}
 {% block content %}
 <div class="col-md-2">
   <div class="box box-solid">
     <div class="box-header with-border">
       <h3 class="box-title">资源设置</h3>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
     </div>
     <div class="box-body no-padding">
       <ul class="nav nav-pills nav-stacked">
-        <li class='active'><a href="#"><i class="fa fa-hand-peace-o"></i> 品牌</a></li>
+        <li class='active'><a href="{% url 'setData_get_brand' %}"><i class="fa fa-hand-peace-o"></i> 品牌</a></li>
         <li><a href="{% url 'setData_get_brandtype' %}"><i class="fa fa-hand-peace-o"></i> 型号</a></li>
         <li><a href="#"><i class="fa fa-hand-peace-o"></i> 数据中心</a></li>
         <li><a href="#"><i class="fa fa-hand-peace-o"></i> 许可证 </a></li>
@@ -23,9 +27,11 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="box-body">
+          <span><h4><font color="red">{{ error_data }}</font></h4></span><p><p>
           <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#create-brand">
             添加品牌
           </button>
+
           </div>
           </div>
         </div>
@@ -67,7 +73,7 @@
             <tr>
               <th style="display:none">id</th>
               <th>品牌</th>
-              <th>新加时间</th>
+              <th>添加时间</th>
               <th>添加人</th>
               <th>操作</th>
             </tr>
@@ -80,8 +86,8 @@
               <td>{{ brand.create_time }}</td>
               <td>{{ brand.who_create }}</td>
               <td>
-              <button type="button" class="btn btn-info" data-toggle="modal"><a href="#">删除</a></button>
-              <button type="button" class="btn btn-info" data-toggle="modal"><a href="#">修改</a></button>
+              <a href="{% url 'setData_delete_brand'  brand.id  %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
+              <a href="{% url 'setData_modify_brand' brand.id %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>
               </td>
             </tr>
             {% endfor %}
@@ -92,6 +98,9 @@
     </div>
   </div>
 </div>
+
+
+
 {% endblock %}
 {% block js %}
 <script type="text/javascript">
@@ -99,6 +108,14 @@
       $('#brand_data').DataTable()
     })
 
+      function del() {
+        var msg = "您确定要删除吗？";
+          if (confirm(msg)==true){
+            return true;
+          }else{
+            return false;
+        }
+      }
     // $("#getoption").click(function(){
     //   $.ajax({
     //     type: "GET",

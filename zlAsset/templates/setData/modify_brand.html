@@ -12,10 +12,14 @@
         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
         </button>
       </div>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
     </div>
     <div class="box-body no-padding">
       <ul class="nav nav-pills nav-stacked">
-        <li class='active'><a href="#"><i class="fa fa-hand-peace-o"></i> 品牌</a></li>
+        <li class='active'><a href="{% url 'setData_get_brand' %}"><i class="fa fa-hand-peace-o"></i> 品牌</a></li>
         <li><a href="{% url 'setData_get_brandtype' %}"><i class="fa fa-hand-peace-o"></i> 型号</a></li>
         <li><a href="#"><i class="fa fa-hand-peace-o"></i> 数据中心</a></li>
         <li><a href="#"><i class="fa fa-hand-peace-o"></i> 许可证 </a></li>
@@ -23,7 +27,7 @@
       </ul>
     </div>
   </div>
-  </div>
+</div>
 
 <div class="col-md-6">
 <div class="box box-info">
@@ -31,13 +35,14 @@
     <h3 class="box-title">修改品牌</h3>
   </div>
   <div class="login-box-body">
-    <form action="{% url 'index_login' %}" method="post">
+    <form action="{% url 'setData_modify_brand_action' %}" method="post">
       <div class="form-group has-feedback">
-        <input type="text"  class="form-control" placeholder="品牌" name='brand'>
+        <input type="hidden"  class="form-control" value={{ brand_data.id }} name='id'>
+        <input type="text"  class="form-control" value={{ brand_data.name }} name='brand'>
       </div>
       <div class="row">
         <div class="box-footer">
-                <button type="submit" class="btn btn-default">取消</button>
+                <a href="{% url 'setData_get_brand' %}">取消</a>
                 <button type="submit" class="btn btn-info pull-right">修改</button>
         </div>
         <!-- /.col -->

@@ -6,11 +6,15 @@
   <div class="box box-solid">
     <div class="box-header with-border">
       <h3 class="box-title">资源设置</h3>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
     </div>
     <div class="box-body no-padding">
       <ul class="nav nav-pills nav-stacked">
         <li><a href="{% url 'setData_get_brand' %}"><i class="fa fa-hand-peace-o"></i> 品牌</a></li>
-        <li class='active'><a href="#"><i class="fa fa-hand-peace-o"></i> 型号</a></li>
+        <li class='active'><a href="{% url 'setData_get_brandtype' %}"><i class="fa fa-hand-peace-o"></i> 型号</a></li>
         <li><a href="#"><i class="fa fa-hand-peace-o"></i> 数据中心</a></li>
         <li><a href="#"><i class="fa fa-hand-peace-o"></i> 许可证 </a></li>
         <li><a href="#zilic" data-toggle="tab">zilic</a></li>
@@ -23,6 +27,7 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="box-body">
+          <span><h4><font color="red">{{ error_data }}</font></h4></span><p><p>
           <button type="button" id='getoption' class="btn btn-block btn-primary" data-toggle="modal" data-target="#create-brand">
             添加型号
           </button>
@@ -42,9 +47,11 @@
             <form role="form" action="{% url 'setData_create_brandtype' %}" method="post">
               <div class="form-group">
                 <label>品牌</label>
+                <!-- <select class="form-control" id="addoption" name=brand onchange="selectShow()"> -->
                 <select class="form-control" id="addoption" name=brand>
                   <option></option>
                 </select>
+                <!-- <input type="text" id="brand_id" name="brand_id" readonly="true" /> -->
                 <p><span>{{ form_error.brand }}</span></p>
                 <label>型号</label>
                 <input type="text" class="form-control" name=brandtype placeholder="请填写...">
@@ -72,9 +79,9 @@
           <table id="brandtype_data" class="table table-bordered table-striped">
             <thead>
             <tr>
-              <th>id</th>
-              <th>品牌</th>
+              <th style="display:none">id</th>
               <th>型号</th>
+              <th>品牌</th>
               <th>添加时间</th>
               <th>添加人</th>
               <th>操作</th>
@@ -83,14 +90,14 @@
             <tbody>
             {% for brandtype in brandtype_data %}
             <tr >
-              <td id="brandtype_brand_name" >{{ brandtype.id }}</td>
-              <td id="brandtype_brand_name">{{ brandtype.brand_name }}</td>
-              <td id="brandtype_name">{{ brandtype.name }}</td>
+              <td id="brandtype_brand_id" style="display:none">{{ brandtype.id }}</td>
+              <td id="brandtype_brand_name">{{ brandtype.name }}</td>
+              <td id="brandtype_name">{{ brandtype.brand_name }}</td>
               <td id="brandtype_create_time">{{ brandtype.create_time }}</td>
               <td id="brandtype_who_create">{{ brandtype.who_create }}</td>
               <td>
-              <a href="#"><i class="fa fa-minus-square"></i></a>
-              <input type="submit"  name="create" class="btn btn btn-info" >
+              <a href="{% url 'setData_delete_brandtype'  brandtype.id  %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
+              <a href="{% url 'setData_modify_brandtype'  brandtype.id  %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>
               </td>
             </tr>
             {% endfor %}
@@ -105,10 +112,25 @@
 
 {% block js %}
 <script type="text/javascript">
+//选择联动
+  // window.onload=selectShow;
+  // function selectShow(){
+  // document.getElementById("brand_id").value=document.getElementById("addoption").value;
+  // }
+//删除提醒
+    function del() {
+      var msg = "您确定要删除吗？";
+        if (confirm(msg)==true){
+          return true;
+        }else{
+          return false;
+      }
+    }
+
     $(function () {
       $('#brandtype_data').DataTable()
     })
-
+//ajax请求
     $("#getoption").click(function(){
       $.ajax({
         type: "GET",
@@ -118,15 +140,15 @@
         success: function(data){
           //var brand_data = JSON.parse(data.brandtype_data)
           var brand_data = data
-          console.info( "data：" + brand_data + "--length:" + brand_data.length );
+          // console.info( "data：" + brand_data + "--length:" + brand_data.length );
           var option=null;
           for (var i =0;i<brand_data.length;i++){
-            option +="<option + value="+brand_data[i].id+">"+brand_data[i].name+"</option>"
+            option +="<option + value="+brand_data[i].name+">"+brand_data[i].name+"</option>"
           }
           $("#addoption").append(option);
           },
         error : function(){
-        alert("setData数据获取出现问题");
+          alert("setData数据获取出现问题");
         }
       });
     });
