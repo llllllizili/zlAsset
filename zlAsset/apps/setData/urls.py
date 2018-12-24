@@ -35,6 +35,11 @@ urlpatterns = [
     path('modify_brandtype/<int:id>/',views.modify_brandtype,name='setData_modify_brandtype'),
     path('modify_brandtype_action/',views.modify_brandtype_action,name='setData_modify_brandtype_action'),
 
+    path('create_position/',views.create_position,name='setData_create_positione'),
+    path('get_position/',views.get_position,name='setData_get_position'),
+    path('delete_position/<int:id>/',views.delete_position,name='setData_delete_position'),
+    path('modify_position/<int:id>/',views.modify_position,name='setData_modify_position'),
+    path('modify_position_action/',views.modify_position_action,name='setData_modify_position_action'),
 
     #api
     url(r'^api/', include(router.urls)),

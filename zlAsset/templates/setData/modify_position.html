@@ -19,9 +19,9 @@
     </div>
     <div class="box-body no-padding">
       <ul class="nav nav-pills nav-stacked">
-        <li class='active'><a href="{% url 'setData_get_brand' %}"><i class="fa fa-hand-peace-o"></i> 品牌</a></li>
+        <li><a href="{% url 'setData_get_brand' %}"><i class="fa fa-hand-peace-o"></i> 品牌</a></li>
         <li><a href="{% url 'setData_get_brandtype' %}"><i class="fa fa-hand-peace-o"></i> 型号</a></li>
-        <li><a href="{% url 'setData_get_position' %}"><i class="fa fa-hand-peace-o"></i> 地理位置</a></li>
+        <li class='active'><a href="{% url 'setData_get_position' %}"><i class="fa fa-hand-peace-o"></i> 地理位置</a></li>
         <li><a href="#"><i class="fa fa-hand-peace-o"></i> 数据中心</a></li>
         <li><a href="#"><i class="fa fa-hand-peace-o"></i> 许可证 </a></li>
         <li><a href="#zilic" data-toggle="tab">zilic</a></li>
@@ -33,24 +33,43 @@
 <div class="col-md-6">
 <div class="box box-info">
   <div class="box-header with-border">
-    <h3 class="box-title">修改品牌</h3>
+    <h3 class="box-title">修改位置</h3>
   </div>
   <div class="login-box-body">
-    <form action="{% url 'setData_modify_brand_action' %}" method="post">
-      <div class="form-group has-feedback">
-        <input type="hidden"  class="form-control" value={{ brand_data.id }} name='id'>
-        <input type="text"  class="form-control" value={{ brand_data.name }} name='brand'>
+    <form action="{% url 'setData_modify_position_action' %}" method="post">
+      <div class="form-group">
+          <input type="hidden"  class="form-control" value="{{ position_data.id }}" name="id">
+          <label>名称</label>
+          <input type="text" class="form-control" value="{{ position_data.name }}" name="name">
+          <label>城市</label>
+          <input type="text" class="form-control" value="{{ position_data.city }}" name="city">
+          <label>地址</label>
+          <input type="text" class="form-control" value="{{ position_data.address }}" name="address">
       </div>
       <div class="row">
         <div class="box-footer">
-                <a href="{% url 'setData_get_brand' %}">取消</a>
-                <button type="submit" class="btn btn-info pull-right">修改</button>
+          <a href="{% url 'setData_get_position' %}">取消</a>
+          <button type="submit" class="btn btn-info pull-right">修改</button>
         </div>
-        <!-- /.col -->
       </div>
     </form>
-
   </div>
 </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    function del() {
+      var msg = "您确定要删除吗？";
+        if (confirm(msg)==true){
+          return true;
+        }else{
+          return false;
+      }
+    }
+    $(function () {
+      $('#brandtype_data').DataTable()
+    })
+</script>
 {% endblock %}

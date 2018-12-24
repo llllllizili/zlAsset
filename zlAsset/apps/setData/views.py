@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponseRedirect
 from urllib.parse import quote, unquote
 
 # from django.core import serializers
@@ -44,7 +44,7 @@ def create_brand(request):
             error = form.errors
             return render(request,'setData/index.html',{'form_error':error})
     else:
-        return HttpResponse ('create_brand 不支持GET请求')
+        return HttpResponseRedirect ('/setData/index/')
 #获取品牌
 @login_required(login_url='/login/')
 def get_brand(request):
@@ -70,7 +70,7 @@ def modify_brand_action(request):
         brand_data =Brand.objects.all()
         return render(request,'setData/index.html',{'brand_data':brand_data })
     else:
-        return HttpResponse ('modify_brand_action 不支持GET请求')
+        return HttpResponseRedirect ('/setData/index/')
 #删除品牌
 @login_required(login_url='/login/')
 def delete_brand(request,id):
@@ -120,7 +120,7 @@ def create_brandtype(request):
             error = form.errors
             return render(request,'setData/brandtype.html',{'form_error':error})
     else:
-        return HttpResponse ('create_brandtype 不支持GET请求')
+        return HttpResponseRedirect ('/setData/get_brandtype/')
 #获取型号
 @login_required(login_url='/login/')
 def get_brandtype(request):
@@ -148,7 +148,7 @@ def modify_brandtype_action(request):
         brandtype_data =BrandType.objects.all()
         return render(request,'setData/brandtype.html',{'brandtype_data':brandtype_data })
     else:
-        return HttpResponse ('modify_brandtype_action 不支持GET请求')
+        return HttpResponseRedirect ('/setData/get_brandtype/')
 
 #删除型号
 @login_required(login_url='/login/')
@@ -156,3 +156,67 @@ def delete_brandtype(request,id):
     BrandType.objects.filter(id=id).delete()
     brandtype_data =BrandType.objects.all()
     return render(request,'setData/brandtype.html',{'brandtype_data':brandtype_data })
+
+
+#添加地理位置
+@login_required(login_url='/login/')
+def create_position(request):
+    if request.method == 'POST':
+        form = positionForm(request.POST)
+        if form.is_valid():
+            #data = form.clean()
+            name=form.cleaned_data['name']
+            city=form.cleaned_data['city']
+            address=form.cleaned_data['address']
+
+            val = Position.objects.filter(name=name)
+            if not val:
+                Position.objects.create(
+                    name=name,
+                    city=city,
+                    address=address,
+                    )
+                position_data = Position.objects.all()
+                return render(request,'setData/position.html',{'position_data':position_data })
+
+            else:
+                error_data = city + ' 已存在'
+                position_data = BrandType.objects.all()
+                return render(request,'setData/position.html',{'position_data':position_data,'error_data':error_data})
+        else:
+            error = form.errors
+            return render(request,'setData/position.html',{'form_error':error})
+    else:
+        return HttpResponseRedirect ('/setData/get_position/')
+#获取地理位置
+@login_required(login_url='/login/')
+def get_position(request):
+    position_data = Position.objects.all()
+    return render(request,'setData/position.html',{'position_data':position_data })
+#修改地理位置
+def modify_position(request,id):
+    position_data =Position.objects.get(id=id)
+    return render(request,'setData/modify_position.html',{'position_data':position_data })
+@login_required(login_url='/login/')
+def modify_position_action(request):
+    if request.method == 'POST':
+        id=int(request.POST['id'])
+        name=request.POST['name']
+        city=request.POST['city']
+        address=request.POST['address']
+
+        Position.objects.filter(id=id).update(
+                    name=name,
+                    city=city,
+                    address=address,
+                    )
+        position_data =Position.objects.all()
+        return render(request,'setData/position.html',{'position_data':position_data })
+    else:
+        return HttpResponseRedirect ('/setData/get_position/')
+#删除地理位置
+@login_required(login_url='/login/')
+def delete_position(request,id):
+    Position.objects.filter(id=id).delete()
+    position_data =Position.objects.all()
+    return render(request,'setData/position.html',{'position_data':position_data })
