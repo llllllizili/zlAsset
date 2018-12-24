@@ -145,6 +145,7 @@
           for (var i =0;i<brand_data.length;i++){
             option +="<option + value="+brand_data[i].name+">"+brand_data[i].name+"</option>"
           }
+          $("#addoption").empty();
           $("#addoption").append(option);
           },
         error : function(){

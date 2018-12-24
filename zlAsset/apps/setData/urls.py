@@ -25,14 +25,14 @@ urlpatterns = [
 
     path('create_brand/',views.create_brand,name='setData_create_brand'),
     path('get_brand/',views.get_brand,name='setData_get_brand'),
-    path('delete_brand/(?P<id>[0-9]+)/$',views.delete_brand,name='setData_delete_brand'),
-    path('modify_brand/(?P<id>[0-9]+)/$',views.modify_brand,name='setData_modify_brand'),
+    path('delete_brand/<int:id>/',views.delete_brand,name='setData_delete_brand'),
+    path('modify_brand/<int:id>/',views.modify_brand,name='setData_modify_brand'),
     path('modify_brand_action/',views.modify_brand_action,name='setData_modify_brand_action'),
 
     path('create_brandtype/',views.create_brandtype,name='setData_create_brandtype'),
     path('get_brandtype/',views.get_brandtype,name='setData_get_brandtype'),
-    path('delete_brandtype/(?P<id>[0-9]+)/$',views.delete_brandtype,name='setData_delete_brandtype'),
-    path('modify_brandtype/(?P<id>[0-9]+)/$',views.modify_brandtype,name='setData_modify_brandtype'),
+    path('delete_brandtype/<int:id>/',views.delete_brandtype,name='setData_delete_brandtype'),
+    path('modify_brandtype/<int:id>/',views.modify_brandtype,name='setData_modify_brandtype'),
     path('modify_brandtype_action/',views.modify_brandtype_action,name='setData_modify_brandtype_action'),
 
 

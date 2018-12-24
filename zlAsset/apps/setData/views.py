@@ -76,9 +76,15 @@ def modify_brand_action(request):
 def delete_brand(request,id):
     #id = request.GET['id']
     #id = request.GET.get('id', '')
-    Brand.objects.filter(id=id).delete()
-    brand_data =Brand.objects.all()
-    return render(request,'setData/index.html',{'brand_data':brand_data })
+    val = BrandType.objects.filter(brand_id=id)
+    if val:
+        error_data='请先删除相关型号'
+        brand_data =Brand.objects.all()
+        return render(request,'setData/index.html',{'brand_data':brand_data,'error_data':error_data })
+    else:
+        Brand.objects.filter(id=id).delete()
+        brand_data =Brand.objects.all()
+        return render(request,'setData/index.html',{'brand_data':brand_data })
 
 
 #新加型号
