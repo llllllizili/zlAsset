@@ -181,7 +181,7 @@ def create_position(request):
 
             else:
                 error_data = city + ' 已存在'
-                position_data = BrandType.objects.all()
+                position_data = Position.objects.all()
                 return render(request,'setData/position.html',{'position_data':position_data,'error_data':error_data})
         else:
             error = form.errors
@@ -220,3 +220,91 @@ def delete_position(request,id):
     Position.objects.filter(id=id).delete()
     position_data =Position.objects.all()
     return render(request,'setData/position.html',{'position_data':position_data })
+
+
+#添加数据中心
+@login_required(login_url='/login/')
+def create_datacenter(request):
+    if request.method == 'POST':
+        form = datacenterForm(request.POST)
+        if form.is_valid():
+            #data = form.clean()
+            name=form.cleaned_data['name']
+            position_name=form.cleaned_data['position_name']
+            type=form.cleaned_data['type']
+            supplier=form.cleaned_data['supplier']
+            supplier_phone=form.cleaned_data['supplier_phone']
+            manager=form.cleaned_data['manager']
+            manager_phone=form.cleaned_data['manager_phone']
+
+            val = DataCenter.objects.filter(name=name)
+            position_info = Position.objects.get(name=position_name)
+            if not val:
+                DataCenter.objects.create(
+                    name=name,
+                    position_name=position_name,
+                    type=type,
+                    supplier=supplier,
+                    supplier_phone=supplier_phone,
+                    manager=manager,
+                    manager_phone=manager_phone,
+                    position_id=position_info.id,
+                    city=position_info.city,
+                    address=position_info.address
+                    )
+                datacenter_data = DataCenter.objects.all()
+                return render(request,'setData/datacenter.html',{'datacenter_data':datacenter_data })
+
+            else:
+                error_data = name + ' 已存在'
+                datacenter_data = DataCenter.objects.all()
+                return render(request,'setData/datacenter.html',{'datacenter_data':datacenter_data,'error_data':error_data})
+        else:
+            error = form.errors
+            return render(request,'setData/datacenter.html',{'form_error':error})
+    else:
+        return HttpResponseRedirect ('/setData/get_datacenter/')
+#获取数据中心
+@login_required(login_url='/login/')
+def get_datacenter(request):
+    datacenter_data = DataCenter.objects.all()
+    return render(request,'setData/datacenter.html',{'datacenter_data':datacenter_data })
+#修改数据中心
+def modify_datacenter(request,id):
+    datacenter_data =DataCenter.objects.get(id=id)
+    return render(request,'setData/modify_datacenter.html',{'datacenter_data':datacenter_data })
+@login_required(login_url='/login/')
+def modify_datacenter_action(request):
+    if request.method == 'POST':
+        id=int(request.POST['id'])
+        name=request.POST['name']
+        position_name=request.POST['position_name']
+        type=request.POST['type']
+        supplier=request.POST['supplier']
+        supplier_phone=request.POST['supplier_phone']
+        manager=request.POST['manager']
+        manager_phone=request.POST['manager_phone']
+
+        position_info = Position.objects.get(name=position_name)
+        DataCenter.objects.filter(id=id).update(
+                    name=name,
+                    position_name=position_name,
+                    type=type,
+                    supplier=supplier,
+                    supplier_phone=supplier_phone,
+                    manager=manager,
+                    manager_phone=manager_phone,
+                    position_id=position_info.id,
+                    city=position_info.city,
+                    address=position_info.address
+                    )
+        datacenter_data =DataCenter.objects.all()
+        return render(request,'setData/datacenter.html',{'datacenter_data':datacenter_data })
+    else:
+        return HttpResponseRedirect ('/setData/get_datacenter/')
+#删除数据中心
+@login_required(login_url='/login/')
+def delete_datacenter(request,id):
+    DataCenter.objects.filter(id=id).delete()
+    datacenter_data =DataCenter.objects.all()
+    return render(request,'setData/datacenter.html',{'datacenter_data':datacenter_data })

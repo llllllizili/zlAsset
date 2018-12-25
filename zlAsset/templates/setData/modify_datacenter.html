@@ -1,0 +1,107 @@
+{% extends 'common/base.html' %}
+{% block title %} create_brand {% endblock %}
+{% block page_head %} {% endblock %}
+
+{% block content %}
+
+<div class="col-md-2">
+  <div class="box box-solid">
+    <div class="box-header with-border">
+      <h3 class="box-title">资源设置</h3>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+    </div>
+    <div class="box-body no-padding">
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="{% url 'setData_get_brand' %}"><i class="fa fa-hand-peace-o"></i> 品牌</a></li>
+        <li><a href="{% url 'setData_get_brandtype' %}"><i class="fa fa-hand-peace-o"></i> 型号</a></li>
+        <li><a href="{% url 'setData_get_datacenter' %}"><i class="fa fa-hand-peace-o"></i> 地理位置</a></li>
+        <li class='active'><a href="{% url 'setData_get_datacenter' %}"><i class="fa fa-hand-peace-o"></i> 数据中心</a></li>
+        <li><a href="#"><i class="fa fa-hand-peace-o"></i> 许可证 </a></li>
+        <li><a href="#zilic" data-toggle="tab">zilic</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6">
+<div class="box box-info">
+  <div class="box-header with-border">
+    <h3 class="box-title">修改数据中心</h3>
+  </div>
+  <div class="login-box-body">
+    <form action="{% url 'setData_modify_datacenter_action' %}" method="post">
+      <div class="form-group">
+        <input type="hidden"  class="form-control" value="{{ datacenter_data.id }}" name="id">
+        <label>名称</label>
+        <input type="text" class="form-control"  value="{{ datacenter_data.name }}" name="name">
+        <label>地理位置</label>
+        <select class="form-control" id="addoption" value="{{ datacenter_data.position_name }}" name="position_name">
+        </select>
+        <label>类型</label>
+        <select class="form-control"  name="type">
+          <option value="{{ datacenter_data.type }}">{{ datacenter_data.type }}</option>
+          <option value='第三方'>第三方</option>
+          <option value='自建'>自建</option>
+        </select>
+        <label>供应商</label>
+        <input type="text" class="form-control" value="{{ datacenter_data.supplier }}" name="supplier">
+        <label>供应商电话</label>
+        <input type="text" class="form-control" value="{{ datacenter_data.supplier_phone }}" name="supplier_phone">
+        <label>管理者</label>
+        <input type="text" class="form-control" value="{{ datacenter_data.manager }}" name="manager">
+        <label>管理者电话</label>
+        <input type="text" class="form-control" value="{{ datacenter_data.manager_phone }}" placeholder="后续单选框,ajax获取" name="manager_phone">
+      </div>
+      <div class="row">
+        <div class="box-footer">
+          <a href="{% url 'setData_get_datacenter' %}">取消</a>
+          <button type="submit" class="btn btn-info pull-right">修改</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    function del() {
+      var msg = "您确定要删除吗？";
+        if (confirm(msg)==true){
+          return true;
+        }else{
+          return false;
+      }
+    }
+    $(function () {
+      $('#brandtype_data').DataTable()
+    })
+
+    $.ajax({
+      type: "GET",
+      url: "/setData/api/get_position/",
+      dataType : "json", // 指定返回类型
+      //data: {xxx:"yyy"}, // 传递到后台的参数
+      success: function(data){
+        var position_data = data
+        var option=null;
+        for (var i =0;i<position_data.length;i++){
+          option +="<option + value="+position_data[i].name+">"+position_data[i].name+"</option>"
+        }
+        $("#addoption").empty();
+        $("#addoption").append(option);
+        },
+      error : function(){
+        alert("setData数据获取出现问题");
+      }
+    });
+</script>
+{% endblock %}

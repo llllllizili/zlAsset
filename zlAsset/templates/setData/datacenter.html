@@ -1,0 +1,164 @@
+{% extends 'common/base.html' %}
+{% block title %}主页-地理位置{% endblock %}
+{% block page_head %} {% endblock %}
+{% block content %}
+<div class="col-md-2">
+  <div class="box box-solid">
+    <div class="box-header with-border">
+      <h3 class="box-title">资源设置</h3>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+    </div>
+    <div class="box-body no-padding">
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="{% url 'setData_get_brand' %}"><i class="fa fa-hand-peace-o"></i> 品牌</a></li>
+        <li><a href="{% url 'setData_get_brandtype' %}"><i class="fa fa-hand-peace-o"></i> 型号</a></li>
+        <li><a href="{% url 'setData_get_position' %}"><i class="fa fa-hand-peace-o"></i> 地理位置</a></li>
+        <li class='active'><a href="{% url 'setData_get_datacenter' %}"><i class="fa fa-hand-peace-o"></i> 数据中心</a></li>
+        <li><a href="#"><i class="fa fa-hand-peace-o"></i> 许可证 </a></li>
+        <li><a href="#zilic" data-toggle="tab">zilic</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="active tab-pane" id="zilia">
+    <div class="post">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box-body">
+          <span><h4><font color="red">{{ error_data }}</font></h4></span><p><p>
+          <button type="button" id='getoption' class="btn btn-block btn-primary" data-toggle="modal" data-target="#create-datacenter">
+            添加数据中心
+          </button>
+
+          </div>
+          </div>
+        </div>
+        <div class="modal fade" id="create-datacenter">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">添加数据中心</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" action="{% url 'setData_create_datacenter' %}" method="post">
+                        <div class="form-group">
+                          <label>名称</label>
+                          <input type="text" class="form-control"  value='' name="name">
+                          <label>地理位置</label>
+                          <select class="form-control" id="addoption" name="position_name">
+                            <option></option>
+                          </select>
+                          <label>类型</label>
+                          <select class="form-control" name="type">
+                            <option value='第三方'>第三方</option>
+                            <option value='自建'>自建</option>
+                          </select>
+                          <label>供应商</label>
+                          <input type="text" class="form-control" value='' name="supplier">
+                          <label>供应商电话</label>
+                          <input type="text" class="form-control" value='' name="supplier_phone">
+                          <label>管理者</label>
+                          <input type="text" class="form-control" value='' name="manager">
+                          <label>管理者电话</label>
+                          <input type="text" class="form-control" placeholder="后续单选框,ajax获取" value='' name="manager_phone">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+                            <input type="submit" value="创建" name="create" class="btn btn-primary" >
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-10">
+  <div class="box box-primary">
+    <div class="box-body no-padding">
+      <div class="table-responsive mailbox-messages">
+        <div class="box-body">
+          <table id="datacenter_data" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th style="display:none">id</th>
+              <th>名称</th>
+              <th>位置</th>
+              <th>地址</th>
+              <th>供应商</th>
+              <th>管理者</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for datacenter in datacenter_data %}
+            <tr>
+              <td style="display:none">{{ datacenter.id }}</td>
+              <td>{{ datacenter.name }}</td>
+              <td>{{ datacenter.position }}</td>
+              <td>{{ datacenter.address }}</td>
+              <td>{{ datacenter.supplier }}</td>
+              <td>{{ datacenter.manager }}</td>
+              <td>
+              <a href="{% url 'setData_delete_datacenter' datacenter.id  %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
+              <a href="{% url 'setData_modify_datacenter'  datacenter.id  %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <span><h4><font color="red">{{ form_error  }}</font></h4></span><p><p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    $(function () {
+      $('#datacenter_data').DataTable()
+    })
+
+      function del() {
+        var msg = "您确定要删除吗？";
+          if (confirm(msg)==true){
+            return true;
+          }else{
+            return false;
+        }
+      }
+
+//ajax请求
+    $("#getoption").click(function(){
+      $.ajax({
+        type: "GET",
+        url: "/setData/api/get_position/",
+        dataType : "json", // 指定返回类型
+        //data: {xxx:"yyy"}, // 传递到后台的参数
+        success: function(data){
+          var datacenter_data = data
+          var option=null;
+          for (var i =0;i<datacenter_data.length;i++){
+            option +="<option + value="+datacenter_data[i].name+">"+datacenter_data[i].name+"</option>"
+          }
+          $("#addoption").empty();
+          $("#addoption").append(option);
+          },
+        error : function(){
+          alert("setData数据获取出现问题");
+        }
+      });
+    });
+</script>
+{% endblock %}

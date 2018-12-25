@@ -37,7 +37,8 @@ class Position(models.Model):
 class DataCenter(models.Model):
     name = models.CharField(max_length=128)#unique=True
     # 表关联
-    Position = models.CharField(max_length=128)
+    position = models.ForeignKey('Position',null=True, blank=True, on_delete=models.SET_NULL)
+    position_name = models.CharField(max_length=128,null=True, blank=True)
     city = models.CharField(max_length=128,null=True, blank=True)
     address = models.CharField(max_length=128,null=True, blank=True)
     type = models.CharField(max_length=128,null=True, blank=True)

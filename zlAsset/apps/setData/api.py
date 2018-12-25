@@ -36,3 +36,13 @@ class BrandTypeData(viewsets.ViewSet):
             return Response('None')
         else:
             return Response(serializer.data)
+
+class PositionData(viewsets.ViewSet):
+    def list(self,request):
+        queryset = Position.objects.all()
+        serializer_class = PositionSerializer
+        serializer = PositionSerializer(queryset, many=True)
+        if serializer.data == []:
+            return Response('None')
+        else:
+            return Response(serializer.data)

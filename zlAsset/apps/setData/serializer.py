@@ -13,3 +13,7 @@ class BrandTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model =BrandType
         fields =('id','name','brand_id','brand_name','create_time','who_create')
+class PositionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =Position
+        fields =('id','name','city','address')
