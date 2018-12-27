@@ -1,5 +1,5 @@
 {% extends 'common/base.html' %}
-{% block title %} create_brand {% endblock %}
+{% block title %} 数据中心 {% endblock %}
 {% block page_head %} {% endblock %}
 
 {% block content %}
@@ -21,7 +21,7 @@
       <ul class="nav nav-pills nav-stacked">
         <li><a href="{% url 'setData_get_brand' %}"><i class="fa fa-hand-peace-o"></i> 品牌</a></li>
         <li><a href="{% url 'setData_get_brandtype' %}"><i class="fa fa-hand-peace-o"></i> 型号</a></li>
-        <li><a href="{% url 'setData_get_datacenter' %}"><i class="fa fa-hand-peace-o"></i> 地理位置</a></li>
+        <li><a href="{% url 'setData_get_position' %}"><i class="fa fa-hand-peace-o"></i> 地理位置</a></li>
         <li class='active'><a href="{% url 'setData_get_datacenter' %}"><i class="fa fa-hand-peace-o"></i> 数据中心</a></li>
         <li><a href="#"><i class="fa fa-hand-peace-o"></i> 许可证 </a></li>
         <li><a href="#zilic" data-toggle="tab">zilic</a></li>

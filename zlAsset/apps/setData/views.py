@@ -217,11 +217,15 @@ def modify_position_action(request):
 #删除地理位置
 @login_required(login_url='/login/')
 def delete_position(request,id):
-    Position.objects.filter(id=id).delete()
-    position_data =Position.objects.all()
-    return render(request,'setData/position.html',{'position_data':position_data })
-
-
+    val = DataCenter.objects.filter(position_id=id)
+    if val:
+        error_data='请先删除相关数据中心'
+        position_data =Position.objects.all()
+        return render(request,'setData/position.html',{'position_data':position_data,'error_data':error_data })
+    else:
+        Position.objects.filter(id=id).delete()
+        position_data =Position.objects.all()
+        return render(request,'setData/position.html',{'position_data':position_data })
 #添加数据中心
 @login_required(login_url='/login/')
 def create_datacenter(request):
