@@ -1,0 +1,118 @@
+{% extends 'common/base.html' %}
+{% block title %}部门{% endblock %}
+{% block page_head %} {% endblock %}
+{% block content %}
+<div class="col-md-2">
+  <div class="box box-solid">
+    <div class="box-header with-border">
+      <h3 class="box-title">组织设置</h3>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+    </div>
+    <div class="box-body no-padding">
+      <ul class="nav nav-pills nav-stacked">
+        <li class='active'><a href="{% url 'setOrg_get_department' %}"><i class="fa fa-hand-peace-o"></i>部门</a></li>
+        <li><a href="#"><i class="fa fa-hand-peace-o"></i> 团队</a></li>
+        <li><a href="#"><i class="fa fa-hand-peace-o"></i> 成员</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="active tab-pane" id="zilia">
+    <div class="post">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box-body">
+          <span><h4><font color="red">{{ error_data }}</font></h4></span><p><p>
+          <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#create-department">
+            添加部门
+          </button>
+
+          </div>
+          </div>
+        </div>
+        <div class="modal fade" id="create-department">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">添加部门</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" action="{% url 'setOrg_create_department' %}" method="post">
+                        <div class="form-group">
+                          <label>部门名称</label>
+                          <input type="text" class="form-control" placeholder="请输入..."  value='' name="name">
+                          <label>部门职责/描述</label>
+                          <input type="text" class="form-control" placeholder="请输入..."  value='' name="description">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+                            <input type="submit" value="创建" name="create" class="btn btn-primary" >
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-10">
+  <div class="box box-primary">
+    <div class="box-body no-padding">
+      <div class="table-responsive mailbox-messages">
+        <div class="box-body">
+          <table id="department_data" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th style="display:none">id</th>
+              <th>部门</th>
+              <th>描述</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for department in department_data %}
+            <tr>
+              <td style="display:none">{{ department.id }}</td>
+              <td>{{ department.name }}</td>
+              <td>{{ department.description }}</td>
+              <td>
+              <a href="{% url 'setOrg_delete_department' department.id %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
+              <a href="{% url 'setOrg_modify_department' department.id %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    $(function () {
+      $('#department_data').DataTable()
+    })
+
+      function del() {
+        var msg = "您确定要删除吗？";
+          if (confirm(msg)==true){
+            return true;
+          }else{
+            return false;
+        }
+      }
+</script>
+{% endblock %}

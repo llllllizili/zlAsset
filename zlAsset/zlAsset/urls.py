@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('index.urls')),
     path('setData/', include('setData.urls')),
+    path('setOrg/', include('setOrg.urls')),
     path('hdServer/', include('hdServer.urls')),
 ]
