@@ -19,6 +19,7 @@ router = DefaultRouter()
 
 # /setOrg/api/get_department/  # userd: setOrg/team.html
 router.register('get_department',api_views.DepartmentData,base_name='setOrg_get_department_api')
+router.register('get_team',api_views.TeamData,base_name='setOrg_get_team_api')
 
 
 urlpatterns = [
@@ -35,6 +36,12 @@ urlpatterns = [
     path('delete_team/<int:id>/',views.delete_team,name='setOrg_delete_team'),
     path('modify_team/<int:id>/',views.modify_team,name='setOrg_modify_team'),
     path('modify_team_action/',views.modify_team_action,name='setOrg_modify_team_action'),
+
+    path('create_member/',views.create_member,name='setOrg_create_member'),
+    path('get_member/',views.get_member,name='setOrg_get_member'),
+    path('delete_member/<int:id>/',views.delete_member,name='setOrg_delete_member'),
+    path('modify_member/<int:id>/',views.modify_member,name='setOrg_modify_member'),
+    path('modify_member_action/',views.modify_member_action,name='setOrg_modify_member_action'),
 
     #api
     url(r'^api/', include(router.urls)),

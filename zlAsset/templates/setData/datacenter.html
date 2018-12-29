@@ -92,7 +92,6 @@
               <th style="display:none">id</th>
               <th>名称</th>
               <th>位置</th>
-              <th>地址</th>
               <th>供应商</th>
               <th>管理者</th>
               <th>操作</th>
@@ -104,12 +103,12 @@
               <td style="display:none">{{ datacenter.id }}</td>
               <td>{{ datacenter.name }}</td>
               <td>{{ datacenter.position }}</td>
-              <td>{{ datacenter.address }}</td>
               <td>{{ datacenter.supplier }}</td>
               <td>{{ datacenter.manager }}</td>
               <td>
               <a href="{% url 'setData_delete_datacenter' datacenter.id  %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
-              <a href="{% url 'setData_modify_datacenter'  datacenter.id  %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>
+              <a href="{% url 'setData_modify_datacenter'  datacenter.id  %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>&nbsp;&nbsp;
+              <a data-toggle="modal" data-target=#{{ datacenter.id }}><i class="fa fa-eye"></i></a>
               </td>
             </tr>
             {% endfor %}
@@ -122,7 +121,34 @@
   </div>
 </div>
 
+{% for datacenter in datacenter_data %}
+<div class="modal fade" id={{ datacenter.id }}>
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">详细信息</h4>
+      </div>
+      <div class="modal-body">
+          <table class="table">
+            <tbody>
+              <tr><th>名称</th><td>{{ datacenter.name }}</td></tr>
+              <tr><th>位置</th><td>{{ datacenter.position_name }}</td></tr>
+              <tr><th>地址</th><td>{{ datacenter.address }}</td></tr>
+              <tr><th>供应商</th><td>{{ datacenter.supplier }}</td></tr>
+              <tr><th>供应商电话</th><td>{{ datacenter.supplier_phone }}</td></tr>
+              <tr><th>管理者</th><td>{{ datacenter.manager }}</td></tr>
+              <tr><th>管理者电话</th><td>{{ datacenter.manager_phone }}</td></tr>
 
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
 
 {% endblock %}
 {% block js %}

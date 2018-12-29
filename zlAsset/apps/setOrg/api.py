@@ -28,3 +28,12 @@ class DepartmentData(viewsets.ViewSet):
             return Response(serializer.data)
 
 
+class TeamData(viewsets.ViewSet):
+    def list(self,request):
+        queryset = Team.objects.all()
+        serializer_class = TeamSerializer
+        serializer = TeamSerializer(queryset, many=True)
+        if serializer.data == []:
+            return Response('None')
+        else:
+            return Response(serializer.data)

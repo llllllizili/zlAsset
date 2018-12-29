@@ -1,5 +1,5 @@
 {% extends 'common/base.html' %}
-{% block title %} 团队 {% endblock %}
+{% block title %} 成员 {% endblock %}
 {% block page_head %} {% endblock %}
 
 {% block content %}
@@ -20,8 +20,8 @@
     <div class="box-body no-padding">
       <ul class="nav nav-pills nav-stacked">
         <li><a href="{% url 'setOrg_get_department' %}"><i class="fa fa-hand-peace-o"></i>部门</a></li>
-        <li class='active'><a href="{% url 'setOrg_get_team' %}"><i class="fa fa-hand-peace-o"></i> 团队</a></li>
-        <li><a href="{% url 'setOrg_get_member' %}"><i class="fa fa-hand-peace-o"></i> 成员</a></li>
+        <li><a href="{% url 'setOrg_get_team' %}"><i class="fa fa-hand-peace-o"></i> 团队</a></li>
+        <li class='active'><a href="{% url 'setOrg_get_member' %}"><i class="fa fa-hand-peace-o"></i> 成员</a></li>
       </ul>
     </div>
   </div>
@@ -30,25 +30,27 @@
 <div class="col-md-6">
 <div class="box box-info">
   <div class="box-header with-border">
-    <h3 class="box-title">修改团队</h3>
+    <h3 class="box-title">修改成员信息</h3>
   </div>
   <div class="login-box-body">
-    <form action="{% url 'setOrg_modify_team_action' %}" method="post">
+    <form action="{% url 'setOrg_modify_member_action' %}" method="post">
       <div class="form-group">
-        <input type="hidden"  class="form-control" value="{{ team_data.id }}" name='id'>
-        <label>团队名称</label>
-        <input type="text" class="form-control" value="{{ team_data.name }}" name="name">
-        <label>所属部门</label>
-        <select class="form-control" id="addoption" name="department">
-          <option  value={{ team_data.department_name }}>{{ team_data.department_name }}</option>
+        <input type="hidden"  class="form-control" value="{{ member_data.id }}" name='id'>
+        <label>姓名</label>
+        <input type="text" class="form-control" value="{{ member_data.name }}" name="name">
+        <label>所属团队</label>
+        <select class="form-control" id="addoption" name="team">
+          <option  value={{ member_data.team_name }}>{{ member_data.team_name }}</option>
         </select>
-        <label>职责/描述</label>
-        <input type="text" class="form-control" value="{{ team_data.description }}" name="description">
+        <label>电话</label>
+        <input type="text" class="form-control" value="{{ member_data.phone }}" name="phone">
+        <label>邮件</label>
+        <input type="text" class="form-control" value="{{ member_data.email }}" name="email">
 
       </div>
       <div class="row">
         <div class="box-footer">
-                <a href="{% url 'setOrg_get_team' %}">取消</a>
+                <a href="{% url 'setOrg_get_member' %}">取消</a>
                 <button type="submit" class="btn btn-info pull-right">修改</button>
         </div>
         <!-- /.col -->
@@ -76,14 +78,14 @@
 
     $.ajax({
       type: "GET",
-      url: "/setOrg/api/get_department/",
+      url: "/setOrg/api/get_team/",
       dataType : "json", // 指定返回类型
       //data: {xxx:"yyy"}, // 传递到后台的参数
       success: function(data){
-        var department_data = data
+        var team_data = data
         var option=null;
-        for (var i =0;i<department_data.length;i++){
-          option +="<option + value="+department_data[i].name+">"+department_data[i].name+"</option>"
+        for (var i =0;i<team_data.length;i++){
+          option +="<option + value="+team_data[i].name+">"+team_data[i].name+"</option>"
         }
         $("#addoption").empty();
         $("#addoption").append(option);
