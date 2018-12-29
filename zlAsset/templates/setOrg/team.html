@@ -1,5 +1,5 @@
 {% extends 'common/base.html' %}
-{% block title %}部门{% endblock %}
+{% block title %}团队{% endblock %}
 {% block page_head %} {% endblock %}
 {% block content %}
 <div class="col-md-2">
@@ -13,8 +13,8 @@
     </div>
     <div class="box-body no-padding">
       <ul class="nav nav-pills nav-stacked">
-        <li class='active'><a href="{% url 'setOrg_get_department' %}"><i class="fa fa-hand-peace-o"></i>部门</a></li>
-        <li><a href="{% url 'setOrg_get_team' %}"><i class="fa fa-hand-peace-o"></i> 团队</a></li>
+        <li><a href="{% url 'setOrg_get_department' %}"><i class="fa fa-hand-peace-o"></i>部门</a></li>
+        <li class='active'><a href="{% url 'setOrg_get_team' %}"><i class="fa fa-hand-peace-o"></i> 团队</a></li>
         <li><a href="#"><i class="fa fa-hand-peace-o"></i> 成员</a></li>
       </ul>
     </div>
@@ -26,27 +26,31 @@
         <div class="col-xs-12">
           <div class="box-body">
           <span><h4><font color="red">{{ error_data }}</font></h4></span><p><p>
-          <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#create-department">
-            添加部门
+          <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#create-team" id="getoption">
+            添加团队
           </button>
 
           </div>
           </div>
         </div>
-        <div class="modal fade" id="create-department">
+        <div class="modal fade" id="create-team">
         <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">添加部门</h4>
+                    <h4 class="modal-title">添加团队</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form" action="{% url 'setOrg_create_department' %}" method="post">
+                    <form role="form" action="{% url 'setOrg_create_team' %}" method="post">
                         <div class="form-group">
-                          <label>部门名称</label>
+                          <label>团队名称</label>
                           <input type="text" class="form-control" placeholder="请输入..."  value='' name="name">
+                          <label>所属部门</label>
+                          <select class="form-control" id="addoption" name=department>
+                            <option></option>
+                          </select>
                           <label>职责/描述</label>
                           <input type="text" class="form-control" placeholder="请输入..."  value='' name="description">
                         </div>
@@ -68,24 +72,26 @@
     <div class="box-body no-padding">
       <div class="table-responsive mailbox-messages">
         <div class="box-body">
-          <table id="department_data" class="table table-bordered table-striped">
+          <table id="team_data" class="table table-bordered table-striped">
             <thead>
             <tr>
               <th style="display:none">id</th>
+              <th>团队</th>
               <th>部门</th>
               <th>描述</th>
               <th>操作</th>
             </tr>
             </thead>
             <tbody>
-            {% for department in department_data %}
+            {% for team in team_data %}
             <tr>
-              <td style="display:none">{{ department.id }}</td>
-              <td>{{ department.name }}</td>
-              <td>{{ department.description }}</td>
+              <td style="display:none">{{ team.id }}</td>
+              <td>{{ team.name }}</td>
+              <td>{{ team.department_name }}</td>
+              <td>{{ team.description }}</td>
               <td>
-              <a href="{% url 'setOrg_delete_department' department.id %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
-              <a href="{% url 'setOrg_modify_department' department.id %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>
+              <a href="{% url 'setOrg_delete_team' team.id %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
+              <a href="{% url 'setOrg_modify_team' team.id %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>
               </td>
             </tr>
             {% endfor %}
@@ -103,16 +109,38 @@
 {% block js %}
 <script type="text/javascript">
     $(function () {
-      $('#department_data').DataTable()
+      $('#team_data').DataTable()
     })
 
       function del() {
-        var msg = "您确定要删除吗？请先删除下属所有团队,否则无法删除!";
+        var msg = "您确定要删除吗？请先删除下属所有成员,否则无法删除!";
           if (confirm(msg)==true){
             return true;
           }else{
             return false;
         }
       }
+
+//ajax请求
+    $("#getoption").click(function(){
+      $.ajax({
+        type: "GET",
+        url: "/setOrg/api/get_department/",
+        dataType : "json", // 指定返回类型
+        //data: {xxx:"yyy"}, // 传递到后台的参数
+        success: function(data){
+          var department_data = data
+          var option=null;
+          for (var i =0;i<department_data.length;i++){
+            option +="<option + value="+department_data[i].name+">"+department_data[i].name+"</option>"
+          }
+          $("#addoption").empty();
+          $("#addoption").append(option);
+          },
+        error : function(){
+          alert("setOrg数据获取出现问题");
+        }
+      });
+    });
 </script>
 {% endblock %}

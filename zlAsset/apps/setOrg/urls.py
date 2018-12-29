@@ -9,16 +9,16 @@ from django.conf.urls import url
 #静态文件
 from django.conf.urls.static import static
 from django.conf import settings
-from . import views
-# from . import api as api_views
+from .import views
+from .import api as api_views
 
-# from rest_framework.routers import DefaultRouter
-# router = DefaultRouter()
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
 
 #api
 
-# /setOrg/api/get_department/  # userd: setOrg/departmenttype.html
-# router.register('get_department',api_views.departmentData,base_name='setOrg_get_department_api')
+# /setOrg/api/get_department/  # userd: setOrg/team.html
+router.register('get_department',api_views.DepartmentData,base_name='setOrg_get_department_api')
 
 
 urlpatterns = [
@@ -30,7 +30,12 @@ urlpatterns = [
     path('modify_department/<int:id>/',views.modify_department,name='setOrg_modify_department'),
     path('modify_department_action/',views.modify_department_action,name='setOrg_modify_department_action'),
 
+    path('create_team/',views.create_team,name='setOrg_create_team'),
+    path('get_team/',views.get_team,name='setOrg_get_team'),
+    path('delete_team/<int:id>/',views.delete_team,name='setOrg_delete_team'),
+    path('modify_team/<int:id>/',views.modify_team,name='setOrg_modify_team'),
+    path('modify_team_action/',views.modify_team_action,name='setOrg_modify_team_action'),
 
     #api
-    # url(r'^api/', include(router.urls)),
+    url(r'^api/', include(router.urls)),
 ]+ static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)

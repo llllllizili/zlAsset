@@ -1,5 +1,5 @@
 {% extends 'common/base.html' %}
-{% block title %} 主页-品牌 {% endblock %}
+{% block title %} 部门 {% endblock %}
 {% block page_head %} {% endblock %}
 
 {% block content %}
@@ -20,7 +20,7 @@
     <div class="box-body no-padding">
       <ul class="nav nav-pills nav-stacked">
         <li class='active'><a href="{% url 'setOrg_get_department' %}"><i class="fa fa-hand-peace-o"></i>部门</a></li>
-        <li><a href="#"><i class="fa fa-hand-peace-o"></i> 团队</a></li>
+        <li><a href="{% url 'setOrg_get_team' %}"><i class="fa fa-hand-peace-o"></i> 团队</a></li>
         <li><a href="#"><i class="fa fa-hand-peace-o"></i> 成员</a></li>
       </ul>
     </div>

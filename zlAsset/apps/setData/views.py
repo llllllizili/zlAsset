@@ -98,7 +98,7 @@ def create_brandtype(request):
             brandtype=form.cleaned_data['brandtype']
 
             val = BrandType.objects.filter(name=brandtype,brand_name=brand)
-            brabd_info =Brand.objects.get(name=brand)
+            brand_info =Brand.objects.get(name=brand)
             if not val:
                 dtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 #un_time = time.mktime(dtime.timetuple())
@@ -107,7 +107,7 @@ def create_brandtype(request):
                     brand_name=brand,
                     create_time=dtime,
                     who_create=request.user.username,
-                    brand_id=brabd_info.id
+                    brand_id=brand_info.id
                     )
                 brandtype_data = BrandType.objects.all()
                 return render(request,'setData/brandtype.html',{'brandtype_data':brandtype_data })
@@ -139,11 +139,13 @@ def modify_brandtype_action(request):
         brandtype=request.POST['brandtype']
 
         dtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        brand_info =Brand.objects.get(name=brand)
         BrandType.objects.filter(id=id).update(
                     name=brandtype,
                     brand_name=brand,
                     create_time=dtime,
-                    who_create=request.user.username
+                    who_create=request.user.username,
+                    brand_id=brand_info.id
                     )
         brandtype_data =BrandType.objects.all()
         return render(request,'setData/brandtype.html',{'brandtype_data':brandtype_data })

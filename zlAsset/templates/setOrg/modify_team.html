@@ -1,0 +1,96 @@
+{% extends 'common/base.html' %}
+{% block title %} 团队 {% endblock %}
+{% block page_head %} {% endblock %}
+
+{% block content %}
+
+<div class="col-md-2">
+  <div class="box box-solid">
+    <div class="box-header with-border">
+      <h3 class="box-title">组织设置</h3>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+    </div>
+    <div class="box-body no-padding">
+      <ul class="nav nav-pills nav-stacked">
+        <li class='active'><a href="{% url 'setOrg_get_team' %}"><i class="fa fa-hand-peace-o"></i>部门</a></li>
+        <li class='active'><a href="{% url 'setOrg_get_team' %}"><i class="fa fa-hand-peace-o"></i> 团队</a></li>
+        <li><a href="#"><i class="fa fa-hand-peace-o"></i> 成员</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6">
+<div class="box box-info">
+  <div class="box-header with-border">
+    <h3 class="box-title">修改团队</h3>
+  </div>
+  <div class="login-box-body">
+    <form action="{% url 'setOrg_modify_team_action' %}" method="post">
+      <div class="form-group">
+        <input type="hidden"  class="form-control" value="{{ team_data.id }}" name='id'>
+        <label>团队名称</label>
+        <input type="text" class="form-control" value="{{ team_data.name }}" name="name">
+        <label>所属部门</label>
+        <select class="form-control" id="addoption" name="department">
+          <option  value={{ team_data.department_name }}>{{ team_data.department_name }}</option>
+        </select>
+        <label>职责/描述</label>
+        <input type="text" class="form-control" value="{{ team_data.description }}" name="description">
+
+      </div>
+      <div class="row">
+        <div class="box-footer">
+                <a href="{% url 'setOrg_get_team' %}">取消</a>
+                <button type="submit" class="btn btn-info pull-right">修改</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+  </div>
+</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    function del() {
+      var msg = "您确定要删除吗？";
+        if (confirm(msg)==true){
+          return true;
+        }else{
+          return false;
+      }
+    }
+    $(function () {
+      $('#brandtype_data').DataTable()
+    })
+
+    $.ajax({
+      type: "GET",
+      url: "/setOrg/api/get_department/",
+      dataType : "json", // 指定返回类型
+      //data: {xxx:"yyy"}, // 传递到后台的参数
+      success: function(data){
+        var department_data = data
+        var option=null;
+        for (var i =0;i<department_data.length;i++){
+          option +="<option + value="+department_data[i].name+">"+department_data[i].name+"</option>"
+        }
+        $("#addoption").empty();
+        $("#addoption").append(option);
+        },
+      error : function(){
+        alert("setOrg数据获取出现问题");
+      }
+    });
+</script>
+{% endblock %}
