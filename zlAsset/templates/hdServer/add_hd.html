@@ -1,0 +1,318 @@
+{% extends 'common/base.html' %}
+{% block title %}服务器{% endblock %}
+{% block page_head %} {% endblock %}
+{% block content %}
+<div class="col-md-12">
+    <div class="box box-primary">
+    <div class="row">
+      <form role="form" action="#" method="post">{% csrf_token %}
+        <!-- >基本信息 -->
+        <div class="col-md-12">
+          <div class="col-md-4">
+            <div class="modal-header">
+              <h4 class="modal-title"><i class="fa fa-tags"></i>基本信息</h4>
+            </div>
+            <div class="form-group">
+              <div class="form-group">
+                <label>名称</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-smile-o"></i>
+                  </div>
+                  <input type="text" id="getbrand" class="form-control" placeholder="设备名称 ..."  value='' name="name">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>品牌</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-server"></i>
+                  </div>
+                <select class="form-control" id="brandoption" name="brand"></select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>型号</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-server"></i>
+                  </div>
+                  <select class="form-control" id="brandtypeoption" name="brand_type"></select>
+                </div>
+              </div>
+              <label>运行环境</label>
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-bug"></i>
+                </div>
+                <select class="form-control"  name="environment">
+                  <option value=''>---请选择---</option>
+                  <option value ='生产'>生产环境</option>
+                  <option value ='测试'>测试环境</option>
+                  <option value ='研发'>研发环境</option>
+                  <option value ='办公'>办公环境</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- right-->
+          <div class="col-md-4">
+            <div class="modal-header">
+              <h4 class="modal-title">&nbsp</h4>
+            </div>
+            <div class="form-group">
+              <label>管理IP</label>
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-laptop"></i>
+                </div>
+                <input type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask="" name="manager_ip">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>设备IP</label>
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-laptop"></i>
+                </div>
+                <input type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask="" name="device_ip">
+              </div>
+            </div>
+            <div class="form-group">
+                <label>用途</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-server"></i>
+                  </div>
+                <select class="form-control"  name="host" id="departmentoption" name="description"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>运维联系人</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-server"></i>
+                  </div>
+                <select class="form-control"  name="oper_member"></select>
+                </div>
+            </div>
+          </div>
+          <!-- right-->
+          <div class="col-md-4">
+            <div class="modal-header">
+              <h4 class="modal-title">&nbsp</h4>
+            </div>
+            <div class="form-group">
+                <label>部门</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-server"></i>
+                  </div>
+                <select class="form-control"  id="teamoption" name="department" ></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>团队</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-server"></i>
+                  </div>
+                <select class="form-control"  id="teamoption"  name="team"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>使用者</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-server"></i>
+                  </div>
+                <select class="form-control" id="123" name="use_member"></select>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+        <div class="col-md-4">
+          <div class="modal-header">
+            <h4 class="modal-title"><i class="fa fa-tags"></i>位置信息</h4>
+          </div>
+          <div class="form-group">
+            <div class="form-group">
+              <label>名称</label>
+              <input type="text" class="form-control"   value='' name="name">
+            </div>
+            <label>运行环境</label>
+            <select class="form-control"  name="host">
+              <option placeholder="设备名称 ..."></option>
+              <option value ='生产'>生产环境</option>
+              <option value ='测试'>测试环境</option>
+              <option value ='研发'>研发环境</option>
+              <option value ='办公'>办公环境</option>
+            </select>
+            <div class="form-group">
+              <label>名称</label>
+              <input type="text" class="form-control" placeholder="设备名称 ..."  value='' name="name">
+            </div>
+          </div>
+        </div>
+        <!-- right-->
+        <div class="col-md-4">
+          <div class="modal-header">
+            <h4 class="modal-title">&nbsp</h4>
+          </div>
+          <div class="form-group">
+            <label>磁盘类型</label>
+            <select class="form-control"  name="disk_type">
+              <option value ='thin'>精简制备</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>硬盘大小</label>
+            <input type="text" class="form-control" placeholder="capacity ..."  value='' name="capacity">
+          </div>
+        </div>
+        <!-- right-->
+        <div class="col-md-4">
+          <div class="modal-header">
+            <h4 class="modal-title"> &nbsp</h4>
+          </div>
+          <div class="form-group">
+            <label>设置主机名</label>
+            <input type="text" class="form-control" placeholder="host_name ..."  value='' name="host_name">
+          </div>
+          <div class="form-group">
+            <label>设置IP</label>
+            <input type="text" class="form-control" placeholder="ip ..."  value='' name="ip">
+          </div>
+        </div>
+        </div>
+
+
+        <div class="col-md-12">
+        <div class="col-md-4">
+          <div class="modal-header">
+            <h4 class="modal-title"><i class="fa fa-tags"></i>资产信息</h4>
+          </div>
+          <div class="form-group">
+            <div class="form-group">
+              <label>名称</label>
+              <input type="text" class="form-control" placeholder="设备名称 ..."  value='' name="name">
+            </div>
+            <label>运行环境</label>
+            <select class="form-control"  name="host">
+              <option >---选择主机---</option>
+              <option value ='生产'>生产环境</option>
+              <option value ='测试'>测试环境</option>
+              <option value ='研发'>研发环境</option>
+              <option value ='办公'>办公环境</option>
+            </select>
+          </div>
+        </div>
+        <!-- right-->
+        <div class="col-md-4">
+          <div class="modal-header">
+            <h4 class="modal-title">&nbsp</h4>
+          </div>
+          <div class="form-group">
+            <label>磁盘类型</label>
+            <select class="form-control"  name="disk_type">
+              <option value ='thin'>精简制备</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>硬盘大小</label>
+            <input type="text" class="form-control" placeholder="capacity ..."  value='' name="capacity">
+          </div>
+        </div>
+        <!-- right-->
+        <div class="col-md-4">
+          <div class="modal-header">
+            <h4 class="modal-title"> &nbsp</h4>
+          </div>
+          <div class="form-group">
+            <label>设置主机名</label>
+            <input type="text" class="form-control" placeholder="host_name ..."  value='' name="host_name">
+          </div>
+          <div class="form-group">
+            <label>设置IP</label>
+            <input type="text" class="form-control" placeholder="ip ..."  value='' name="ip">
+          </div>
+          <div class="form-group">
+            <label>设置IP</label>
+            <input type="text" class="form-control" placeholder="ip ..."  value='' name="ip">
+          </div>
+        </div>
+        </div>
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+            <input type="submit" value="创建" name="create" class="btn btn-primary" >
+        </div>
+      </form>
+    </div>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+  $('[data-mask]').inputmask();
+
+  $('.select2').select2();
+
+    $(function () {
+      $('#team_data').DataTable()
+    })
+
+    //ajax请求 获取品牌信息
+      $.ajax({
+        type: "GET",
+        url: "/setData/api/get_brand/",
+        dataType : "json",
+        success: function(data){
+          var brand_data = data
+          var option=null;
+          for (var i =0;i<brand_data.length;i++){
+            option +="<option + value="+brand_data[i].id+">"+brand_data[i].name+"</option>"
+          }
+          $("#brandoption").empty();
+          $("#brandoption").append("<option + value=''>---请选择---</option>");
+          $("#brandoption").append(option);
+          },
+        error : function(){
+          alert("setOrg数据获取出现问题");
+        }
+      });
+
+      //ajax获取型号信息
+      $("#brandoption").click(function(){
+        var brand_id=$("#brandoption  option:selected").val(); //获取选中的value
+        $("#brandtypeoption").empty();
+      $.ajax({
+        type: "GET",
+        url: "/setData/api/get_brandtype/",
+        dataType : "json",
+        success: function(data){
+          var brandtype_data = data
+          var option=null;
+          for (var i =0;i<brandtype_data.length;i++){
+            if (brand_id == brandtype_data[i].brand_id) {
+              option +="<option + value="+brandtype_data[i].name+">"+brandtype_data[i].name+"</option>"
+            }
+          }
+          $("#brandtypeoption").append("<option + value=''>---请选择---</option>");
+          $("#brandtypeoption").append(option);
+          },
+        error : function(){
+          alert("setOrg数据获取出现问题");
+        }
+      });
+    });
+
+
+</script>
+{% endblock %}

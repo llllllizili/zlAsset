@@ -7,6 +7,8 @@ from . import views
 
 urlpatterns = [
     path('',views.index,name='hdServer_index'),
+    path('add_hd/',views.add_hd,name='hdServer_add_hd'),
+
     path('test/',views.test,name='hdServer_test'),
     path('info/',views.get_hd_info,name='hdServer_get_info'),
     path('task_add_test/',views.task_add_test,name='task_add_test'),

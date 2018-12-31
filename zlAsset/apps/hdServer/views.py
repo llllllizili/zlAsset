@@ -26,7 +26,6 @@ def get_hd_info(request):
     password=
     server=
     '''
-
     ilo_login = SyncHdInfo(username='administrator',password='123qweASD',server='192.168.3.11')
     ilo_info = ilo_login.get_hd_info_ilo()
 
@@ -44,3 +43,10 @@ def task_add_test(request):
 #     #result.ready()     #判断任务是否完成处理 True 或 False
 #     #result.get(timeout=1)  # 可以重新抛出异常
 #     #result.traceback   #可以获取原始的回溯信息
+
+#添加服务器
+def add_hd(request):
+    # if request.method == 'POST':
+    #     id=request.POST['id']
+    test='test'
+    return render(request, 'hdServer/add_hd.html')
