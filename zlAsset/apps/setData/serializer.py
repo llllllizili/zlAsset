@@ -17,3 +17,7 @@ class PositionSerializer(serializers.ModelSerializer):
     class Meta:
         model =Position
         fields =('id','name','city','address')
+class DatacenterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =DataCenter
+        fields =('id','name','position_id','position_name')

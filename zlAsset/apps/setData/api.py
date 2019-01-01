@@ -46,3 +46,13 @@ class PositionData(viewsets.ViewSet):
             return Response('None')
         else:
             return Response(serializer.data)
+
+class DatacenterData(viewsets.ViewSet):
+    def list(self,request):
+        queryset = DataCenter.objects.all()
+        serializer_class = DatacenterSerializer
+        serializer = DatacenterSerializer(queryset, many=True)
+        if serializer.data == []:
+            return Response('None')
+        else:
+            return Response(serializer.data)

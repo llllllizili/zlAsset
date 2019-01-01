@@ -37,3 +37,13 @@ class TeamData(viewsets.ViewSet):
             return Response('None')
         else:
             return Response(serializer.data)
+
+class MemberData(viewsets.ViewSet):
+    def list(self,request):
+        queryset = Member.objects.all()
+        serializer_class = MemberSerializer
+        serializer = MemberSerializer(queryset, many=True)
+        if serializer.data == []:
+            return Response('None')
+        else:
+            return Response(serializer.data)

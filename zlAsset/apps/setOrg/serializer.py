@@ -12,4 +12,9 @@ class DepartmentSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model =Team
-        fields =('id','name','description')
+        fields =('id','name','description','department_name','department_id')
+
+class MemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =Member
+        fields =('id','name','team_name','team_id','email','phone')

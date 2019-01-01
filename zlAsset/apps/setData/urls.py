@@ -21,8 +21,10 @@ router.register('get_brandtype',api_views.BrandTypeData,base_name='setData_get_b
 # /setData/api/get_position/  # userd: setData/datacenter.html
 router.register('get_position',api_views.PositionData,base_name='setData_get_position_api')
 
+router.register('get_datacenter',api_views.DatacenterData,base_name='setData_get_datacenter_api')
+
 urlpatterns = [
-    path('',views.index,name='setData_index'),
+    path('index',views.index,name='setData_index'),
 
     path('create_brand/',views.create_brand,name='setData_create_brand'),
     path('get_brand/',views.get_brand,name='setData_get_brand'),

@@ -1,18 +1,17 @@
 {% extends 'common/base.html' %}
-{% block title %}服务器{% endblock %}
-{% block page_head %} {% endblock %}
+{% block title %}服务器添加{% endblock %}
+{% block page_head %}{% endblock %}
 {% block content %}
 <div class="col-md-12">
     <div class="box box-primary">
     <div class="row">
-      <form role="form" action="#" method="post">{% csrf_token %}
+      <form role="form" action="{% url 'hdServer_add_hd_action' %}" method="post">{% csrf_token %}
         <!-- >基本信息 -->
         <div class="col-md-12">
           <div class="col-md-4">
             <div class="modal-header">
               <h4 class="modal-title"><i class="fa fa-tags"></i>基本信息</h4>
             </div>
-            <div class="form-group">
               <div class="form-group">
                 <label>名称</label>
                 <div class="input-group">
@@ -46,7 +45,7 @@
                 <div class="input-group-addon">
                   <i class="fa fa-bug"></i>
                 </div>
-                <select class="form-control"  name="environment">
+                <select class="form-control"  name="run_env">
                   <option value=''>---请选择---</option>
                   <option value ='生产'>生产环境</option>
                   <option value ='测试'>测试环境</option>
@@ -54,7 +53,6 @@
                   <option value ='办公'>办公环境</option>
                 </select>
               </div>
-            </div>
           </div>
           <!-- right-->
           <div class="col-md-4">
@@ -83,18 +81,18 @@
                 <label>用途</label>
                 <div class="input-group">
                   <div class="input-group-addon">
-                    <i class="fa fa-server"></i>
+                    <i class="fa fa-edit"></i>
                   </div>
-                <select class="form-control"  name="host" id="departmentoption" name="description"></select>
+                  <input type="text" class="form-control" placeholder="用途 ..."  value='' name="description">
                 </div>
             </div>
             <div class="form-group">
                 <label>运维联系人</label>
                 <div class="input-group">
                   <div class="input-group-addon">
-                    <i class="fa fa-server"></i>
+                    <i class="fa fa-user"></i>
                   </div>
-                <select class="form-control"  name="oper_member"></select>
+                <select class="form-control" id="operoption" name="oper_member"></select>
                 </div>
             </div>
           </div>
@@ -107,16 +105,16 @@
                 <label>部门</label>
                 <div class="input-group">
                   <div class="input-group-addon">
-                    <i class="fa fa-server"></i>
+                    <i class="fa fa-users"></i>
                   </div>
-                <select class="form-control"  id="teamoption" name="department" ></select>
+                <select class="form-control"  id="departmentoption" name="department" ></select>
                 </div>
             </div>
             <div class="form-group">
                 <label>团队</label>
                 <div class="input-group">
                   <div class="input-group-addon">
-                    <i class="fa fa-server"></i>
+                    <i class="fa fa-users"></i>
                   </div>
                 <select class="form-control"  id="teamoption"  name="team"></select>
                 </div>
@@ -125,9 +123,9 @@
                 <label>使用者</label>
                 <div class="input-group">
                   <div class="input-group-addon">
-                    <i class="fa fa-server"></i>
+                    <i class="fa fa-user"></i>
                   </div>
-                <select class="form-control" id="123" name="use_member"></select>
+                <select class="form-control" id="memberoption" name="use_member"></select>
                 </div>
             </div>
           </div>
@@ -139,22 +137,22 @@
             <h4 class="modal-title"><i class="fa fa-tags"></i>位置信息</h4>
           </div>
           <div class="form-group">
-            <div class="form-group">
-              <label>名称</label>
-              <input type="text" class="form-control"   value='' name="name">
-            </div>
-            <label>运行环境</label>
-            <select class="form-control"  name="host">
-              <option placeholder="设备名称 ..."></option>
-              <option value ='生产'>生产环境</option>
-              <option value ='测试'>测试环境</option>
-              <option value ='研发'>研发环境</option>
-              <option value ='办公'>办公环境</option>
-            </select>
-            <div class="form-group">
-              <label>名称</label>
-              <input type="text" class="form-control" placeholder="设备名称 ..."  value='' name="name">
-            </div>
+              <label>地理位置</label>
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-location-arrow"></i>
+                </div>
+              <select class="form-control" id="positionoption" name="position"></select>
+              </div>
+          </div>
+          <div class="form-group">
+                <label>数据中心</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-cube"></i>
+                  </div>
+                <select class="form-control" id="datacenteroption" name="datacenter"></select>
+                </div>
           </div>
         </div>
         <!-- right-->
@@ -163,14 +161,22 @@
             <h4 class="modal-title">&nbsp</h4>
           </div>
           <div class="form-group">
-            <label>磁盘类型</label>
-            <select class="form-control"  name="disk_type">
-              <option value ='thin'>精简制备</option>
-            </select>
+            <label>机柜</label>
+            <div class="input-group">
+              <div class="input-group-addon">
+                <i class="fa fa-smile-o"></i>
+              </div>
+              <input type="text" id="getbrand" class="form-control" placeholder="设备名称 ..."  value='' name="cabinet">
+            </div>
           </div>
           <div class="form-group">
-            <label>硬盘大小</label>
-            <input type="text" class="form-control" placeholder="capacity ..."  value='' name="capacity">
+            <label>设备U数</label>
+            <div class="input-group">
+              <div class="input-group-addon">
+                <i class="fa fa-smile-o"></i>
+              </div>
+              <input type="text" class="form-control" placeholder="设备总U数..."  value='' name="u_num">
+            </div>
           </div>
         </div>
         <!-- right-->
@@ -179,12 +185,22 @@
             <h4 class="modal-title"> &nbsp</h4>
           </div>
           <div class="form-group">
-            <label>设置主机名</label>
-            <input type="text" class="form-control" placeholder="host_name ..."  value='' name="host_name">
+            <label>起始U</label>
+            <div class="input-group">
+              <div class="input-group-addon">
+                <i class="fa fa-smile-o"></i>
+              </div>
+              <input type="text" class="form-control" placeholder="设备起始U数..."  value='' name="u_start">
+            </div>
           </div>
           <div class="form-group">
-            <label>设置IP</label>
-            <input type="text" class="form-control" placeholder="ip ..."  value='' name="ip">
+            <label>结束U</label>
+            <div class="input-group">
+              <div class="input-group-addon">
+                <i class="fa fa-smile-o"></i>
+              </div>
+              <input type="text" class="form-control" placeholder="设备结束U数..." value='' name="u_end">
+            </div>
           </div>
         </div>
         </div>
@@ -197,17 +213,13 @@
           </div>
           <div class="form-group">
             <div class="form-group">
-              <label>名称</label>
-              <input type="text" class="form-control" placeholder="设备名称 ..."  value='' name="name">
+              <label>资产编号</label>
+              <input type="text" class="form-control" placeholder="资产编号..."  value='' name="asset_num">
             </div>
-            <label>运行环境</label>
-            <select class="form-control"  name="host">
-              <option >---选择主机---</option>
-              <option value ='生产'>生产环境</option>
-              <option value ='测试'>测试环境</option>
-              <option value ='研发'>研发环境</option>
-              <option value ='办公'>办公环境</option>
-            </select>
+            <div class="form-group">
+              <label>产品序列号</label>
+              <input type="text" class="form-control" placeholder="产品SN..."  value='' name="asset_sn">
+            </div>
           </div>
         </div>
         <!-- right-->
@@ -216,14 +228,22 @@
             <h4 class="modal-title">&nbsp</h4>
           </div>
           <div class="form-group">
-            <label>磁盘类型</label>
-            <select class="form-control"  name="disk_type">
-              <option value ='thin'>精简制备</option>
-            </select>
+            <label>维保起始时间</label>
+            <div class="input-group date">
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <input type="text" class="form-control pull-right" id="datepicker1" name="support_start">
+            </div>
           </div>
           <div class="form-group">
-            <label>硬盘大小</label>
-            <input type="text" class="form-control" placeholder="capacity ..."  value='' name="capacity">
+            <label>维保结束时间</label>
+            <div class="input-group date">
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <input type="text" class="form-control pull-right" id="datepicker2" name="support_end">
+            </div>
           </div>
         </div>
         <!-- right-->
@@ -232,35 +252,29 @@
             <h4 class="modal-title"> &nbsp</h4>
           </div>
           <div class="form-group">
-            <label>设置主机名</label>
-            <input type="text" class="form-control" placeholder="host_name ..."  value='' name="host_name">
+            <label>硬件成本</label>
+            <input type="text" class="form-control" placeholder="硬件成本(人民币)..." value='' name="hd_cost">
           </div>
           <div class="form-group">
-            <label>设置IP</label>
-            <input type="text" class="form-control" placeholder="ip ..."  value='' name="ip">
-          </div>
-          <div class="form-group">
-            <label>设置IP</label>
-            <input type="text" class="form-control" placeholder="ip ..."  value='' name="ip">
+            <label>供应商</label>
+            <input type="text" class="form-control" placeholder="供应商..." value='' name="supplier">
           </div>
         </div>
         </div>
-
-
         <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+            <button class="btn btn-default"><a href="{% url 'hdServer_index' %}" target="_self">取消</a></button>
             <input type="submit" value="创建" name="create" class="btn btn-primary" >
         </div>
       </form>
     </div>
     </div>
 </div>
-
-
 {% endblock %}
+
+
 {% block js %}
 <script type="text/javascript">
-  $('[data-mask]').inputmask();
+  //$('[data-mask]').inputmask();
 
   $('.select2').select2();
 
@@ -268,6 +282,13 @@
       $('#team_data').DataTable()
     })
 
+    //Date picker
+    $('#datepicker1').datepicker({
+      autoclose: true
+    })
+    $('#datepicker2').datepicker({
+      autoclose: true
+    })
     //ajax请求 获取品牌信息
       $.ajax({
         type: "GET",
@@ -277,7 +298,7 @@
           var brand_data = data
           var option=null;
           for (var i =0;i<brand_data.length;i++){
-            option +="<option + value="+brand_data[i].id+">"+brand_data[i].name+"</option>"
+            option +="<option + value="+brand_data[i].name+">"+brand_data[i].name+"</option>"
           }
           $("#brandoption").empty();
           $("#brandoption").append("<option + value=''>---请选择---</option>");
@@ -290,28 +311,168 @@
 
       //ajax获取型号信息
       $("#brandoption").click(function(){
-        var brand_id=$("#brandoption  option:selected").val(); //获取选中的value
-        $("#brandtypeoption").empty();
+        var brand_name=$("#brandoption  option:selected").val(); //获取选中的value
+
+        $.ajax({
+          type: "GET",
+          url: "/setData/api/get_brandtype/",
+          dataType : "json",
+          success: function(data){
+            var brandtype_data = data
+            var option=null;
+            for (var i =0;i<brandtype_data.length;i++){
+              if (brand_name == brandtype_data[i].brand_name) {
+                option +="<option + value="+brandtype_data[i].name+">"+brandtype_data[i].name+"</option>"
+              }
+            }
+            $("#brandtypeoption").empty();
+            $("#brandtypeoption").append("<option + value=''>---请选择---</option>");
+            $("#brandtypeoption").append(option);
+            },
+          error : function(){
+            alert("setOrg数据获取出现问题");
+          }
+        });
+      });
+
+
+
+    //ajax请求 获取部门
       $.ajax({
         type: "GET",
-        url: "/setData/api/get_brandtype/",
+        url: "/setOrg/api/get_department/",
         dataType : "json",
         success: function(data){
-          var brandtype_data = data
+          var department_data = data
           var option=null;
-          for (var i =0;i<brandtype_data.length;i++){
-            if (brand_id == brandtype_data[i].brand_id) {
-              option +="<option + value="+brandtype_data[i].name+">"+brandtype_data[i].name+"</option>"
-            }
+          for (var i =0;i<department_data.length;i++){
+            option +="<option + value="+department_data[i].name+">"+department_data[i].name+"</option>"
           }
-          $("#brandtypeoption").append("<option + value=''>---请选择---</option>");
-          $("#brandtypeoption").append(option);
+          $("#departmentoption").empty();
+          $("#departmentoption").append("<option + value=''>---请选择---</option>");
+          $("#departmentoption").append(option);
           },
         error : function(){
           alert("setOrg数据获取出现问题");
         }
       });
-    });
+      //ajax获取团队
+      $("#departmentoption").click(function(){
+        var department_name=$("#departmentoption  option:selected").val(); //获取选中的value
+
+        $.ajax({
+          type: "GET",
+          url: "/setOrg/api/get_team/",
+          dataType : "json",
+          success: function(data){
+            var department_data = data
+            var option=null;
+            for (var i =0;i<department_data.length;i++){
+              if (department_name == department_data[i].department_name) {
+                option +="<option + value="+department_data[i].name+">"+department_data[i].name+"</option>"
+              }
+            }
+            $("#teamoption").empty();
+            $("#teamoption").append("<option + value=''>---请选择---</option>");
+            $("#teamoption").append(option);
+            },
+          error : function(){
+            alert("setOrg数据获取出现问题");
+          }
+        });
+      });
+
+      //ajax获取成员
+      $("#teamoption").click(function(){
+        var team_name=$("#teamoption  option:selected").val(); //获取选中的value
+
+        $.ajax({
+          type: "GET",
+          url: "/setOrg/api/get_member/",
+          dataType : "json",
+          success: function(data){
+            var member_data = data
+            var option=null;
+            for (var i =0;i<member_data.length;i++){
+              if (team_name == member_data[i].team_name) {
+                option +="<option + value="+member_data[i].name+">"+member_data[i].name+"</option>"
+              }
+            }
+            $("#memberoption").empty();
+            $("#memberoption").append("<option + value=''>---请选择---</option>");
+            $("#memberoption").append(option);
+            },
+          error : function(){
+            alert("setOrg数据获取出现问题");
+          }
+        });
+      });
+        //ajax请求 获取成员信息
+      $.ajax({
+        type: "GET",
+        url: "/setOrg/api/get_member/",
+        dataType : "json",
+        success: function(data){
+          var member_data = data
+          var option=null;
+          for (var i =0;i<member_data.length;i++){
+            option +="<option + value="+member_data[i].name+">"+member_data[i].name+"</option>"
+          }
+          $("#operoption").empty();
+          $("#operoption").append("<option + value=''>---请选择---</option>");
+          $("#operoption").append(option);
+          },
+        error : function(){
+          alert("setOrg数据获取出现问题");
+        }
+      });
+
+
+//ajax请求 获取地理位置
+      $.ajax({
+        type: "GET",
+        url: "/setData/api/get_position/",
+        dataType : "json",
+        success: function(data){
+          var position_data = data
+          var option=null;
+          for (var i =0;i<position_data.length;i++){
+            option +="<option + value="+position_data[i].name+">"+position_data[i].name+"</option>"
+          }
+          $("#positionoption").empty();
+          $("#positionoption").append("<option + value=''>---请选择---</option>");
+          $("#positionoption").append(option);
+          },
+        error : function(){
+          alert("setOrg数据获取出现问题");
+        }
+      });
+
+      //ajax获取数据中心
+      $("#positionoption").click(function(){
+        var datacenter_name=$("#positionoption  option:selected").val(); //获取选中的value
+
+        $.ajax({
+          type: "GET",
+          url: "/setData/api/get_datacenter/",
+          dataType : "json",
+          success: function(data){
+            var datacenter_data = data
+            var option=null;
+            for (var i =0;i<datacenter_data.length;i++){
+              if (datacenter_name == datacenter_data[i].position_name) {
+                option +="<option + value="+datacenter_data[i].name+">"+datacenter_data[i].name+"</option>"
+              }
+            }
+            $("#datacenteroption").empty();
+            $("#datacenteroption").append("<option + value=''>---请选择---</option>");
+            $("#datacenteroption").append(option);
+            },
+          error : function(){
+            alert("setOrg数据获取出现问题");
+          }
+        });
+      });
 
 
 </script>

@@ -20,10 +20,10 @@ router = DefaultRouter()
 # /setOrg/api/get_department/  # userd: setOrg/team.html
 router.register('get_department',api_views.DepartmentData,base_name='setOrg_get_department_api')
 router.register('get_team',api_views.TeamData,base_name='setOrg_get_team_api')
-
+router.register('get_member',api_views.MemberData,base_name='setOrg_get_member_api')
 
 urlpatterns = [
-    path('',views.index,name='setOrg_index'),#index:member
+    path('index',views.index,name='setOrg_index'),#index:member
 
     path('create_department/',views.create_department,name='setOrg_create_department'),
     path('get_department/',views.get_department,name='setOrg_get_department'),
