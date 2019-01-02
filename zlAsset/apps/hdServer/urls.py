@@ -6,9 +6,11 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    path('index',views.index,name='hdServer_index'),
+    path('index/',views.index,name='hdServer_index'),
     path('add_hd/',views.add_hd,name='hdServer_add_hd'),
     path('add_hd_action/',views.add_hd_action,name='hdServer_add_hd_action'),
+    path('modify_hd/<int:id>/',views.modify_hd,name='hdServer_modify_hd'),
+    path('modify_hd_actio/',views.modify_hd_action,name='hdServer_modify_hd_action'),
 
     path('test/',views.test,name='hdServer_test'),
     path('info/',views.get_hd_info,name='hdServer_get_info'),

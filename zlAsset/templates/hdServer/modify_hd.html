@@ -1,11 +1,11 @@
 {% extends 'common/base.html' %}
-{% block title %}服务器添加{% endblock %}
+{% block title %}服务器修改{% endblock %}
 {% block page_head %}{% endblock %}
 {% block content %}
 <div class="col-md-12">
     <div class="box box-primary">
     <div class="row">
-      <form role="form" action="{% url 'hdServer_add_hd_action' %}" method="post">{% csrf_token %}
+      <form role="form" action="{% url 'hdServer_modify_hd_action' %}" method="post">{% csrf_token %}
         <!-- >基本信息 -->
         <div class="col-md-12">
           <div class="col-md-4">
@@ -13,12 +13,13 @@
               <h4 class="modal-title"><i class="fa fa-tags"></i>基本信息</h4>
             </div>
               <div class="form-group">
+                <input type="hidden"  class="form-control" value="{{ hdServer_data.id }}" name='id'>
                 <label>名称</label>
                 <div class="input-group">
                   <div class="input-group-addon">
                     <i class="fa fa-smile-o"></i>
                   </div>
-                  <input type="text" id="getbrand" class="form-control" placeholder="设备名称 ..."  value='' name="name">
+                  <input type="text" id="getbrand" class="form-control" placeholder="设备名称 ..."  value="{{ hdServer_data.name }}" name="name">
                 </div>
               </div>
 
@@ -28,7 +29,7 @@
                   <div class="input-group-addon">
                     <i class="fa fa-server"></i>
                   </div>
-                <select class="form-control" id="brandoption" name="brand"></select>
+                <select class="form-control" id="brandoption" value="{{ hdServer_data.brand }}" name="brand"></select>
                 </div>
               </div>
               <div class="form-group">
@@ -37,7 +38,7 @@
                   <div class="input-group-addon">
                     <i class="fa fa-server"></i>
                   </div>
-                  <select class="form-control" id="brandtypeoption" name="brand_type"></select>
+                  <select class="form-control" id="brandtypeoption" value="{{ hdServer_data.brand_type }}" name="brand_type"></select>
                 </div>
               </div>
               <label>运行环境</label>
@@ -46,7 +47,7 @@
                   <i class="fa fa-bug"></i>
                 </div>
                 <select class="form-control"  name="run_env">
-                  <option value=''>---请选择---</option>
+                  <option value="{{ hdServer_data.run_env }}">{{ hdServer_data.run_env }}</option>
                   <option value ='生产环境'>生产环境</option>
                   <option value ='测试环境'>测试环境</option>
                   <option value ='研发环境'>研发环境</option>
@@ -65,7 +66,7 @@
                 <div class="input-group-addon">
                   <i class="fa fa-laptop"></i>
                 </div>
-                <input type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask="" name="manager_ip">
+                <input type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask="" value="{{ hdServer_data.manager_ip }}" name="manager_ip">
               </div>
             </div>
             <div class="form-group">
@@ -74,7 +75,7 @@
                 <div class="input-group-addon">
                   <i class="fa fa-laptop"></i>
                 </div>
-                <input type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask="" name="device_ip">
+                <input type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask="" value="{{ hdServer_data.device_ip }}" name="device_ip">
               </div>
             </div>
             <div class="form-group">
@@ -83,7 +84,7 @@
                   <div class="input-group-addon">
                     <i class="fa fa-edit"></i>
                   </div>
-                  <input type="text" class="form-control" placeholder="用途 ..."  value='' name="description">
+                  <input type="text" class="form-control" placeholder="用途 ..." value="{{ hdServer_data.description }}" name="description">
                 </div>
             </div>
             <div class="form-group">
@@ -92,7 +93,7 @@
                   <div class="input-group-addon">
                     <i class="fa fa-user"></i>
                   </div>
-                <select class="form-control" id="operoption" name="oper_member"></select>
+                <select class="form-control" id="operoption" value="{{ hdServer_data.oper_member }}" name="oper_member"></select>
                 </div>
             </div>
           </div>
@@ -107,7 +108,7 @@
                   <div class="input-group-addon">
                     <i class="fa fa-users"></i>
                   </div>
-                <select class="form-control"  id="departmentoption" name="department" ></select>
+                <select class="form-control"  id="departmentoption" value="{{ hdServer_data.department_name }}" name="department" ></select>
                 </div>
             </div>
             <div class="form-group">
@@ -125,7 +126,7 @@
                   <div class="input-group-addon">
                     <i class="fa fa-user"></i>
                   </div>
-                <select class="form-control" id="memberoption" name="use_member"></select>
+                <select class="form-control" id="memberoption" value="{{ hdServer_data.use_member }}" name="use_member"></select>
                 </div>
             </div>
           </div>
@@ -166,7 +167,7 @@
               <div class="input-group-addon">
                 <i class="fa fa-smile-o"></i>
               </div>
-              <input type="text" id="getbrand" class="form-control" placeholder="设备名称 ..."  value='' name="cabinet">
+              <input type="text" id="getbrand" class="form-control" placeholder="设备名称 ..."  value="{{ hdServer_data.cabinet }}" name="cabinet">
             </div>
           </div>
           <div class="form-group">
@@ -175,7 +176,7 @@
               <div class="input-group-addon">
                 <i class="fa fa-smile-o"></i>
               </div>
-              <input type="text" class="form-control" placeholder="设备总U数..."  value='' name="u_num">
+              <input type="text" class="form-control" placeholder="设备总U数..." value="{{ hdServer_data.u_num }}" name="u_num">
             </div>
           </div>
         </div>
@@ -190,7 +191,7 @@
               <div class="input-group-addon">
                 <i class="fa fa-smile-o"></i>
               </div>
-              <input type="text" class="form-control" placeholder="设备起始U数..."  value='' name="u_start">
+              <input type="text" class="form-control" placeholder="设备起始U数..." value="{{ hdServer_data.u_start }}" name="u_start">
             </div>
           </div>
           <div class="form-group">
@@ -199,7 +200,7 @@
               <div class="input-group-addon">
                 <i class="fa fa-smile-o"></i>
               </div>
-              <input type="text" class="form-control" placeholder="设备结束U数..." value='' name="u_end">
+              <input type="text" class="form-control" placeholder="设备结束U数..." value="{{ hdServer_data.u_end }}" name="u_end">
             </div>
           </div>
         </div>
@@ -214,11 +215,11 @@
           <div class="form-group">
             <div class="form-group">
               <label>资产编号</label>
-              <input type="text" class="form-control" placeholder="资产编号..."  value='' name="asset_num">
+              <input type="text" class="form-control" placeholder="资产编号..." value="{{ hdServer_data.asset_num }}" name="asset_num">
             </div>
             <div class="form-group">
               <label>产品序列号</label>
-              <input type="text" class="form-control" placeholder="产品SN..."  value='' name="asset_sn">
+              <input type="text" class="form-control" placeholder="产品SN..." value="{{ hdServer_data.asset_sn }}" name="asset_sn">
             </div>
           </div>
         </div>
@@ -233,7 +234,7 @@
               <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </div>
-              <input type="text" class="form-control pull-right" id="datepicker1" name="support_start">
+              <input type="text" class="form-control pull-right" id="datepicker1" value="{{ hdServer_data.support_start }}" name="support_start">
             </div>
           </div>
           <div class="form-group">
@@ -242,7 +243,7 @@
               <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </div>
-              <input type="text" class="form-control pull-right" id="datepicker2" name="support_end">
+              <input type="text" class="form-control pull-right" id="datepicker2" value="{{ hdServer_data.support_end }}" name="support_end">
             </div>
           </div>
         </div>
@@ -253,17 +254,17 @@
           </div>
           <div class="form-group">
             <label>硬件成本</label>
-            <input type="text" class="form-control" placeholder="硬件成本(人民币)..." value='' name="hd_cost">
+            <input type="text" class="form-control" placeholder="硬件成本(人民币)..." value="{{ hdServer_data.hd_cost }}" name="hd_cost">
           </div>
           <div class="form-group">
             <label>供应商</label>
-            <input type="text" class="form-control" placeholder="供应商..." value='' name="supplier">
+            <input type="text" class="form-control" placeholder="供应商..." value="{{ hdServer_data.supplier }}" name="supplier">
           </div>
         </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-default"><a href="{% url 'hdServer_index' %}" target="_self">取消</a></button>
-            <input type="submit" value="创建" name="create" class="btn btn-primary" >
+            <input type="submit" value="修改" name="create" class="btn btn-primary" >
         </div>
       </form>
     </div>
@@ -301,7 +302,7 @@
             option +="<option + value="+brand_data[i].name+">"+brand_data[i].name+"</option>"
           }
           $("#brandoption").empty();
-          $("#brandoption").append("<option + value=''>---请选择---</option>");
+          $("#brandoption").append("<option + value={{ hdServer_data.brand }}>{{ hdServer_data.brand }}</option>");
           $("#brandoption").append(option);
           },
         error : function(){
@@ -309,7 +310,31 @@
         }
       });
 
-      //ajax获取型号信息
+      //ajax获取型号信息 直接获取
+        var brand_name="{{ hdServer_data.brand }}" //获取选中的value
+        $.ajax({
+          type: "GET",
+          url: "/setData/api/get_brandtype/",
+          dataType : "json",
+          success: function(data){
+            var brandtype_data = data
+            var option=null;
+            for (var i =0;i<brandtype_data.length;i++){
+              if (brand_name == brandtype_data[i].brand_name) {
+
+                option +="<option + value="+brandtype_data[i].name+">"+brandtype_data[i].name+"</option>"
+              }
+            }
+            $("#brandtypeoption").empty();
+            $("#brandtypeoption").append("<option + value={{ hdServer_data.brand_type }}>{{ hdServer_data.brand_type }}</option>");
+            $("#brandtypeoption").append(option);
+            },
+          error : function(){
+            alert("setOrg数据获取出现问题");
+          }
+        });
+
+         //ajax获取型号信息 点击更新
       $("#brandoption").click(function(){
         var brand_name=$("#brandoption  option:selected").val(); //获取选中的value
 
@@ -334,9 +359,6 @@
           }
         });
       });
-
-
-
     //ajax请求 获取部门
       $.ajax({
         type: "GET",
@@ -349,14 +371,37 @@
             option +="<option + value="+department_data[i].name+">"+department_data[i].name+"</option>"
           }
           $("#departmentoption").empty();
-          $("#departmentoption").append("<option + value=''>---请选择---</option>");
+          $("#departmentoption").append("<option + value={{ hdServer_data.department }}>{{ hdServer_data.department }}</option>");
           $("#departmentoption").append(option);
           },
         error : function(){
           alert("setOrg数据获取出现问题");
         }
       });
-      //ajax获取团队
+      //ajax获取团队 直接获取
+        var department_name="{{ hdServer_data.department }}"; //获取选中的value
+        $.ajax({
+          type: "GET",
+          url: "/setOrg/api/get_team/",
+          dataType : "json",
+          success: function(data){
+            var department_data = data
+            var option=null;
+            for (var i =0;i<department_data.length;i++){
+              if (department_name == department_data[i].department_name) {
+                option +="<option + value="+department_data[i].name+">"+department_data[i].name+"</option>"
+              }
+            }
+            $("#teamoption").empty();
+            $("#teamoption").append("<option + value={{ hdServer_data.team }}>{{ hdServer_data.team }}</option>");
+            $("#teamoption").append(option);
+            },
+          error : function(){
+            alert("setOrg数据获取出现问题");
+          }
+        });
+
+//ajax获取团队 点击更新
       $("#departmentoption").click(function(){
         var department_name=$("#departmentoption  option:selected").val(); //获取选中的value
 
@@ -382,7 +427,30 @@
         });
       });
 
-      //ajax获取成员
+      //ajax获取成员 直接获取
+        var team_name="{{ hdServer_data.member }}"; //获取选中的value
+        $.ajax({
+          type: "GET",
+          url: "/setOrg/api/get_member/",
+          dataType : "json",
+          success: function(data){
+            var member_data = data
+            var option=null;
+            for (var i =0;i<member_data.length;i++){
+              if (team_name == member_data[i].team_name) {
+                option +="<option + value="+member_data[i].name+">"+member_data[i].name+"</option>"
+              }
+            }
+            $("#memberoption").empty();
+            $("#memberoption").append("<option + value={{ hdServer_data.use_member }}>{{ hdServer_data.use_member }}</option>");
+            $("#memberoption").append(option);
+            },
+          error : function(){
+            alert("setOrg数据获取出现问题");
+          }
+        });
+
+//ajax获取成员 点击更新
       $("#teamoption").click(function(){
         var team_name=$("#teamoption  option:selected").val(); //获取选中的value
 
@@ -407,7 +475,9 @@
           }
         });
       });
-        //ajax请求 获取成员信息
+
+
+        //ajax请求 获取所有成员信息(运维)
       $.ajax({
         type: "GET",
         url: "/setOrg/api/get_member/",
@@ -419,7 +489,7 @@
             option +="<option + value="+member_data[i].name+">"+member_data[i].name+"</option>"
           }
           $("#operoption").empty();
-          $("#operoption").append("<option + value=''>---请选择---</option>");
+          $("#operoption").append("<option + value={{ hdServer_data.use_member }}>{{ hdServer_data.use_member }}</option>");
           $("#operoption").append(option);
           },
         error : function(){
@@ -440,7 +510,7 @@
             option +="<option + value="+position_data[i].name+">"+position_data[i].name+"</option>"
           }
           $("#positionoption").empty();
-          $("#positionoption").append("<option + value=''>---请选择---</option>");
+          $("#positionoption").append("<option + value={{ hdServer_data.position }}>{{ hdServer_data.position }}</option>");
           $("#positionoption").append(option);
           },
         error : function(){
@@ -448,7 +518,30 @@
         }
       });
 
-      //ajax获取数据中心
+      //ajax获取数据中心 直接获取
+        var datacenter_name="{{ hdServer_data.position }}"; //获取选中的value
+        $.ajax({
+          type: "GET",
+          url: "/setData/api/get_datacenter/",
+          dataType : "json",
+          success: function(data){
+            var datacenter_data = data
+            var option=null;
+            for (var i =0;i<datacenter_data.length;i++){
+              if (datacenter_name == datacenter_data[i].position_name) {
+                option +="<option + value="+datacenter_data[i].name+">"+datacenter_data[i].name+"</option>"
+              }
+            }
+            $("#datacenteroption").empty();
+            $("#datacenteroption").append("<option + value={{ hdServer_data.datacenter }}>{{ hdServer_data.datacenter }}</option>");
+            $("#datacenteroption").append(option);
+            },
+          error : function(){
+            alert("setOrg数据获取出现问题");
+          }
+        });
+
+    //ajax获取数据中心 点击更新
       $("#positionoption").click(function(){
         var datacenter_name=$("#positionoption  option:selected").val(); //获取选中的value
 
@@ -473,7 +566,5 @@
           }
         });
       });
-
-
 </script>
 {% endblock %}

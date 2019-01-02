@@ -4,36 +4,47 @@
 {% block content %}
 
 
-<a href="{% url 'hdServer_add_hd' %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>
+<div class="col-md-12">
 
-
-<div class="col-md-10">
   <div class="box box-primary">
+
+
     <div class="box-body no-padding">
       <div class="table-responsive mailbox-messages">
         <div class="box-body">
-          <table id="team_data" class="table table-bordered table-striped">
+          <a href="{% url 'hdServer_add_hd' %}" title="添加按钮"><i class="fa fa-plus pull-right"></i></a>
+          <table id="hdServer_data" class="table table-bordered table-striped">
+
             <thead>
+
             <tr>
               <th style="display:none">id</th>
-              <th>用户</th>
-              <th>所属团队</th>
-              <th>联系方式</th>
-              <th>邮箱</th>
+              <th>名称</th>
+              <th>品牌</th>
+              <th>型号</th>
+              <th>数据中心</th>
+              <th>运行环境</th>
+              <th>使用人</th>
+              <th>供应商</th>
               <th>操作</th>
             </tr>
             </thead>
             <tbody>
-            {% for member in member_data %}
+            {% for hdServer in hdServer_data %}
             <tr>
-              <td style="display:none">{{ member.id }}</td>
-              <td>{{ member.name }}</td>
-              <td>{{ member.team_name }}</td>
-              <td>{{ member.phone }}</td>
-              <td>{{ member.email }}</td>
+              <td style="display:none">{{ hdServer.id }}</td>
+              <td>{{ hdServer.name }}</td>
+              <td>{{ hdServer.brand }}</td>
+              <td>{{ hdServer.brand_type }}</td>
+              <td>{{ hdServer.datacenter }}</td>
+              <td>{{ hdServer.run_env }}</td>
+              <td>{{ hdServer.use_member }}</td>
+              <td>{{ hdServer.supplier }}</td>
               <td>
-              <a href="{% url 'setOrg_delete_member' member.id %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
-              <a href="{% url 'setOrg_modify_member' member.id %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>
+                <a href="#" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
+                <a href="{% url 'hdServer_modify_hd' hdServer.id %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>&nbsp;&nbsp;
+                <a href="#" title="查看更多"><i class="fa fa-eye"></i></a>
+              </td>
               </td>
             </tr>
             {% endfor %}
@@ -50,40 +61,17 @@
 {% endblock %}
 {% block js %}
 <script type="text/javascript">
-    // $(function () {
-    //   $('#team_data').DataTable()
-    // })
+    $(function () {
+      $('#hdServer_data').DataTable()
+    })
 
-      // function del() {
-      //   var msg = "您确定要删除吗？";
-      //     if (confirm(msg)==true){
-      //       return true;
-      //     }else{
-      //       return false;
-      //   }
-      // }
-
-    //ajax请求
-    // $("#getoption").click(function(){
-    //   $.ajax({
-    //     type: "GET",
-    //     url: "/setOrg/api/get_team/",
-    //     dataType : "json", // 指定返回类型
-    //     //data: {xxx:"yyy"}, // 传递到后台的参数
-    //     success: function(data){
-    //       var team_data = data
-    //       var option=null;
-    //       for (var i =0;i<team_data.length;i++){
-    //         option +="<option + value="+team_data[i].name+">"+team_data[i].name+"</option>"
-    //       }
-    //       $("#addoption").empty();
-    //       $("#addoption").append(option);
-    //       },
-    //     error : function(){
-    //       alert("setOrg数据获取出现问题");
-    //     }
-    //   });
-    // });
-
+      function del() {
+        var msg = "您确定要删除吗？";
+          if (confirm(msg)==true){
+            return true;
+          }else{
+            return false;
+        }
+      }
 </script>
 {% endblock %}

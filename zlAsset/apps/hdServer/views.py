@@ -1,6 +1,9 @@
 # -*- coding:utf-8 -*-
+# Author: zili
+
 from django.shortcuts import render,HttpResponse
 from urllib.parse import quote, unquote
+from django.http import JsonResponse,HttpResponseRedirect
 
 # FBV(function base views) 登录校验
 from django.contrib.auth.decorators import login_required
@@ -19,7 +22,10 @@ def test(request):
 
 @login_required(login_url='/login/')
 def index(request):
-    return render(request, 'hdServer/index.html')
+    hdServer_data =Data.objects.all()
+    test = 'this is hdServer test'
+    # return render(request, 'hdServer/index.html', {'test': test})
+    return render(request,'hdServer/index.html',{'hdServer_data':hdServer_data})
 
 def get_hd_info(request):
     '''
@@ -83,7 +89,7 @@ def add_hd_action(request):
                 name=name,
                 brand=brand,
                 brand_type=brand_type,
-                run_env=brand_type,
+                run_env=run_env,
                 manager_ip=manager_ip,
                 device_ip=device_ip,
                 description=description,
@@ -108,8 +114,68 @@ def add_hd_action(request):
             return render(request,'hdServer/index.html',{'hdServer_data':hdServer_data })
         else:
             error_data = name+'已存在'
-            hdServer_data =Department.objects.all()
+            hdServer_data =Data.objects.all()
             return render(request,'hdServer/index.html',{'hdServer_data':hdServer_data,'error_data':error_data})
     else:
-        # return HttpResponseRedirect ('/hdServer/')
-        pass
+        return HttpResponseRedirect ('/hdServer/index/')
+
+
+def modify_hd(request,id):
+    hdServer_data =Data.objects.get(id=id)
+    return render(request,'hdServer/modify_hd.html',{'hdServer_data':hdServer_data})
+def modify_hd_action(request):
+    if request.method == 'POST':
+        id=request.POST['id']
+        name=request.POST['name']
+        brand=request.POST['brand']
+        brand_type=request.POST['brand_type']
+        run_env=request.POST['run_env']
+        manager_ip=request.POST['manager_ip']
+        device_ip=request.POST['device_ip']
+        description=request.POST['description']
+        oper_member=request.POST['oper_member']
+        department=request.POST['department']
+        team=request.POST['team']
+        use_member=request.POST['use_member']
+        position=request.POST['position']
+        datacenter=request.POST['datacenter']
+        cabinet=request.POST['cabinet']
+        u_num=request.POST['u_num']
+        u_start=request.POST['u_start']
+        u_end=request.POST['u_end']
+        asset_num=request.POST['asset_num']
+        asset_sn=request.POST['asset_sn']
+        support_start=request.POST['support_start']
+        support_end=request.POST['support_end']
+        hd_cost=request.POST['hd_cost']
+        supplier=request.POST['supplier']
+
+        Data.objects.filter(id=id).update(
+            name=name,
+            brand=brand,
+            brand_type=brand_type,
+            run_env=run_env,
+            manager_ip=manager_ip,
+            device_ip=device_ip,
+            description=description,
+            oper_member=oper_member,
+            department=department,
+            team=team,
+            use_member=use_member,
+            position=position,
+            datacenter=datacenter,
+            cabinet=cabinet,
+            u_num=u_num,
+            u_start=u_start,
+            u_end=u_end,
+            asset_num=asset_num,
+            asset_sn=asset_sn,
+            support_start=support_start,
+            support_end=support_end,
+            hd_cost=hd_cost,
+            supplier=supplier,
+            )
+        hdServer_data =Data.objects.all()
+        return render(request,'hdServer/index.html',{'hdServer_data':hdServer_data })
+    else:
+        return HttpResponseRedirect ('/hdServer/index/')
