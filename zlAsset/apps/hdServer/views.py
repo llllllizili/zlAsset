@@ -184,4 +184,4 @@ def base_detail(request,id):
 
 def hd_detail(request,id):
     hdServer_data =Data.objects.get(id=id)
-    return render(request,'hdServer/base_detail.html',{'hdServer_data':hdServer_data})
+    return render(request,'hdServer/hd_detail.html',{'hdServer_data':hdServer_data})

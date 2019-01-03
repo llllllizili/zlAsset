@@ -8,8 +8,8 @@
   <div class="box box-solid">
     <div class="box-body no-padding">
       <ul class="nav nav-pills nav-stacked">
-        <li class='active'><a href="{% url 'setData_get_brand' %}"><i class="fa fa-hand-peace-o"></i>基本信息</a></li>
-        <li><a href="{% url 'setData_get_brandtype' %}"><i class="fa fa-hand-peace-o"></i>硬件信息</a></li>
+        <li class='active'><a href="{% url 'hdServer_base_detail' hdServer_data.id %}"><i class="fa fa-hand-peace-o"></i>基本信息</a></li>
+        <li><a href="{% url 'hdServer_hd_detail' hdServer_data.id %}"><i class="fa fa-hand-peace-o"></i>硬件信息</a></li>
       </ul>
     </div>
   </div>
