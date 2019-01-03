@@ -23,8 +23,6 @@ def test(request):
 @login_required(login_url='/login/')
 def index(request):
     hdServer_data =Data.objects.all()
-    test = 'this is hdServer test'
-    # return render(request, 'hdServer/index.html', {'test': test})
     return render(request,'hdServer/index.html',{'hdServer_data':hdServer_data})
 
 def get_hd_info(request):
@@ -179,3 +177,11 @@ def modify_hd_action(request):
         return render(request,'hdServer/index.html',{'hdServer_data':hdServer_data })
     else:
         return HttpResponseRedirect ('/hdServer/index/')
+
+def base_detail(request,id):
+    hdServer_data =Data.objects.get(id=id)
+    return render(request,'hdServer/base_detail.html',{'hdServer_data':hdServer_data})
+
+def hd_detail(request,id):
+    hdServer_data =Data.objects.get(id=id)
+    return render(request,'hdServer/base_detail.html',{'hdServer_data':hdServer_data})
