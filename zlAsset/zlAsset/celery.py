@@ -1,16 +1,12 @@
 # -*- coding:utf-8 -*-
 
 from __future__ import absolute_import
-
 import os
-
 from celery import Celery
-
-
 from django.conf import settings
 
 #这里我们的项目名称为,所以为platform.settings
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "zlAsset.settings") 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "zlAsset.settings")
 #创建celery 应用
 app = Celery('zlAsset')
 
@@ -24,10 +20,6 @@ def debug_task(self):
 
 
 
-
-
-
-
 #定时任务 #成功
 from celery.schedules import crontab
 from datetime import timedelta
@@ -38,7 +30,7 @@ app.conf.update(
         # 一小时一次
         'sum-task': {
             'task': 'hdServer.tasks.add', #应用下的tasks
-            'schedule':  timedelta(seconds=3600),
+            'schedule':  timedelta(seconds=5),
             'args': (3000, 600)
         },
         # 2h 一次

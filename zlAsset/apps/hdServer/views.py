@@ -7,16 +7,54 @@ from django.http import JsonResponse,HttpResponseRedirect
 
 # FBV(function base views) 登录校验
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.hashers import make_password, check_password
 # Create your views here.
-import time
+import time,datetime
 import json
 from .sync_hddata import SyncHdInfo
 from .models import *
 
 @login_required(login_url='/login/')
 def test(request):
-    test = 'this is hdServer test'
+    # t = make_password("123456")
+    # test = check_password('123456',t)
+    test = []
+    cert_data=Cert.objects.all()
+    for c in cert_data:
+        if c.sync=='true':
+            if c.way=='ipmi':
+                ipmi_login = SyncHdInfo(username=c.username,password=c.password,server=c.ip)
+                ipmi_info = ipmi_login.get_hd_info_ipmi()
+
+                update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                val = IpmiData.objects.filter(cert_ip=c.ip)
+                if not val:
+                    IpmiData.objects.create(
+                        cert_ip=c.ip,
+                        brand=ipmi_info['hd']['brand'],
+                        product_name=ipmi_info['hd']['product_name'],
+                        uuid=ipmi_info['uuid'],
+                        fw=ipmi_info['fw'],
+                        way='ipmi',
+                        ip=ipmi_info['net']['IPAddress'],
+                        mac=ipmi_info['net']['MACAddress'],
+                        sn=ipmi_info['hd']['sn'],
+                        update_time=update_time
+                    )
+                else:
+                    IpmiData.objects.filter(cert_ip=c.ip).update(
+                        cert_ip=c.ip,
+                        brand=ipmi_info['hd']['brand'],
+                        product_name=ipmi_info['hd']['product_name'],
+                        uuid=ipmi_info['uuid'],
+                        fw=ipmi_info['fw'],
+                        way='ipmi',
+                        ip=ipmi_info['net']['IPAddress'],
+                        mac=ipmi_info['net']['MACAddress'],
+                        sn=ipmi_info['hd']['sn'],
+                        update_time=update_time
+                    )
+
     return render(request, 'hdServer/test.html', {'test': test})
 
 
@@ -26,15 +64,16 @@ def index(request):
     return render(request,'hdServer/index.html',{'hdServer_data':hdServer_data})
 
 def get_hd_info(request):
-    '''
-    username=
-    password=
-    server=
-    '''
-    ilo_login = SyncHdInfo(username='administrator',password='123qweASD',server='192.168.3.11')
-    ilo_info = ilo_login.get_hd_info_ilo()
+    username='administratot'
+    password='123qweASD'
+    ip='192.168.3.11'
 
-    return render(request, 'hdServer/return_value.html', {'return_value': ilo_info})
+    Cert_data = Cert.objects.get(ip=ip)
+    ipmi_info = SyncHdInfo(username=Cert_data.username,password=Cert_data.password,server=Cert_data.ip)
+    # ilo_info = ilo_login.get_hd_info_ilo()
+    ipmi_info = ipmi_info.get_hd_info_ipmi()
+
+    return render(request, 'hdServer/return_value.html', {'return_value': ipmi_info})
 
 def task_add_test(request):
     x = request.GET['x']
@@ -184,4 +223,34 @@ def base_detail(request,id):
 
 def hd_detail(request,id):
     hdServer_data =Data.objects.get(id=id)
-    return render(request,'hdServer/hd_detail.html',{'hdServer_data':hdServer_data})
+    try:
+        Cert_data = Cert.objects.get(hd_name=hdServer_data.name)
+    except Exception as e:
+        Cert_data = None
+    return render(request,'hdServer/hd_detail.html',{'hdServer_data':hdServer_data,'Cert_data':Cert_data})
+
+def set_cert(request,id):
+     if request.method == 'POST':
+        ip=request.POST['ip']
+        way=request.POST['way']
+        username=request.POST['username']
+        password=request.POST['password']
+        val = Cert.objects.filter(ip=ip)
+        hdServer_data =Data.objects.get(id=id)
+        if not val:
+            Cert.objects.create(
+                hd_name=hdServer_data.name,
+                ip=ip,
+                way=way,
+                username=username,
+                password=password
+                )
+            return HttpResponseRedirect ("/hdServer/hd_detail/"+str(id))
+        else:
+            Cert.objects.filter(ip=ip).update(
+                hd_name=hdServer_data.name,
+                way=way,
+                username=username,
+                password=password
+            )
+            return HttpResponseRedirect ("/hdServer/hd_detail/"+str(id))

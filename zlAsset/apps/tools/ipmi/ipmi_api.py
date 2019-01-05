@@ -1,5 +1,6 @@
 # coding: utf-8
-import commands
+# import commands
+import subprocess
 import re
 import sys
 import json
@@ -23,7 +24,7 @@ class IpmiApi(object):
         self.interface=interface_type
 
     def get_data(self,command):
-        (status,output) = commands.getstatusoutput(IPMI_CMD + ' -H '+self.server+' -U '+self.username+'\
+        (status,output) = subprocess.getstatusoutput(IPMI_CMD + ' -H '+self.server+' -U '+self.username+'\
                          -P '+'"'+self.password+'"'+ ' -p ' + str(self.port) + ' -I ' + self.interface + ' ' +command)
 
         if status >0:
@@ -62,14 +63,14 @@ class IpmiApi(object):
                     data['brand']=brand
             else:
                 continue
-        return json.dumps(data)
+        return data
 
 
 # info
     def get_info(self):
         #fru
         hd = self.get_fru()
-        brand=json.loads(hd)['brand']
+        brand=hd['brand']
         if 'dell' in brand.lower():
             # uuid info
             uuid_data=''
@@ -235,7 +236,7 @@ class IpmiApi(object):
                 if fan['msg']:
                     fanlist=[]
                     for val in fan['msg'].splitlines():
-                        if 'fan' in val.lower():    
+                        if 'fan' in val.lower():
                             _v = val.split('|')
                             # hp
                             if 'percent' in _v[2].strip():
@@ -309,7 +310,7 @@ class IpmiApi(object):
                     if not net_dict:
                         net_json='unsupported'
                     else:
-                        net_json=json.dumps(net_dict)
+                        net_json=net_dict
                 else:
                     net_json='unsupported'
             else:
@@ -325,10 +326,10 @@ class IpmiApi(object):
         res = self.get_data("power " + action)
         return res
 
-# status 
+# status
     def get_status(self):
         hd = self.get_fru()
-        brand=json.loads(hd)['brand']
+        brand=hd['brand']
         if 'dell' in brand.lower():
             #cpu
             cpu_data = {}
@@ -360,10 +361,10 @@ class IpmiApi(object):
                     cpu_sta = 'unsupported'
             else:
                 cpu_sta = 'failed (command get cpu use)'
-            
+
             cpu_data['temp']=cpu_temp_avg
             cpu_data['status']=cpu_sta
-        
+
             #memory
             mem_data = {}
             mem_temp = []
@@ -378,7 +379,7 @@ class IpmiApi(object):
             mem_temp = 'unsupported'
             mem_data['temp']=mem_temp
             mem_data['status']=mem_sta
-            
+
             #fan
             fan_data = {}
             fan_sta=[]
@@ -498,7 +499,7 @@ class IpmiApi(object):
                         elif 'RPM' in _v[2].strip():
                             fan_temp.append(float(_v[1].strip()))
                             fan_sta.append(_v[3].strip())
-                        
+
                     if len(set(fan_sta)) >= 2:
                         fan_data['status'] = 'issue'
                     else:
@@ -543,7 +544,7 @@ class IpmiApi(object):
             else:
                 power_data['watts']='faild (command get power watts)'
                 power_data['status']='faild (command get power sta)'
-                
+
         #return json.dumps(mem_sta)
         return {
             'cpu_sta':json.dumps(cpu_data),
@@ -570,4 +571,4 @@ if __name__ == "__main__":
     ipmi_login = ipmi_api('192.168.1.14', 'root', '123qweASD')
     info = ipmi_login.get_info()
 
-    print info
+    print(info)

@@ -21,7 +21,7 @@
           <div class="box-body">
           <span><h4><font color="red">{{ error_data }}</font></h4></span><p><p>
           <button type="button" id='getoption' class="btn btn-block btn-primary" data-toggle="modal" data-target="#pingzheng">
-            凭证设置
+            同步设置
           </button></br>
           <a href="{% url 'hdServer_index' %}">
             <button class="btn btn-block btn-default">返回</button>
@@ -39,23 +39,23 @@
                     <h4 class="modal-title">设置凭证</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form" action="{% url 'setData_create_datacenter' %}" method="post">
+                    <form role="form" action="{% url 'hdServer_set_cert' hdServer_data.id %}" method="post">
                         <div class="form-group">
                           <label>IP</label>
-                          <input type="text" class="form-control"  value='' name="ip">
+                          <input type="text" class="form-control"  value="{{ Cert_data.ip }}" name="ip">
                           <label>同步方式</label>
                           <select class="form-control" name="way">
                             <option value='ipmi'>ipmi</option>
                             <option value='ilo'>ilo</option>
                           </select>
                           <label>用户名</label>
-                          <input type="text" class="form-control" value='' name="username">
+                          <input type="text" class="form-control" value="{{ Cert_data.username }}" name="username">
                           <label>密码</label>
-                          <input type="text" class="form-control" value='' name="password">
+                          <input type="password" class="form-control" value='' name="password">
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
-                          <input type="submit" value="创建" name="create" class="btn btn-primary" >
+                          <input type="submit" name="create" class="btn btn-primary" >
                         </div>
                     </form>
                 </div>
@@ -64,18 +64,10 @@
       </div>
     </div>
   </div>
-
-
-
-
-
-
-
 </div>
 
 
-
-
+<!-- ipmi -->
 <div class="col-md-10">
     <div class="box box-primary">
     <div class="row">
@@ -83,19 +75,10 @@
         <div class="col-md-12">
           <div class="col-md-4">
             <div class="modal-header">
-              <h4 class="modal-title"><i class="fa fa-tags"></i>基本信息</h4>
+              <h4 class="modal-title"><i class="fa fa-tags"></i>凭证信息</h4>
             </div>
               <div class="form-group">
-                <label>名称: </label> {{ hdServer_data.name }}
-              </div>
-              <div class="form-group">
-                <label>品牌: </label> {{ hdServer_data.brand }}
-              </div>
-              <div class="form-group">
-                <label>型号: </label> {{ hdServer_data.brand_type }}
-              </div>
-              <div class="form-group">
-                <label>运行环境: </label> {{ hdServer_data.run_env }}
+                <label>IP: </label> {{ Cert_data.ip }}
               </div>
           </div>
           <!-- right-->
@@ -104,16 +87,7 @@
               <h4 class="modal-title">&nbsp</h4>
             </div>
               <div class="form-group">
-                <label>管理IP: </label> {{ hdServer_data.manager_ip }}
-              </div>
-              <div class="form-group">
-                <label>设备IP: </label> {{ hdServer_data.device_ip }}
-              </div>
-              <div class="form-group">
-                <label>用途: </label> {{ hdServer_data.description }}
-              </div>
-              <div class="form-group">
-                <label>运维联系人: </label> {{ hdServer_data.oper_member }}
+                <label>用户: </label> {{ Cert_data.username }}
               </div>
           </div>
           <!-- right-->
@@ -122,94 +96,72 @@
               <h4 class="modal-title">&nbsp</h4>
             </div>
               <div class="form-group">
-                <label>部门: </label> {{ hdServer_data.department }}
+                <label>方式: </label> {{ Cert_data.way }}
+              </div>
+          </div>
+        </div>
+        {% if Cert_data.way == 'ipmi' %}
+          <div class="col-md-12">
+            <div class="col-md-4">
+              <div class="modal-header">
+                <h4 class="modal-title"><i class="fa fa-tags"></i>IPMI信息</h4>
               </div>
               <div class="form-group">
-                <label>团队: </label> {{ hdServer_data.team }}
+                <label>ipmi: </label> {{ hdServer_data.position }}
+              </div>
+            </div>
+          <!-- right-->
+            <div class="col-md-4">
+              <div class="modal-header">
+                <h4 class="modal-title">&nbsp</h4>
               </div>
               <div class="form-group">
-                <label>使用者: </label> {{ hdServer_data.use_member }}
+                <label>ipmi: </label> {{ hdServer_data.cabinet }}
               </div>
+            </div>
+          <!-- right-->
+            <div class="col-md-4">
+              <div class="modal-header">
+                <h4 class="modal-title"> &nbsp</h4>
+              </div>
+              <div class="form-group">
+                <label>ipmi: </label> {{ hdServer_data.u_start }}
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="col-md-12">
-        <div class="col-md-4">
-          <div class="modal-header">
-            <h4 class="modal-title"><i class="fa fa-tags"></i>位置信息</h4>
+        {% else %}
+          <div class="col-md-12">
+            <div class="col-md-4">
+              <div class="modal-header">
+                <h4 class="modal-title"><i class="fa fa-tags"></i>ILO信息</h4>
+              </div>
+              <div class="form-group">
+                <label>ILO: </label> {{ hdServer_data.position }}
+              </div>
+            </div>
+          <!-- right-->
+            <div class="col-md-4">
+              <div class="modal-header">
+                <h4 class="modal-title">&nbsp</h4>
+              </div>
+              <div class="form-group">
+                <label>ILO: </label> {{ hdServer_data.cabinet }}
+              </div>
+            </div>
+          <!-- right-->
+            <div class="col-md-4">
+              <div class="modal-header">
+                <h4 class="modal-title"> &nbsp</h4>
+              </div>
+              <div class="form-group">
+                <label>ILO: </label> {{ hdServer_data.u_start }}
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label>地理位置: </label> {{ hdServer_data.position }}
-          </div>
-          <div class="form-group">
-            <label>数据中心: </label> {{ hdServer_data.datacenter }}
-          </div>
-        </div>
-        <!-- right-->
-        <div class="col-md-4">
-          <div class="modal-header">
-            <h4 class="modal-title">&nbsp</h4>
-          </div>
-          <div class="form-group">
-            <label>机柜: </label> {{ hdServer_data.cabinet }}
-          </div>
-          <div class="form-group">
-            <label>设备U数: </label> {{ hdServer_data.u_num }}
-          </div>
-        </div>
-        <!-- right-->
-        <div class="col-md-4">
-          <div class="modal-header">
-            <h4 class="modal-title"> &nbsp</h4>
-          </div>
-          <div class="form-group">
-            <label>起始U: </label> {{ hdServer_data.u_start }}
-          </div>
-          <div class="form-group">
-            <label>结束U: </label> {{ hdServer_data.u_end }}
-          </div>
-        </div>
-        </div>
-
-
-        <div class="col-md-12">
-        <div class="col-md-4">
-          <div class="modal-header">
-            <h4 class="modal-title"><i class="fa fa-tags"></i>资产信息</h4>
-          </div>
-          <div class="form-group">
-            <label>资产编号: </label> {{ hdServer_data.asset_num }}
-          </div>
-          <div class="form-group">
-            <label>产品序列号: </label> {{ hdServer_data.asset_sn }}
-          </div>
-        </div>
-        <!-- right-->
-        <div class="col-md-4">
-          <div class="modal-header">
-            <h4 class="modal-title">&nbsp</h4>
-          </div>
-          <div class="form-group">
-            <label>维保起始时间: </label> {{ hdServer_data.support_start }}
-          </div>
-          <div class="form-group">
-            <label>维保结束时间: </label> {{ hdServer_data.support_end }}
-          </div>
-        </div>
-        <!-- right-->
-        <div class="col-md-4">
-          <div class="modal-header">
-            <h4 class="modal-title"> &nbsp</h4>
-          </div>
-          <div class="form-group">
-            <label>硬件成本: </label> {{ hdServer_data.hd_cost }}
-          </div>
-          <div class="form-group">
-            <label>供应商: </label> {{ hdServer_data.supplier }}
-          </div>
-        </div>
-        </div>
+        {% endif %}
     </div>
     </div>
 </div>
+
 {% endblock %}
