@@ -20,7 +20,7 @@ class SyncHdInfo(object):
         ilo.login()
         _ret = ilo.get_info()
 
-        return json.dumps(_ret)
+        return _ret
 
     def get_hd_info_ipmi(self):
         ipmi = IpmiApi(username=self.username,password=self.password,server=self.server)

@@ -70,173 +70,51 @@ class IpmiApi(object):
     def get_info(self):
         #fru
         hd = self.get_fru()
-        brand=hd['brand']
-        if 'dell' in brand.lower():
+        if 'brand' in hd:
+            brand=hd['brand']
+            #dell
+            if 'dell' in brand.lower():
             # uuid info
-            uuid_data=''
-            uuid = self.get_data('mc guid | grep -i GUID')
-            if uuid['status'] == 1:
-                if uuid['msg']:
-                    for val in uuid['msg'].splitlines():
-                        _v=val.split(':')
-                        if len(_v) != 2:
-                            continue
-                        uuid_data=_v[1].strip()
-                    if not uuid_data:
-                        uuid_data='unsupported'
-                else:
-                    uuid_data='unsupported'
-            else:
-                uuid_data='failed (command get uuid)'
-
-            # fw info
-            fw_data=''
-            fw = self.get_data("mc info | grep -i 'Firmware Revision'")
-            if fw['status'] == 1:
-                if fw['msg']:
-                    for val in fw['msg'].splitlines():
-                        _v=val.split(':')
-                        if len(_v) != 2:
-                            continue
-                        fw_data=_v[1].strip()
-                    if not fw_data:
-                        fw_data='unsupported'
-                else:
-                    fw_data='unsupported'
-            else:
-                fw_data='failed (command get fw)'
-
-            # fan info
-            fan_num=''
-            fan = self.get_data("sensor list | grep -E -i 'fan'")
-            if fw['status'] == 1:
-                if fan['msg']:
-                    fanlist=[]
-                    for val in fan['msg'].splitlines():
-                        _v = val.split('|')
-                        # hp
-                        if 'percent' in _v[2].strip():
-                            fanlist.append(_v[0])
-                        # lenvov & ibm & dell
-                        elif 'RPM' in _v[2].strip():
-                            fanlist.append(_v[0])
-                        else:
-                            continue
-                    fan_num = len(fanlist)
-                    if not fan_num:
-                        fan_num='unsupported'
-                else:
-                    fan_num='unsupported'
-            else:
-                fan_num='failed (command get fan)'
-
-            #cpu info
-            cpu_num=''
-            cpu = self.get_data("sensor list | grep -E -i 'CPU'")
-            if cpu['status'] == 1:
-                if cpu['msg']:
-                    cpulist=[]
-                    for val in cpu['msg'].splitlines():
-                        _v =  val.split('|')
-                        if 'degrees' in _v[2].strip():
-                            cpulist.append(_v[0])
-                        else:
-                            continue
-                    cpu_num = len(cpulist)
-                    if not cpu_num:
-                        cpu_num = 'unsupported'
-                else:
-                    cpu_num='unsupported'
-            else:
-                cpu_num='failed (command get fan)'
-
-            # mem info
-            mem_num=''
-            mem = self.get_data("sensor list | grep -E -i 'DIMM'")
-            if mem['status'] == 1:
-                if mem['msg']:
-                    memlist=[]
-                    for val in mem['msg'].splitlines():
-                        _v = val.split('|')
-                        if 'degrees' in _v[2].strip():
-                            memlist.append(_v[0])
-                        else:
-                            continue
-                    mem_num= len(memlist)
-                    if not mem_num:
-                        mem_num='unsupported'
-                else:
-                    mem_num='unsupported'
-            else:
-                mem_num='failed (command get mem)'
-
-            # net info
-            net_json=''
-            net = self.get_data("lan print | grep -E -i 'address|mask'")
-            if net['status'] == 1:
-                if net['msg']:
-                    net_dict = {}
-                    for val in net['msg'].splitlines():
-                        _v = val.split(': ')
-                        _k = _v[0].strip()
-                        net_dict[''.join(_k.split())] = _v[1].strip()
-                    if not net_dict:
-                        net_json='unsupported'
+                uuid_data=''
+                uuid = self.get_data('mc guid | grep -i GUID')
+                if uuid['status'] == 1:
+                    if uuid['msg']:
+                        for val in uuid['msg'].splitlines():
+                            _v=val.split(':')
+                            if len(_v) != 2:
+                                continue
+                            uuid_data=_v[1].strip()
+                        if not uuid_data:
+                            uuid_data='unsupported'
                     else:
-                        net_json=json.dumps(net_dict)
-                else:
-                    net_json='unsupported'
-            else:
-                net_json='failed (command get net)'
-
-            return {'uuid':uuid_data,'fw':fw_data,'fan_num':fan_num,
-                    'cpu_num':cpu_num,'mem_num':mem_num,'net':net_json,
-                    'hd':hd}
-# other
-        else:
-            # uuid info
-            uuid_data=''
-            uuid = self.get_data('mc guid | grep -i GUID')
-            if uuid['status'] == 1:
-                if uuid['msg']:
-                    for val in uuid['msg'].splitlines():
-                        _v=val.split(':')
-                        if len(_v) != 2:
-                            continue
-                        uuid_data=_v[1].strip()
-                    if not uuid_data:
                         uuid_data='unsupported'
                 else:
-                    uuid_data='unsupported'
-            else:
-                uuid_data='failed (command get uuid)'
+                    uuid_data='failed (command get uuid)'
 
-            # fw info
-            fw_data=''
-            fw = self.get_data("mc info | grep -i 'Firmware Revision'")
-            if fw['status'] == 1:
-                if fw['msg']:
-                    for val in fw['msg'].splitlines():
-                        _v=val.split(':')
-                        if len(_v) != 2:
-                            continue
-                        fw_data=_v[1].strip()
-                    if not fw_data:
+                # fw info
+                fw_data=''
+                fw = self.get_data("mc info | grep -i 'Firmware Revision'")
+                if fw['status'] == 1:
+                    if fw['msg']:
+                        for val in fw['msg'].splitlines():
+                            _v=val.split(':')
+                            if len(_v) != 2:
+                                continue
+                            fw_data=_v[1].strip()
+                        if not fw_data:
+                            fw_data='unsupported'
+                    else:
                         fw_data='unsupported'
                 else:
-                    fw_data='unsupported'
-            else:
-                fw_data='failed (command get fw)'
+                    fw_data='failed (command get fw)'
 
-
-            # fan info
-            fan_num=''
-            fan = self.get_data("sensor list | grep -E -i 'fan'")
-            if fan['status'] == 1:
-                if fan['msg']:
-                    fanlist=[]
-                    for val in fan['msg'].splitlines():
-                        if 'fan' in val.lower():
+                # fan info
+                fan_num=''
+                fan = self.get_data("sensor list | grep -E -i 'fan'")
+                if fw['status'] == 1:
+                    if fan['msg']:
+                        fanlist=[]
+                        for val in fan['msg'].splitlines():
                             _v = val.split('|')
                             # hp
                             if 'percent' in _v[2].strip():
@@ -247,79 +125,205 @@ class IpmiApi(object):
                             else:
                                 continue
                         fan_num = len(fanlist)
-                    if not fan_num:
+                        if not fan_num:
+                            fan_num='unsupported'
+                    else:
                         fan_num='unsupported'
                 else:
-                    fan_num='unsupported'
-            else:
-                fan_num='failed (command get fan)'
+                    fan_num='failed (command get fan)'
 
-            #cpu info
-            cpu_num=''
-            cpu = self.get_data("sensor list | grep -E -i 'CPU'")
-            if cpu['status'] == 1:
-                if cpu['msg']:
-                    cpulist=[]
-                    for val in cpu['msg'].splitlines():
-                        if 'cpu' in val.lower():
+                #cpu info
+                cpu_num=''
+                cpu = self.get_data("sensor list | grep -E -i 'CPU'")
+                if cpu['status'] == 1:
+                    if cpu['msg']:
+                        cpulist=[]
+                        for val in cpu['msg'].splitlines():
                             _v =  val.split('|')
                             if 'degrees' in _v[2].strip():
                                 cpulist.append(_v[0])
                             else:
                                 continue
-                    cpu_num = len(cpulist)
-                    if not cpu_num:
-                        cpu_num = 'unsupported'
+                        cpu_num = len(cpulist)
+                        if not cpu_num:
+                            cpu_num = 'unsupported'
+                    else:
+                        cpu_num='unsupported'
                 else:
-                    cpu_num='unsupported'
-            else:
-                cpu_num='failed (command get fan)'
+                    cpu_num='failed (command get fan)'
 
-            # mem info
-            mem_num=''
-            mem = self.get_data("sensor list | grep -E -i 'DIMM'")
-            if mem['status'] == 1:
-                if mem['msg']:
-                    memlist=[]
-                    for val in mem['msg'].splitlines():
-                        if 'DIMM' in val:
+                # mem info
+                mem_num=''
+                mem = self.get_data("sensor list | grep -E -i 'DIMM'")
+                if mem['status'] == 1:
+                    if mem['msg']:
+                        memlist=[]
+                        for val in mem['msg'].splitlines():
                             _v = val.split('|')
                             if 'degrees' in _v[2].strip():
                                 memlist.append(_v[0])
                             else:
                                 continue
-                    mem_num= len(memlist)
-                    if not mem_num:
+                        mem_num= len(memlist)
+                        if not mem_num:
+                            mem_num='unsupported'
+                    else:
                         mem_num='unsupported'
                 else:
-                    mem_num='unsupported'
-            else:
-                mem_num='failed (command get mem)'
+                    mem_num='failed (command get mem)'
 
-            # net info
-            net_json=''
-            net = self.get_data("lan print | grep -E -i 'address|mask'")
-            if net['status'] == 1:
-                if net['msg']:
-                    net_dict = {}
-                    for val in net['msg'].splitlines():
-                        if ('address' or 'mask') in val.lower():
+                # net info
+                net_json=''
+                net = self.get_data("lan print | grep -E -i 'address|mask'")
+                if net['status'] == 1:
+                    if net['msg']:
+                        net_dict = {}
+                        for val in net['msg'].splitlines():
                             _v = val.split(': ')
                             _k = _v[0].strip()
                             net_dict[''.join(_k.split())] = _v[1].strip()
-                    if not net_dict:
-                        net_json='unsupported'
+                        if not net_dict:
+                            net_json='unsupported'
+                        else:
+                            net_json=json.dumps(net_dict)
                     else:
-                        net_json=net_dict
+                        net_json='unsupported'
                 else:
-                    net_json='unsupported'
+                    net_json='failed (command get net)'
+
+                return {'uuid':uuid_data,'fw':fw_data,'fan_num':fan_num,
+                        'cpu_num':cpu_num,'mem_num':mem_num,'net':net_json,
+                        'hd':hd}
+
+# other
             else:
-                net_json='failed (command get net)'
+            # uuid info
+                uuid_data=''
+                uuid = self.get_data('mc guid | grep -i GUID')
+                if uuid['status'] == 1:
+                    if uuid['msg']:
+                        for val in uuid['msg'].splitlines():
+                            _v=val.split(':')
+                            if len(_v) != 2:
+                                continue
+                            uuid_data=_v[1].strip()
+                        if not uuid_data:
+                            uuid_data='unsupported'
+                    else:
+                        uuid_data='unsupported'
+                else:
+                    uuid_data='failed (command get uuid)'
+
+                # fw info
+                fw_data=''
+                fw = self.get_data("mc info | grep -i 'Firmware Revision'")
+                if fw['status'] == 1:
+                    if fw['msg']:
+                        for val in fw['msg'].splitlines():
+                            _v=val.split(':')
+                            if len(_v) != 2:
+                                continue
+                            fw_data=_v[1].strip()
+                        if not fw_data:
+                            fw_data='unsupported'
+                    else:
+                        fw_data='unsupported'
+                else:
+                    fw_data='failed (command get fw)'
+
+
+                # fan info
+                fan_num=''
+                fan = self.get_data("sensor list | grep -E -i 'fan'")
+                if fan['status'] == 1:
+                    if fan['msg']:
+                        fanlist=[]
+                        for val in fan['msg'].splitlines():
+                            if 'fan' in val.lower():
+                                _v = val.split('|')
+                                # hp
+                                if 'percent' in _v[2].strip():
+                                    fanlist.append(_v[0])
+                                # lenvov & ibm & dell
+                                elif 'RPM' in _v[2].strip():
+                                    fanlist.append(_v[0])
+                                else:
+                                    continue
+                            fan_num = len(fanlist)
+                        if not fan_num:
+                            fan_num='unsupported'
+                    else:
+                        fan_num='unsupported'
+                else:
+                    fan_num='failed (command get fan)'
+
+                #cpu info
+                cpu_num=''
+                cpu = self.get_data("sensor list | grep -E -i 'CPU'")
+                if cpu['status'] == 1:
+                    if cpu['msg']:
+                        cpulist=[]
+                        for val in cpu['msg'].splitlines():
+                            if 'cpu' in val.lower():
+                                _v =  val.split('|')
+                                if 'degrees' in _v[2].strip():
+                                    cpulist.append(_v[0])
+                                else:
+                                    continue
+                        cpu_num = len(cpulist)
+                        if not cpu_num:
+                            cpu_num = 'unsupported'
+                    else:
+                        cpu_num='unsupported'
+                else:
+                    cpu_num='failed (command get fan)'
+
+                # mem info
+                mem_num=''
+                mem = self.get_data("sensor list | grep -E -i 'DIMM'")
+                if mem['status'] == 1:
+                    if mem['msg']:
+                        memlist=[]
+                        for val in mem['msg'].splitlines():
+                            if 'DIMM' in val:
+                                _v = val.split('|')
+                                if 'degrees' in _v[2].strip():
+                                    memlist.append(_v[0])
+                                else:
+                                    continue
+                        mem_num= len(memlist)
+                        if not mem_num:
+                            mem_num='unsupported'
+                    else:
+                        mem_num='unsupported'
+                else:
+                    mem_num='failed (command get mem)'
+
+                # net info
+                net_json=''
+                net = self.get_data("lan print | grep -E -i 'address|mask'")
+                if net['status'] == 1:
+                    if net['msg']:
+                        net_dict = {}
+                        for val in net['msg'].splitlines():
+                            if ('address' or 'mask') in val.lower():
+                                _v = val.split(': ')
+                                _k = _v[0].strip()
+                                net_dict[''.join(_k.split())] = _v[1].strip()
+                        if not net_dict:
+                            net_json='unsupported'
+                        else:
+                            net_json=net_dict
+                    else:
+                        net_json='unsupported'
+                else:
+                    net_json='failed (command get net)'
 
             return {'uuid':uuid_data,'fw':fw_data,'fan_num':fan_num,
                     'cpu_num':cpu_num,'mem_num':mem_num,'net':net_json,
                     'hd':hd}
-
+        else:
+            return {'error':'get ipmi data faild'}
 
 # operation power
     def oper_power(self,action):

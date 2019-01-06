@@ -14,47 +14,11 @@ import json
 from .sync_hddata import SyncHdInfo
 from .models import *
 
-@login_required(login_url='/login/')
+# @login_required(login_url='/login/')
 def test(request):
     # t = make_password("123456")
     # test = check_password('123456',t)
-    test = []
-    cert_data=Cert.objects.all()
-    for c in cert_data:
-        if c.sync=='true':
-            if c.way=='ipmi':
-                ipmi_login = SyncHdInfo(username=c.username,password=c.password,server=c.ip)
-                ipmi_info = ipmi_login.get_hd_info_ipmi()
-
-                update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                val = IpmiData.objects.filter(cert_ip=c.ip)
-                if not val:
-                    IpmiData.objects.create(
-                        cert_ip=c.ip,
-                        brand=ipmi_info['hd']['brand'],
-                        product_name=ipmi_info['hd']['product_name'],
-                        uuid=ipmi_info['uuid'],
-                        fw=ipmi_info['fw'],
-                        way='ipmi',
-                        ip=ipmi_info['net']['IPAddress'],
-                        mac=ipmi_info['net']['MACAddress'],
-                        sn=ipmi_info['hd']['sn'],
-                        update_time=update_time
-                    )
-                else:
-                    IpmiData.objects.filter(cert_ip=c.ip).update(
-                        cert_ip=c.ip,
-                        brand=ipmi_info['hd']['brand'],
-                        product_name=ipmi_info['hd']['product_name'],
-                        uuid=ipmi_info['uuid'],
-                        fw=ipmi_info['fw'],
-                        way='ipmi',
-                        ip=ipmi_info['net']['IPAddress'],
-                        mac=ipmi_info['net']['MACAddress'],
-                        sn=ipmi_info['hd']['sn'],
-                        update_time=update_time
-                    )
-
+    test = hd_data_sync()
     return render(request, 'hdServer/test.html', {'test': test})
 
 
@@ -156,7 +120,6 @@ def add_hd_action(request):
     else:
         return HttpResponseRedirect ('/hdServer/index/')
 
-
 def modify_hd(request,id):
     hdServer_data =Data.objects.get(id=id)
     return render(request,'hdServer/modify_hd.html',{'hdServer_data':hdServer_data})
@@ -225,9 +188,13 @@ def hd_detail(request,id):
     hdServer_data =Data.objects.get(id=id)
     try:
         Cert_data = Cert.objects.get(hd_name=hdServer_data.name)
+        if Cert_data.way=='ipmi':
+            synchd_data = IpmiData.objects.get(cert_ip=Cert_data.ip)
+        if Cert_data.way=='ilo':
+            synchd_data = IpmiData.objects.get(cert_ip=Cert_data.ip)
     except Exception as e:
         Cert_data = None
-    return render(request,'hdServer/hd_detail.html',{'hdServer_data':hdServer_data,'Cert_data':Cert_data})
+    return render(request,'hdServer/hd_detail.html',{'hdServer_data':hdServer_data,'Cert_data':Cert_data,'synchd_data':synchd_data})
 
 def set_cert(request,id):
      if request.method == 'POST':
@@ -254,3 +221,56 @@ def set_cert(request,id):
                 password=password
             )
             return HttpResponseRedirect ("/hdServer/hd_detail/"+str(id))
+
+def hd_data_sync():
+    # ipmi_login = SyncHdInfo(username='lenovo',password='lenovo',server='192.168.1.231')
+    # ipmi_info = ipmi_login.get_hd_info_ipmi()
+    # return ipmi_info
+    sync_result={}
+    cert_data=Cert.objects.all()
+
+    if cert_data:
+        for c in cert_data:
+            if c.sync=='true':
+                if c.way=='ipmi':
+                    ipmi_login = SyncHdInfo(username=c.username,password=c.password,server=c.ip)
+                    ipmi_info = ipmi_login.get_hd_info_ipmi()
+
+                    if 'error' in ipmi_info:
+                         sync_result[c.ip] = ipmi_info['error']
+                    else:
+                        update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                        val = IpmiData.objects.filter(cert_ip=c.ip)
+                        if not val:
+                            IpmiData.objects.create(
+                                cert_ip=c.ip,
+                                brand=ipmi_info['hd']['brand'],
+                                product_name=ipmi_info['hd']['product_name'],
+                                uuid=ipmi_info['uuid'],
+                                fw=ipmi_info['fw'],
+                                way='ipmi',
+                                ip=ipmi_info['net']['IPAddress'],
+                                mac=ipmi_info['net']['MACAddress'],
+                                sn=ipmi_info['hd']['sn'],
+                                update_time=update_time
+                            )
+                            sync_result[c.ip] = 'ipmi sync success'
+                        else:
+                            IpmiData.objects.filter(cert_ip=c.ip).update(
+                                cert_ip=c.ip,
+                                brand=ipmi_info['hd']['brand'],
+                                product_name=ipmi_info['hd']['product_name'],
+                                uuid=ipmi_info['uuid'],
+                                fw=ipmi_info['fw'],
+                                way='ipmi',
+                                ip=ipmi_info['net']['IPAddress'],
+                                mac=ipmi_info['net']['MACAddress'],
+                                sn=ipmi_info['hd']['sn'],
+                                update_time=update_time
+                            )
+                            sync_result[c.ip] = 'ipmi sync update success'
+            else:
+                sync_result[c.ip] ='ipmi sync is disabled'
+        return sync_result
+    else:
+        return 'Cert is null'
