@@ -194,6 +194,7 @@ def hd_detail(request,id):
             synchd_data = IpmiData.objects.get(cert_ip=Cert_data.ip)
     except Exception as e:
         Cert_data = None
+        synchd_data = None
     return render(request,'hdServer/hd_detail.html',{'hdServer_data':hdServer_data,'Cert_data':Cert_data,'synchd_data':synchd_data})
 
 def set_cert(request,id):
@@ -269,6 +270,11 @@ def hd_data_sync():
                                 update_time=update_time
                             )
                             sync_result[c.ip] = 'ipmi sync update success'
+                if c.way=='ilo':
+                    ilo_login = SyncHdInfo(username=c.username,password=c.password,server=c.ip)
+                    ilo_info = ilo_login.get_hd_info_ilo()
+
+                    return ilo_info
             else:
                 sync_result[c.ip] ='ipmi sync is disabled'
         return sync_result
