@@ -1,8 +1,12 @@
+
+
 # zlAsset
 zili的测试
 
 
-
+#### 2019/1/7
+停止更新.
+近期暂无时间撸了...
 
 
 
@@ -26,3 +30,5 @@ pip3 install -U celery[redis]
 `celery flower --broker=redis://:123qweASD@192.168.1.244:6379/1`
 
 [localhost:5555](localhost:5555)
+
+
