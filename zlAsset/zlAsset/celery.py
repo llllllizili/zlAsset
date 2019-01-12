@@ -43,7 +43,7 @@ app.conf.update(
         # },
         'ipmi_sync_hd': {
             'task': 'hdServer.tasks.hddata_sync',
-            'schedule': 120.0,
+            'schedule': 86400.0,
         },
     }
 )

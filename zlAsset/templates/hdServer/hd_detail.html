@@ -20,11 +20,14 @@
         <div class="col-xs-12">
           <div class="box-body">
           <span><h4><font color="red">{{ error_data }}</font></h4></span><p><p>
-          <button type="button" id='getoption' class="btn btn-block btn-primary" data-toggle="modal" data-target="#pingzheng">
+          <button type="button" id='getoption' class="btn btn-block btn-primary btn-sm" data-toggle="modal" data-target="#pingzheng">
             同步设置
-          </button></br>
+          </button></br></br>
+          <button id="sync" class="btn btn-block btn-default btn-sm" onclick="sync()">
+          同步状态:{{ Cert_data.sync }}
+          </button></br></br>
           <a href="{% url 'hdServer_index' %}">
-            <button class="btn btn-block btn-default">返回</button>
+            <button class="btn btn-block btn-default btn-sm">返回</button>
           </a>
           </div>
           </div>
@@ -93,7 +96,8 @@
           </div>
           <!-- right-->
           <div class="col-md-4">
-            <div class="pull-right">同步时间: {{ synchd_data.update_time }}</div>
+            <div class="pull-right">
+             同步时间: {{ synchd_data.update_time }}</div>
             <div class="modal-header">
               <h4 class="modal-title">&nbsp</h4>
             </div>
@@ -193,4 +197,24 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block js %}
+<script>
+  function sync() {
+    var mark = document.getElementById('sync').innerText;
+    if (mark == '同步状态:on') {
+        document.getElementById('sync').innerText = "同步状态:off";
+    }
+    else {
+        document.getElementById('sync').innerText = "同步状态:on";
+    }
+    $.ajax({
+        type: "POST",
+        url: "{% url 'hdServer_set_sync' hdServer_data.id %}",
+      });
+    alert("同步状态已切换,后台拼命更改中,请勿重复点击~");
+  }
+
+</script>
 {% endblock %}

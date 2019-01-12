@@ -8,6 +8,7 @@ from django.http import JsonResponse,HttpResponseRedirect
 # FBV(function base views) 登录校验
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password, check_password
+#from django.db.models import Q
 # Create your views here.
 import time,datetime
 import json
@@ -19,36 +20,21 @@ def index(request):
     hdServer_data =Data.objects.all()
     return render(request,'hdServer/index.html',{'hdServer_data':hdServer_data})
 
-def get_hd_info(request):
-    username='administratot'
-    password='123qweASD'
-    ip='192.168.3.11'
+# def task_add_test(request):
+#     x = request.GET['x']
+#     y = request.GET['y']
 
-    Cert_data = Cert.objects.get(ip=ip)
-    ipmi_info = SyncHdInfo(username=Cert_data.username,password=Cert_data.password,server=Cert_data.ip)
-    # ilo_info = ilo_login.get_hd_info_ilo()
-    ipmi_info = ipmi_info.get_hd_info_ipmi()
-
-    return render(request, 'hdServer/return_value.html', {'return_value': ipmi_info})
-
-def task_add_test(request):
-    x = request.GET['x']
-    y = request.GET['y']
-
-    from .tasks import add
-    #delay函数实现异步
-    result = add.delay(x,y)
-    res = {'code':200, 'message':'ok', 'data':[{'x':x, 'y':y}]}
-    return render(request, 'hdServer/return_value.html', {'return_value': json.dumps(res)})
-#     #result.ready()     #判断任务是否完成处理 True 或 False
-#     #result.get(timeout=1)  # 可以重新抛出异常
-#     #result.traceback   #可以获取原始的回溯信息
+#     from .tasks import add
+#     #delay函数实现异步
+#     result = add.delay(x,y)
+#     res = {'code':200, 'message':'ok', 'data':[{'x':x, 'y':y}]}
+#     return render(request, 'hdServer/return_value.html', {'return_value': json.dumps(res)})
+# #     #result.ready()     #判断任务是否完成处理 True 或 False
+# #     #result.get(timeout=1)  # 可以重新抛出异常
+# #     #result.traceback   #可以获取原始的回溯信息
 
 #添加服务器
 def add_hd(request):
-    # if request.method == 'POST':
-    #     id=request.POST['id']
-    test='test'
     return render(request, 'hdServer/add_hd.html')
 def add_hd_action(request):
     if request.method == 'POST':
@@ -142,6 +128,11 @@ def modify_hd_action(request):
         hd_cost=request.POST['hd_cost']
         supplier=request.POST['supplier']
 
+        hd_data=Data.objects.get(id=id)
+        cert = Cert.objects.filter(hd_name=hd_data.name)
+        if cert:
+            Cert.objects.filter(hd_name=hd_data.name).update(hd_name=name)
+
         Data.objects.filter(id=id).update(
             name=name,
             brand=brand,
@@ -167,10 +158,28 @@ def modify_hd_action(request):
             hd_cost=hd_cost,
             supplier=supplier,
             )
+
+
         hdServer_data =Data.objects.all()
         return render(request,'hdServer/index.html',{'hdServer_data':hdServer_data })
     else:
         return HttpResponseRedirect ('/hdServer/index/')
+
+# 删除服务器
+def delete_hd(request,id):
+    hd_data=Data.objects.get(id=id)
+    cert=Cert.objects.filter(hd_name=hd_data.name)
+    if cert:
+        cert_data=Cert.objects.get(hd_name=hd_data.name)
+        if cert_data.way=='ipmi':
+            IpmiData.objects.filter(cert_ip=cert_data.ip).delete()
+        if cert_data.way=='ilo':
+            IloData.objects.filter(cert_ip=cert_data.ip).delete()
+        Cert.objects.filter(hd_name=hd_data.name).delete()
+    Data.objects.filter(id=id).delete()
+    hdServer_data =Data.objects.all()
+    return render(request,'hdServer/index.html',{'hdServer_data':hdServer_data})
+
 
 def base_detail(request,id):
     hdServer_data =Data.objects.get(id=id)
@@ -178,16 +187,25 @@ def base_detail(request,id):
 
 def hd_detail(request,id):
     hdServer_data =Data.objects.get(id=id)
-    try:
+
+    cert = Cert.objects.filter(hd_name=hdServer_data.name)
+    if cert:
         Cert_data = Cert.objects.get(hd_name=hdServer_data.name)
         if Cert_data.way=='ipmi':
-            synchd_data = IpmiData.objects.get(cert_ip=Cert_data.ip)
+            if IpmiData.objects.filter(cert_ip=Cert_data.ip):
+                synchd_data = IpmiData.objects.get(cert_ip=Cert_data.ip)
+            else:
+                synchd_data=None
         if Cert_data.way=='ilo':
-            synchd_data = IloData.objects.get(cert_ip=Cert_data.ip)
-    except Exception as e:
+            if IloData.objects.filter(cert_ip=Cert_data.ip):
+                synchd_data = IloData.objects.get(cert_ip=Cert_data.ip)
+            else:
+                synchd_data=None
+    else:
         Cert_data = None
         synchd_data = None
-    return render(request,'hdServer/hd_detail.html',{'hdServer_data':hdServer_data,'Cert_data':Cert_data,'synchd_data':synchd_data})
+    return render(request,'hdServer/hd_detail.html', \
+        {'hdServer_data':hdServer_data,'Cert_data':Cert_data,'synchd_data':synchd_data})
 
 def set_cert(request,id):
      if request.method == 'POST':
@@ -195,27 +213,113 @@ def set_cert(request,id):
         way=request.POST['way']
         username=request.POST['username']
         password=request.POST['password']
-        val = Cert.objects.filter(ip=ip)
         hdServer_data =Data.objects.get(id=id)
+        val = Cert.objects.filter(hd_name=hdServer_data.name)
         if not val:
             Cert.objects.create(
                 hd_name=hdServer_data.name,
                 ip=ip,
                 way=way,
                 username=username,
-                password=password
+                password=password,
+                sync='on'
                 )
-            return HttpResponseRedirect ("/hdServer/hd_detail/"+str(id))
         else:
-            Cert.objects.filter(ip=ip).update(
+            Cert.objects.filter(hd_name=hdServer_data.name).update(
                 hd_name=hdServer_data.name,
+                ip=ip,
                 way=way,
                 username=username,
-                password=password
+                password=password,
+                sync='on'
             )
-            return HttpResponseRedirect ("/hdServer/hd_detail/"+str(id))
 
+        return HttpResponseRedirect ("/hdServer/hd_detail/"+str(id))
 
+def set_sync(request,id):
+    hdServer_data =Data.objects.get(id=id)
+    hd_name=hdServer_data.name
+
+    if request.method == 'POST':
+        val = Cert.objects.get(hd_name=hd_name)
+        sync = val.sync
+        if sync == 'on':
+            sync = 'off'
+        else:
+            sync = 'on'
+            way = val.way
+
+            if way=='ipmi':
+                ipmi_login = SyncHdInfo(username=val.username,password=val.password,server=val.ip)
+                ipmi_info = ipmi_login.get_hd_info_ipmi()
+                if 'error' in ipmi_info:
+                     sync_result[ip] = ipmi_info['error']
+                else:
+                    update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    ipmi_data = IpmiData.objects.filter(cert_ip=val.ip)
+                    if not ipmi_data:
+                        IpmiData.objects.create(
+                            cert_ip=val.ip,
+                            brand=ipmi_info['hd']['brand'],
+                            product_name=ipmi_info['hd']['product_name'],
+                            uuid=ipmi_info['uuid'],
+                            fw=ipmi_info['fw'],
+                            way='ipmi',
+                            ip=ipmi_info['net']['IPAddress'],
+                            mac=ipmi_info['net']['MACAddress'],
+                            sn=ipmi_info['hd']['sn'],
+                            update_time=update_time
+                        )
+                    else:
+                        IpmiData.objects.filter(cert_ip=val.ip).update(
+                            cert_ip=val.ip,
+                            brand=ipmi_info['hd']['brand'],
+                            product_name=ipmi_info['hd']['product_name'],
+                            uuid=ipmi_info['uuid'],
+                            fw=ipmi_info['fw'],
+                            way='ipmi',
+                            ip=ipmi_info['net']['IPAddress'],
+                            mac=ipmi_info['net']['MACAddress'],
+                            sn=ipmi_info['hd']['sn'],
+                            update_time=update_time
+                        )
+            if way=='ilo':
+                ilo_login = SyncHdInfo(username=val.username,password=val.password,server=val.ip)
+                ilo_info = ilo_login.get_hd_info_ilo()
+
+                update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                ilo_data = IloData.objects.filter(cert_ip=val.ip)
+                if not ilo_data:
+                    IloData.objects.create(
+                        cert_ip=val.ip,
+                        product_name=ilo_info['product_name'],
+                        uuid=ilo_info['uuid'],
+                        fw=ilo_info['fw_ver'],
+                        way='ilo',
+                        ip=val.ip,
+                        mac=ilo_info['net_mac']['Embedded'],
+                        sn=ilo_info['sn'],
+                        license=ilo_info['license'],
+                        update_time=update_time
+                    )
+                else:
+                    IloData.objects.filter(cert_ip=val.ip).update(
+                        cert_ip=val.ip,
+                        product_name=ilo_info['product_name'],
+                        uuid=ilo_info['uuid'],
+                        fw=ilo_info['fw_ver'],
+                        way='ilo',
+                        ip=val.ip,
+                        mac=ilo_info['net_mac']['Embedded'],
+                        sn=ilo_info['sn'],
+                        license=ilo_info['license'],
+                        update_time=update_time
+                    )
+
+        Cert.objects.filter(hd_name=hd_name).update(sync=sync)
+    else:
+        pass
+    return HttpResponseRedirect ("/hdServer/hd_detail/"+str(id))
 
 
 
@@ -229,7 +333,7 @@ def hd_data_sync():
 
     if cert_data:
         for c in cert_data:
-            if c.sync=='true':
+            if c.sync=='on':
                 if c.way=='ipmi':
                     ipmi_login = SyncHdInfo(username=c.username,password=c.password,server=c.ip)
                     ipmi_info = ipmi_login.get_hd_info_ipmi()

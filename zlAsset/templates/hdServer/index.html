@@ -43,7 +43,7 @@
               <td>{{ hdServer.use_member }}</td>
               <td>{{ hdServer.supplier }}</td>
               <td>
-                <a href="#" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
+                <a href="{% url 'hdServer_delete_hd' hdServer.id %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
                 <a href="{% url 'hdServer_modify_hd' hdServer.id %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>&nbsp;&nbsp;
                 <a href="{% url 'hdServer_base_detail' hdServer.id %}" title="查看更多"><i class="fa fa-eye"></i></a>
               </td>
