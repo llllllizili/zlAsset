@@ -116,7 +116,7 @@ class IloApi():
 
         except Exception as e:
             raise e
-            
+
         return {'uuid':uuid,'sn':sn,'product_name':product_name,'cpu':cpu,'cores':cores,'mem':int(mem/1024),'mac':_mac,'disk':disk,'disk_detail':json.dumps(_disk_detail),
                 'mem_detail':json.dumps(_mem_detail),'BoardManufactureDateTime':BoardManufactureDateTime,'ChassisType':ChassisType,'_source':json.dumps(_source),
                 'cpu_detail':json.dumps(_cpu_detail),'fw':json.dumps(_fwversion)}
@@ -142,14 +142,14 @@ class IloApi():
                 subdict=dict([(key, vv[key]) for key in subkey])
                 mem_list.append(subdict)
 
-        # set list 
+        # set list
         for i in mem_list:
             if i not in mem_set:
                 mem_set.append(i)
 
         for j in mem_set:
             mem_info[mem_list.count(j)]=j
-        
+
         return mem_info
 
 
@@ -163,7 +163,7 @@ class IloApi():
             else:
                 ilo_log[i] = d
 
-        return json.dumps(ilo_log)
+        return ilo_log
             #for val in d:
              #   print val['severity']
 
@@ -199,15 +199,15 @@ class IloApi():
                     subdict=dict([(key, vv[key]) for key in subkey])
                     mem_list.append(subdict)
 
-            # set list 
+            # set list
             for i in mem_list:
                 if i not in mem_set:
                     mem_set.append(i)
 
             for j in mem_set:
                 mem_info[mem_list.count(j)]=j
-            
-            return json.dumps(mem_info)
+
+            return mem_info
 
 
         def get_mac():
@@ -215,7 +215,7 @@ class IloApi():
             for k,v in net.items():
                 net_mac[''.join(k.split())] = v['mac_address']
 
-            return json.dumps(net_mac)
+            return net_mac
 
         def get_cpu():
             cpu_info={}
@@ -223,7 +223,7 @@ class IloApi():
                 cpu_info['cpu_' + str(i)] = _source['processors']['Proc ' + str(i)]['name']
             cpu_info['cpu_core'] = (_ret['cpu'])
             cpu_info['cpu_slot'] = cpu_slot
-            return json.dumps(cpu_info)
+            return cpu_info
 
         def get_disk():
             disk_info={}
@@ -232,8 +232,8 @@ class IloApi():
                 disk_info[i]={}
                 disk_info[i]['capacity'] = disk_logical[i]['capacity']
                 disk_info[i]['label'] = disk_logical[i]['physical_drives'][0]['label']
-                
-            return json.dumps(disk_info)
+
+            return disk_info
 
         def get_raid():
             raid_info={}
@@ -255,7 +255,7 @@ class IloApi():
                 else:
                     sta = 'Single-Point'
                     return sta
-        
+
         def get_power_watt():
             p_sum = _source['power_supply_summary']
             for v in p_sum:
@@ -284,7 +284,7 @@ class IloApi():
                 #fan_speed = get_fan_speed(),
                 power_type = get_power_type(),
                 #spower_watt = get_power_watt(),
-                ilo_log = self.get_log(),
+                #ilo_log = self.get_log(),
                 mem = get_mem(),
                 license=self.get_license(),
             )

@@ -4,10 +4,17 @@
 zili的测试
 
 
-#### 2019/1/7
+
+#### event
+
+##### 2019/1/7
+
 停止更新.
 近期暂无时间撸了...
 
+##### 2019/1/12
+
+码一点,争取把ilo撸完,然后停段时间,要充电..讲课..
 
 
 #### celery
@@ -19,7 +26,7 @@ pip3 install -U celery[redis]
 
 在项目下 启动work和beat
 
-`export PYTHONOPTIMIZE=1 && celery -A 项目 worker -l info -B`
+`export PYTHONOPTIMIZE=1 && celery -A zlAsset worker -l info -B`
 
 
 ##### flower

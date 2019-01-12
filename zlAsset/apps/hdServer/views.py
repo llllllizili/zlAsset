@@ -14,14 +14,6 @@ import json
 from .sync_hddata import SyncHdInfo
 from .models import *
 
-# @login_required(login_url='/login/')
-def test(request):
-    # t = make_password("123456")
-    # test = check_password('123456',t)
-    test = hd_data_sync()
-    return render(request, 'hdServer/test.html', {'test': test})
-
-
 @login_required(login_url='/login/')
 def index(request):
     hdServer_data =Data.objects.all()
@@ -191,7 +183,7 @@ def hd_detail(request,id):
         if Cert_data.way=='ipmi':
             synchd_data = IpmiData.objects.get(cert_ip=Cert_data.ip)
         if Cert_data.way=='ilo':
-            synchd_data = IpmiData.objects.get(cert_ip=Cert_data.ip)
+            synchd_data = IloData.objects.get(cert_ip=Cert_data.ip)
     except Exception as e:
         Cert_data = None
         synchd_data = None
@@ -222,6 +214,11 @@ def set_cert(request,id):
                 password=password
             )
             return HttpResponseRedirect ("/hdServer/hd_detail/"+str(id))
+
+
+
+
+
 
 def hd_data_sync():
     # ipmi_login = SyncHdInfo(username='lenovo',password='lenovo',server='192.168.1.231')
@@ -274,9 +271,50 @@ def hd_data_sync():
                     ilo_login = SyncHdInfo(username=c.username,password=c.password,server=c.ip)
                     ilo_info = ilo_login.get_hd_info_ilo()
 
-                    return ilo_info
+                    update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    val = IloData.objects.filter(cert_ip=c.ip)
+                    if not val:
+                        IloData.objects.create(
+                            cert_ip=c.ip,
+                            product_name=ilo_info['product_name'],
+                            uuid=ilo_info['uuid'],
+                            fw=ilo_info['fw_ver'],
+                            way='ilo',
+                            ip=c.ip,
+                            mac=ilo_info['net_mac']['Embedded'],
+                            sn=ilo_info['sn'],
+                            license=ilo_info['license'],
+                            update_time=update_time
+                        )
+                        sync_result[c.ip] = 'ilo sync success'
+                    else:
+                        IloData.objects.filter(cert_ip=c.ip).update(
+                            cert_ip=c.ip,
+                            product_name=ilo_info['product_name'],
+                            uuid=ilo_info['uuid'],
+                            fw=ilo_info['fw_ver'],
+                            way='ilo',
+                            ip=c.ip,
+                            mac=ilo_info['net_mac']['Embedded'],
+                            sn=ilo_info['sn'],
+                            license=ilo_info['license'],
+                            update_time=update_time
+                        )
+                        sync_result[c.ip] = 'ilo sync update success'
             else:
-                sync_result[c.ip] ='ipmi sync is disabled'
+                sync_result[c.ip] ='sync is disabled'
         return sync_result
     else:
         return 'Cert is null'
+
+
+# @login_required(login_url='/login/')
+def test(request):
+    # t = make_password("123456")
+    # test = check_password('123456',t)
+    #test = hd_data_sync()
+
+    login = SyncHdInfo(username='administrator',password='123qweASD',server='192.168.3.11')
+    info = login.get_hd_info_ilo()
+    # mac = info['net_mac']['Embedded']
+    return render(request, 'hdServer/test.html', {'test': info})

@@ -29,7 +29,7 @@ class SyncHdInfo(object):
         return _ret
 
 if __name__ == '__main__':
-    ilo_login = SyncHdInfo(username='administrator',password='123qweASD',server='192.168.3.11')
+    ilo_login = SyncHdInfo(username='xxxx',password='xxxx',server='192.168.3.11')
     ilo_info = ilo_login.get_hd_info_ilo()
 
     print (ilo_info)

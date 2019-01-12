@@ -45,13 +45,14 @@
                           <input type="text" class="form-control"  value="{{ Cert_data.ip }}" name="ip">
                           <label>同步方式</label>
                           <select class="form-control" name="way">
+                            <option value="{{ Cert_data.way }}">{{ Cert_data.way }}</option>
                             <option value='ipmi'>ipmi</option>
                             <option value='ilo'>ilo</option>
                           </select>
                           <label>用户名</label>
                           <input type="text" class="form-control" value="{{ Cert_data.username }}" name="username">
                           <label>密码</label>
-                          <input type="password" class="form-control" value='' name="password">
+                          <input type="password" class="form-control" value="{{ Cert_data.password }}" name="password">
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
@@ -154,10 +155,10 @@
                 <label>ip: </label> {{ synchd_data.ip }}
               </div>
               <div class="form-group">
-                <label>品牌: </label> {{ synchd_data.brand }}
+                <label>型号: </label> {{ synchd_data.product_name }}
               </div>
               <div class="form-group">
-                <label>型号: </label> {{ synchd_data.product_name }}
+                <label>license: </label> {{ synchd_data.license }}
               </div>
             </div>
           <!-- right-->
@@ -171,6 +172,7 @@
               <div class="form-group">
                 <label>sn: </label> {{ synchd_data.sn }}
               </div>
+
             </div>
           <!-- right-->
             <div class="col-md-4">

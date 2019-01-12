@@ -59,4 +59,24 @@ class IpmiData(models.Model):
 
     def __str__(self):
         return self.ip
+
+class IloData(models.Model):
+    cert_ip=models.CharField(max_length=128,null=True, blank=True)
+    product_name=models.CharField(max_length=128,null=True, blank=True)
+    uuid=models.CharField(max_length=128,null=True, blank=True)
+    fw = models.CharField(max_length=128,null=True, blank=True)
+    way = models.CharField(max_length=128,null=True, blank=True)
+    ip = models.CharField(max_length=128,null=True, blank=True)
+    mac=models.CharField(max_length=128,null=True, blank=True)
+    sn=models.CharField(max_length=128,null=True, blank=True)
+    license=models.CharField(max_length=128,null=True, blank=True)
+    cpu=models.TextField(null=True, blank=True)
+    disk=models.TextField(null=True, blank=True)
+    memory=models.TextField(null=True, blank=True)
+    raid=models.TextField(null=True, blank=True)
+    log=models.TextField(null=True, blank=True)
+    update_time=models.CharField(max_length=128,null=True, blank=True)
+
+    def __str__(self):
+        return self.ip
 #models.TextField(null=True, blank=True)

@@ -30,20 +30,20 @@ app.conf.update(
     # CELERY_BEAT_SCHEDULE= {
         # 周期任务. 两种方式
         # 一小时一次
-        'sum-task': {
-            'task': 'hdServer.tasks.add',
-            'schedule':  timedelta(seconds=300),
-            'args': (3000, 600)
-        },
-        # 2h 一次
-        'task-one': {
-            'task': 'hdServer.tasks.add',
-            'schedule': 7200.0,
-            'args': (7000,200)
-        },
+        # 'sum-task': {
+        #     'task': 'hdServer.tasks.add',
+        #     'schedule':  timedelta(seconds=300),
+        #     'args': (3000, 600)
+        # },
+        # # 2h 一次
+        # 'task-one': {
+        #     'task': 'hdServer.tasks.add',
+        #     'schedule': 7200.0,
+        #     'args': (7000,200)
+        # },
         'ipmi_sync_hd': {
-            'task': 'hdServer.tasks.ipmi_sync',
-            'schedule': 60.0,
+            'task': 'hdServer.tasks.hddata_sync',
+            'schedule': 120.0,
         },
     }
 )
