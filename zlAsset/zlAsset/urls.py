@@ -22,4 +22,5 @@ urlpatterns = [
     path('setData/', include('setData.urls')),
     path('setOrg/', include('setOrg.urls')),
     path('hdServer/', include('hdServer.urls')),
+    path('operSystem/', include('operSystem.urls')),
 ]
