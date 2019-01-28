@@ -1,9 +1,18 @@
 # -*- coding:utf-8 -*-
 from django.urls import path,include
+from django.conf.urls import url
 #静态文件
 from django.conf.urls.static import static
 from django.conf import settings
 from . import views
+
+from . import api as api_views
+
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+router.register('get_hdserver',api_views.OsData,base_name='hdServer_get_data_api')
+
+
 
 urlpatterns = [
     path('index/',views.index,name='hdServer_index'),
@@ -20,4 +29,7 @@ urlpatterns = [
 
     path('test/',views.test,name='hdServer_test'),
     #path('task_add_test/',views.task_add_test,name='task_add_test'),
+
+    #api
+    url(r'^api/', include(router.urls)),
 ]+ static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)

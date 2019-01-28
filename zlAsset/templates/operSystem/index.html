@@ -1,0 +1,76 @@
+
+{% extends 'common/base.html' %}
+{% block title %}主页-操作系统{% endblock %}
+{% block page_head %} {% endblock %}
+{% block content %}
+
+
+
+<div class="col-md-12">
+
+  <div class="box box-primary">
+    <span><h4><font color="red">{{ error_data }}</font></h4></span>
+    <div class="box-body no-padding">
+      <div class="table-responsive mailbox-messages">
+        <div class="box-body">
+          <a href="{% url 'operSystem_add_os' %}" title="添加按钮"><i class="fa fa-plus pull-right"></i></a>
+          <table id="hdServer_data" class="table table-bordered table-striped">
+
+            <thead>
+
+            <tr>
+              <th style="display:none">id</th>
+              <th>主机名</th>
+              <th>主机IP</th>
+              <th>所属服务器</th>
+              <th>运行环境</th>
+              <th>使用人</th>
+              <th>到期时间</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for operSystem in operSystem_data %}
+            <tr>
+              <td style="display:none">{{ operSystem.id }}</td>
+              <td>{{ operSystem.hostname }}</td>
+              <td>{{ operSystem.host_ip }}</td>
+              <td><a href="{% url 'hdServer_base_detail' operSystem.hdserver_id %}">{{ operSystem.hdserver_name }}</a></td>
+              <td>{{ operSystem.run_env }}</td>
+              <td>{{ operSystem.use_member }}</td>
+              <td>{{ operSystem.end_date }}</td>
+              <td>
+                <a href="{% url 'hdServer_delete_hd' operSystem.id %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
+                <a href="{% url 'hdServer_modify_hd' operSystem.id %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>&nbsp;&nbsp;
+                <a href="{% url 'hdServer_base_detail' operSystem.hdserver_id %}" title="查看更多"><i class="fa fa-eye"></i></a>
+              </td>
+              </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    $(function () {
+      $('#hdServer_data').DataTable()
+    })
+
+      function del() {
+        var msg = "您确定要删除吗？";
+          if (confirm(msg)==true){
+            return true;
+          }else{
+            return false;
+        }
+      }
+</script>
+{% endblock %}

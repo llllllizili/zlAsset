@@ -30,6 +30,6 @@ class GetSysDataL(object):
         return data
 
     def script_test(self):
-        data = self.ansible_run.run_script('operSystem/test.sh','123123')
+        data = self.ansible_run.run_script('operSystem/test.sh','')
         return data
 

@@ -1,0 +1,252 @@
+{% extends 'common/base.html' %}
+{% block title %}操作系统添加{% endblock %}
+{% block page_head %}{% endblock %}
+{% block content %}
+<div class="col-md-12">
+    <div class="box box-primary">
+    <div class="row">
+      <form role="form" action="{% url 'operSystem_add_os_action' %}" method="post">{% csrf_token %}
+        <!-- >基本信息 -->
+        <div class="col-md-12">
+          <div class="col-md-4">
+            <div class="modal-header">
+              <h4 class="modal-title"><i class="fa fa-tags"></i>基本信息</h4>
+            </div>
+              <div class="form-group">
+                <label>主机名</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-smile-o"></i>
+                  </div>
+                  <input type="text" id="getbrand" class="form-control" placeholder="主机名 ..."  value='' name="hostname">
+                </div>
+              </div>
+              <div class="form-group">
+              <label>主机IP</label>
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-laptop"></i>
+                </div>
+                <input type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask="" name="host_ip">
+              </div>
+              </div>
+              <div class="form-group">
+                  <label>用途</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="fa fa-edit"></i>
+                    </div>
+                    <input type="text" class="form-control" placeholder="用途 ..."  value='' name="description">
+                  </div>
+              </div>
+              <div class="form-group">
+                <label>所属硬件服务器</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-users"></i>
+                  </div>
+                <select class="form-control"  id="hdoption" name="hdserver_id" ></select>
+                </div>
+              </div>
+
+              
+          </div>
+          <!-- right-->
+          <div class="col-md-4">
+            <div class="modal-header">
+              <h4 class="modal-title">&nbsp</h4>
+            </div>
+            
+            <div class="form-group">
+                <label>部门</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-users"></i>
+                  </div>
+                <select class="form-control"  id="departmentoption" name="department" ></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>团队</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-users"></i>
+                  </div>
+                <select class="form-control"  id="teamoption"  name="team"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>联系人</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-user"></i>
+                  </div>
+                <select class="form-control" id="memberoption" name="use_member"></select>
+                </div>
+            </div>
+          </div>
+          <!-- right-->
+          <div class="col-md-4">
+            <div class="modal-header">
+              <h4 class="modal-title">&nbsp</h4>
+            </div>
+            
+
+            
+            <div class="form-group">
+              <label>开通时间</label>
+              <div class="input-group date">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control pull-right" autocomplete="off" id="datepicker1" name="start_date">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>结束时间</label>
+              <div class="input-group date">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control pull-right" autocomplete="off" id="datepicker2" name="end_date">
+              </div>
+            </div>
+            <label>运行环境</label>
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-bug"></i>
+                </div>
+                <select class="form-control"  name="run_env">
+                  <option value=''>---请选择---</option>
+                  <option value ='生产环境'>生产环境</option>
+                  <option value ='测试环境'>测试环境</option>
+                  <option value ='研发环境'>研发环境</option>
+                  <option value ='办公环境'>办公环境</option>
+                </select>
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default"><a href="{% url 'hdServer_index' %}" target="_self">取消</a></button>
+            <input type="submit" value="创建" name="create" class="btn btn-primary" >
+        </div>
+      </form>
+    </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript">
+  //$('[data-mask]').inputmask();
+
+  $('.select2').select2();
+
+    $(function () {
+      $('#team_data').DataTable()
+    })
+
+    //Date picker
+    $('#datepicker1').datepicker({
+      autoclose: true
+    })
+    $('#datepicker2').datepicker({
+      autoclose: true
+    })
+
+    //ajax请求 获取部门
+      $.ajax({
+        type: "GET",
+        url: "/setOrg/api/get_department/",
+        dataType : "json",
+        success: function(data){
+          var department_data = data
+          var option=null;
+          for (var i =0;i<department_data.length;i++){
+            option +="<option + value="+department_data[i].name+">"+department_data[i].name+"</option>"
+          }
+          $("#departmentoption").empty();
+          $("#departmentoption").append("<option + value=''>---请选择---</option>");
+          $("#departmentoption").append(option);
+          },
+        error : function(){
+          alert("setOrg数据获取出现问题");
+        }
+      });
+      //ajax获取团队
+      $("#departmentoption").click(function(){
+        var department_name=$("#departmentoption  option:selected").val(); //获取选中的value
+
+        $.ajax({
+          type: "GET",
+          url: "/setOrg/api/get_team/",
+          dataType : "json",
+          success: function(data){
+            var department_data = data
+            var option=null;
+            for (var i =0;i<department_data.length;i++){
+              if (department_name == department_data[i].department_name) {
+                option +="<option + value="+department_data[i].name+">"+department_data[i].name+"</option>"
+              }
+            }
+            $("#teamoption").empty();
+            $("#teamoption").append("<option + value=''>---请选择---</option>");
+            $("#teamoption").append(option);
+            },
+          error : function(){
+            alert("setOrg数据获取出现问题");
+          }
+        });
+      });
+
+      //ajax获取成员
+      $("#teamoption").click(function(){
+        var team_name=$("#teamoption  option:selected").val(); //获取选中的value
+
+        $.ajax({
+          type: "GET",
+          url: "/setOrg/api/get_member/",
+          dataType : "json",
+          success: function(data){
+            var member_data = data
+            var option=null;
+            for (var i =0;i<member_data.length;i++){
+              if (team_name == member_data[i].team_name) {
+                option +="<option + value="+member_data[i].name+">"+member_data[i].name+"</option>"
+              }
+            }
+            $("#memberoption").empty();
+            $("#memberoption").append("<option + value=''>---请选择---</option>");
+            $("#memberoption").append(option);
+            },
+          error : function(){
+            alert("setOrg数据获取出现问题");
+          }
+        });
+      });
+
+
+      // ajax 获取硬件服务器信息
+      $.ajax({
+        type: "GET",
+        url: "/hdServer/api/get_hdserver/",
+        dataType : "json",
+        success: function(data){
+          var hdserver_data = data
+          var option=null;
+          for (var i =0;i<hdserver_data.length;i++){
+            option +="<option + value="+hdserver_data[i].id+">"+hdserver_data[i].name+"</option>"
+          }
+          $("#hdoption").empty();
+          $("#hdoption").append("<option + value=''>---请选择---</option>");
+          $("#hdoption").append(option);
+          },
+        error : function(){
+          alert("hdServer数据获取出现问题");
+        }
+      });
+
+</script>
+{% endblock %}

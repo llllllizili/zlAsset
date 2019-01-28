@@ -1,3 +1,50 @@
+# -*- coding:utf-8 -*-
+# Author: zili
+
 from django.db import models
 
 # Create your models here.
+
+
+class Data(models.Model):
+    hostname = models.CharField(max_length=128,null=True, blank=True)
+    host_ip = models.CharField(max_length=128,null=True, blank=True)
+    description = models.CharField(max_length=128,null=True, blank=True)
+    hdserver_id = models.CharField(max_length=128,null=True, blank=True)
+    hdserver_name = models.CharField(max_length=128,null=True, blank=True)
+    department = models.CharField(max_length=128,null=True, blank=True)
+    team = models.CharField(max_length=128,null=True, blank=True)
+    use_member = models.CharField(max_length=128,null=True, blank=True)
+    start_date = models.CharField(max_length=128,null=True, blank=True)
+    end_date = models.CharField(max_length=128,null=True, blank=True)
+    run_env = models.CharField(max_length=128,null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Cert(models.Model):
+    ip = models.CharField(max_length=128,null=True, blank=True)
+    os_type = models.CharField(max_length=128,null=True, blank=True)
+    username = models.CharField(max_length=128,null=True, blank=True)
+    password = models.CharField(max_length=128,null=True, blank=True)
+    sync = models.CharField(max_length=128,null=True, blank=True)
+
+    def __str__(self):
+        return self.ip
+
+# class SyncData(models.Model):
+#     cert_ip=models.CharField(max_length=128,null=True, blank=True)
+#     brand=models.CharField(max_length=128,null=True, blank=True)
+#     product_name=models.CharField(max_length=128,null=True, blank=True)
+#     uuid=models.CharField(max_length=128,null=True, blank=True)
+#     fw = models.CharField(max_length=128,null=True, blank=True)
+#     way = models.CharField(max_length=128,null=True, blank=True)
+#     ip = models.CharField(max_length=128,null=True, blank=True)
+#     mac=models.CharField(max_length=128,null=True, blank=True)
+#     sn=models.CharField(max_length=128,null=True, blank=True)
+#     update_time=models.CharField(max_length=128,null=True, blank=True)
+
+#     def __str__(self):
+#         return self.ip
+
+#models.TextField(null=True, blank=True)
