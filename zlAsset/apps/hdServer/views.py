@@ -323,7 +323,7 @@ def set_sync(request,id):
 
 
 
-
+# task使用
 def hd_data_sync():
     # ipmi_login = SyncHdInfo(username='lenovo',password='lenovo',server='192.168.1.231')
     # ipmi_info = ipmi_login.get_hd_info_ipmi()

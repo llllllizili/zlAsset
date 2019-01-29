@@ -1,0 +1,83 @@
+{% extends 'common/base.html' %}
+{% block title %} OS基本信息 {% endblock %}
+{% block page_head %} {% endblock %}
+
+{% block content %}
+
+<div class="col-md-2">
+  <div class="box box-solid">
+    <div class="box-body no-padding">
+      <ul class="nav nav-pills nav-stacked">
+        <li class='active'><a href="{% url 'operSystem_base_detail' operSystem_data.id %}"><i class="fa fa-hand-peace-o"></i>基本信息</a></li>
+        <li><a href="{% url 'operSystem_sync_detail' operSystem_data.id %}"><i class="fa fa-hand-peace-o"></i>同步信息</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <div class="box-body">
+      <a href="{% url 'operSystem_index' %}">
+        <button class="btn btn-block btn-default">返回</button>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-10">
+    <div class="box box-primary">
+    <div class="row">
+        <!-- >基本信息 -->
+        <div class="col-md-12">
+          <div class="col-md-4">
+            <div class="modal-header">
+              <h4 class="modal-title"><i class="fa fa-tags"></i>基本信息</h4>
+            </div>
+              <div class="form-group">
+                <label>主机名: </label> {{ operSystem_data.hostname }}
+              </div>
+              <div class="form-group">
+                <label>主机IP: </label> {{ operSystem_data.host_ip }}
+              </div>
+              <div class="form-group">
+                <label>用途: </label> {{ operSystem_data.description }}
+              </div>
+              <div class="form-group">
+                <label>所属服务器: </label> {{ operSystem_data.hdserver_name }}
+              </div>
+          </div>
+          <!-- right-->
+          <div class="col-md-4">
+            <div class="modal-header">
+              <h4 class="modal-title">&nbsp</h4>
+            </div>
+              <div class="form-group">
+                <label>部门: </label> {{ operSystem_data.department }}
+              </div>
+              <div class="form-group">
+                <label>团队: </label> {{ operSystem_data.team }}
+              </div>
+              <div class="form-group">
+                <label>联系人: </label> {{ operSystem_data.use_member }}
+              </div>
+          </div>
+          <!-- right-->
+          <div class="col-md-4">
+            <div class="modal-header">
+              <h4 class="modal-title">&nbsp</h4>
+            </div>
+              <div class="form-group">
+                <label>开通时间: </label> {{ operSystem_data.start_date }}
+              </div>
+              <div class="form-group">
+                <label>结束时间: </label> {{ operSystem_data.end_date }}
+              </div>
+              <div class="form-group">
+                <label>运行环境: </label> {{ operSystem_data.run_env }}
+              </div>
+        </div>
+
+        
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

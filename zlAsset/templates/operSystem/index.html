@@ -40,9 +40,9 @@
               <td>{{ operSystem.use_member }}</td>
               <td>{{ operSystem.end_date }}</td>
               <td>
-                <a href="{% url 'hdServer_delete_hd' operSystem.id %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
-                <a href="{% url 'hdServer_modify_hd' operSystem.id %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>&nbsp;&nbsp;
-                <a href="{% url 'hdServer_base_detail' operSystem.hdserver_id %}" title="查看更多"><i class="fa fa-eye"></i></a>
+                <a href="{% url 'operSystem_delete_os' operSystem.id %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
+                <a href="{% url 'operSystem_modify_os' operSystem.id %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>&nbsp;&nbsp;
+                <a href="{% url 'operSystem_base_detail' operSystem.id %}" title="查看更多"><i class="fa fa-eye"></i></a>
               </td>
               </td>
             </tr>

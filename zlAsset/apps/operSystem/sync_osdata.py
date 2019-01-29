@@ -24,7 +24,6 @@ class GetSysDataL(object):
                 os_type=self.os_type
             )
 
-
     def cmd_test(self):
         data = self.ansible_run.run_cmd('ls /tmp')
         return data
@@ -33,3 +32,6 @@ class GetSysDataL(object):
         data = self.ansible_run.run_script('operSystem/test.sh','')
         return data
 
+    def get_os_info(self):
+        data = self.ansible_run.run_script('operSystem/os_base_info.sh','')
+        return data
