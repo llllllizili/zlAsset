@@ -13,6 +13,7 @@ from django.contrib.auth.hashers import make_password, check_password
 #from django.db.models import Q
 # Create your views here.
 import os
+import ast
 import time,datetime
 import json
 from .models import *
@@ -158,13 +159,22 @@ def sync_detail(request,id):
         Cert_data = Cert.objects.get(os_host_ip=operSystem_data.host_ip)
         if SyncData.objects.filter(cert_ip=Cert_data.ip):
             sync_data = SyncData.objects.get(cert_ip=Cert_data.ip)
+            cpu_model=ast.literal_eval(sync_data.cpu_model)
+            disk_data=ast.literal_eval(sync_data.logicdisk)
+            network_data=ast.literal_eval(sync_data.network)
         else:
             sync_data=None
     else:
         Cert_data = None
         sync_data = None
-    return render(request,'operSystem/sync_detail.html', \
-        {'operSystem_data':operSystem_data,'Cert_data':Cert_data,'sync_data':sync_data})
+    return render(request,'operSystem/sync_detail.html',{
+        'operSystem_data':operSystem_data,
+        'Cert_data':Cert_data,
+        'sync_data':sync_data,
+        'cpu_model':cpu_model,
+        'disk_data':disk_data,
+        'network_data':network_data
+        })
 
 
 
@@ -237,7 +247,7 @@ def set_sync(request,id):
                 if not sync_data:
                     SyncData.objects.create(
                         cert_ip=val.ip,
-                        host_ip="",
+                        host_ip=val.ip,
                         hostname=sync_info_dict['hostname'],
                         os_sys=sync_info_dict['os_sys'],
                         os_version=sync_info_dict['os_version'],
@@ -256,8 +266,7 @@ def set_sync(request,id):
                     )
                 else:
                     SyncData.objects.filter(cert_ip=val.ip).update(
-                        cert_ip=val.ip,
-                        host_ip="",
+                        host_ip=val.ip,
                         hostname=sync_info_dict['hostname'],
                         os_sys=sync_info_dict['os_sys'],
                         os_version=sync_info_dict['os_version'],

@@ -24,7 +24,7 @@
             同步设置
           </button></br></br>
           <button id="sync" class="btn btn-block btn-default btn-sm" onclick="sync()">
-          同步状态:{{ Cert_data.sync }}
+          同步状态:{{ Cert_data.sync }}(点击关闭同步)
           </button></br></br>
           <a href="{% url 'hdServer_index' %}">
             <button class="btn btn-block btn-default btn-sm">返回</button>
@@ -203,11 +203,11 @@
 <script>
   function sync() {
     var mark = document.getElementById('sync').innerText;
-    if (mark == '同步状态:on') {
-        document.getElementById('sync').innerText = "同步状态:off";
+    if (mark == '同步状态:on(点击关闭同步)') {
+        document.getElementById('sync').innerText = "同步状态:off(点击开启同步)";
     }
     else {
-        document.getElementById('sync').innerText = "同步状态:on";
+        document.getElementById('sync').innerText = "同步状态:on(点击关闭同步)";
     }
     $.ajax({
         type: "POST",

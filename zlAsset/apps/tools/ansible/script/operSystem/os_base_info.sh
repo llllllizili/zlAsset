@@ -185,7 +185,7 @@ get_disk(){
 get_info(){
   os_sys=`uname -o`
   host_name=`hostname`
-  product_id=`dmidecode -t 1 | grep Serial`
+  product_id=`dmidecode -t 1 | grep Serial | awk -F ':' '{print $2}'`
   if [[ $os_release =~ 'ubuntu' ]];then
     os_version=`grep -i "ubuntu" /etc/issue | awk -F' ' '{print $1$2$3}'`
   elif [[ $os_release =~ 'centos' ]];then
@@ -220,9 +220,9 @@ get_info(){
     \"cpu_model\":\"$cpu_model\",\
     \"cpu_num\":\"$cpu_num\",\
     \"cpu_core\":\"$cpu_core\",\
-    \"mem_total\":\"$[mem_total*1024*1024]\",\
+    \"mem_total\":\"$[mem_total/1024]\",\
     \"product_id\":\"$product_id\",\
-    \"disk_total\":\"$[disk_total*1024]\",\
+    \"disk_total\":\"$[disk_total/1024/1024]\",\
     \"install_date\":\"$install_date\",\
     \"network\":$net_detial,\
     \"cpu_model\":$cpu_detial,\
