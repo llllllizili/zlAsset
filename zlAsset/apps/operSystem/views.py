@@ -14,6 +14,7 @@ from django.contrib.auth.hashers import make_password, check_password
 # Create your views here.
 import os
 import ast
+import base64
 import time,datetime
 import json
 from .models import *
@@ -183,9 +184,11 @@ def sync_detail(request,id):
 def set_cert(request,id):
      if request.method == 'POST':
         ip=request.POST['ip']
+        port=request.POST['port']
         os_type=request.POST['os_type']
         username=request.POST['username']
-        password=request.POST['password']
+        password_b=request.POST['password']
+        password=bytes.decode(base64.b64encode(bytes(password_b,encoding='utf-8')))
 
         operSystem_data =Data.objects.get(id=id)
         val = Cert.objects.filter(os_host_ip=operSystem_data.host_ip)
@@ -232,59 +235,133 @@ def set_sync(request,id):
                     ip=val.ip,
                     port=val.port,
                     username=val.username,
-                    password=val.password,
+                    password=bytes.decode(base64.b64decode(bytes(val.password,encoding='utf-8'))),
                     os_type=val.os_type,
                     )
+                print(bytes.decode(base64.b64decode(bytes(val.password,encoding='utf-8'))))
+
                 sync_info=sync_login.get_os_info()
 
-                update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-                sync_data = SyncData.objects.filter(cert_ip=val.ip)
-
-                sync_info_dict = json.loads(sync_info[val.ip]['script'])
-                #print(sync_info_dict)
-
-                if not sync_data:
-                    SyncData.objects.create(
-                        cert_ip=val.ip,
-                        host_ip=val.ip,
-                        hostname=sync_info_dict['hostname'],
-                        os_sys=sync_info_dict['os_sys'],
-                        os_version=sync_info_dict['os_version'],
-                        os_kernel=sync_info_dict['os_kernel'],
-                        cpu_model=sync_info_dict['cpu_model'],
-                        cpu_num=sync_info_dict['cpu_num'],
-                        cpu_core=sync_info_dict['cpu_core'],
-                        mem_total=sync_info_dict['mem_total'],
-                        disk_total=sync_info_dict['disk_total'],
-                        product_id=sync_info_dict['product_id'],
-                        #phydisk=sync_info_dict['phydisk'],
-                        logicdisk=sync_info_dict['logicdisk'],
-                        install_date=sync_info_dict['install_date'],
-                        network=sync_info_dict['network'],
-                        update_time=update_time
-                    )
-                else:
-                    SyncData.objects.filter(cert_ip=val.ip).update(
-                        host_ip=val.ip,
-                        hostname=sync_info_dict['hostname'],
-                        os_sys=sync_info_dict['os_sys'],
-                        os_version=sync_info_dict['os_version'],
-                        os_kernel=sync_info_dict['os_kernel'],
-                        cpu_model=sync_info_dict['cpu_model'],
-                        cpu_num=sync_info_dict['cpu_num'],
-                        cpu_core=sync_info_dict['cpu_core'],
-                        mem_total=sync_info_dict['mem_total'],
-                        disk_total=sync_info_dict['disk_total'],
-                        product_id=sync_info_dict['product_id'],
-                        #phydisk=sync_info_dict['phydisk'],
-                        logicdisk=sync_info_dict['logicdisk'],
-                        install_date=sync_info_dict['install_date'],
-                        network=sync_info_dict['network'],
-                        update_time=update_time
+                if sync_info['status']=='success':
+                    sync_info_result = json.loads(sync_info['result'])
+                    sync_data = SyncData.objects.filter(cert_ip=val.ip)
+                    update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    if not sync_data:
+                        SyncData.objects.create(
+                            cert_ip=val.ip,
+                            host_ip=val.ip,
+                            hostname=sync_info_result['hostname'],
+                            os_sys=sync_info_result['os_sys'],
+                            os_version=sync_info_result['os_version'],
+                            os_kernel=sync_info_result['os_kernel'],
+                            cpu_model=sync_info_result['cpu_model'],
+                            cpu_num=sync_info_result['cpu_num'],
+                            cpu_core=sync_info_result['cpu_core'],
+                            mem_total=sync_info_result['mem_total'],
+                            disk_total=sync_info_result['disk_total'],
+                            product_id=sync_info_result['product_id'],
+                            #phydisk=sync_info_result['phydisk'],
+                            logicdisk=sync_info_result['logicdisk'],
+                            install_date=sync_info_result['install_date'],
+                            network=sync_info_result['network'],
+                            update_time=update_time
                         )
+                    else:
+                        SyncData.objects.filter(cert_ip=val.ip).update(
+                            host_ip=val.ip,
+                            hostname=sync_info_result['hostname'],
+                            os_sys=sync_info_result['os_sys'],
+                            os_version=sync_info_result['os_version'],
+                            os_kernel=sync_info_result['os_kernel'],
+                            cpu_model=sync_info_result['cpu_model'],
+                            cpu_num=sync_info_result['cpu_num'],
+                            cpu_core=sync_info_result['cpu_core'],
+                            mem_total=sync_info_result['mem_total'],
+                            disk_total=sync_info_result['disk_total'],
+                            product_id=sync_info_result['product_id'],
+                            #phydisk=sync_info_result['phydisk'],
+                            logicdisk=sync_info_result['logicdisk'],
+                            install_date=sync_info_result['install_date'],
+                            network=sync_info_result['network'],
+                            update_time=update_time
+                            )
+                else:
+                    print(sync_info)
 
         Cert.objects.filter(os_host_ip=os_host_ip).update(sync=sync)
     else:
         pass
     return HttpResponseRedirect ("/operSystem/sync_detail/"+str(id))
+
+
+def os_data_sync():
+    sync_result={}
+    cert_data=Cert.objects.all()
+    if cert_data:
+        for c in cert_data:
+            if c.sync=='on':
+                if c.os_type=='linux':
+                    sync_login=GetSysDataL(
+                            ip=c.ip,
+                            port=c.port,
+                            username=c.username,
+                            password=bytes.decode(base64.b64decode(bytes(c.password,encoding='utf-8'))),
+                            os_type=c.os_type,
+                        )
+                    sync_info=sync_login.get_os_info()
+                    
+                    if sync_info['status']=='success':
+                        update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                        sync_data = SyncData.objects.filter(cert_ip=c.ip)
+                        sync_info_result = json.loads(sync_info['result'])
+                        
+                        if not sync_data:
+                            SyncData.objects.create(
+                                cert_ip=c.ip,
+                                host_ip=c.ip,
+                                hostname=sync_info_result['hostname'],
+                                os_sys=sync_info_result['os_sys'],
+                                os_version=sync_info_result['os_version'],
+                                os_kernel=sync_info_result['os_kernel'],
+                                cpu_model=sync_info_result['cpu_model'],
+                                cpu_num=sync_info_result['cpu_num'],
+                                cpu_core=sync_info_result['cpu_core'],
+                                mem_total=sync_info_result['mem_total'],
+                                disk_total=sync_info_result['disk_total'],
+                                product_id=sync_info_result['product_id'],
+                                #phydisk=sync_info_result['phydisk'],
+                                logicdisk=sync_info_result['logicdisk'],
+                                install_date=sync_info_result['install_date'],
+                                network=sync_info_result['network'],
+                                update_time=update_time
+                            )
+                            sync_result[c.ip] = 'os sync success'
+                        else:
+                            SyncData.objects.filter(cert_ip=c.ip).update(
+                                host_ip=c.ip,
+                                hostname=sync_info_result['hostname'],
+                                os_sys=sync_info_result['os_sys'],
+                                os_version=sync_info_result['os_version'],
+                                os_kernel=sync_info_result['os_kernel'],
+                                cpu_model=sync_info_result['cpu_model'],
+                                cpu_num=sync_info_result['cpu_num'],
+                                cpu_core=sync_info_result['cpu_core'],
+                                mem_total=sync_info_result['mem_total'],
+                                disk_total=sync_info_result['disk_total'],
+                                product_id=sync_info_result['product_id'],
+                                #phydisk=sync_info_result['phydisk'],
+                                logicdisk=sync_info_result['logicdisk'],
+                                install_date=sync_info_result['install_date'],
+                                network=sync_info_result['network'],
+                                update_time=update_time
+                                )
+                            sync_result[c.ip] = 'os sync update success'
+                    else:
+                        sync_result[c.ip] = sync_info
+                else:
+                    return '暂不支持windows'
+            else:
+                sync_result[c.ip] ='os sync is disabled'
+        return sync_result
+    else:
+        return 'Cert is null'

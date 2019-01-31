@@ -54,6 +54,6 @@ class SyncData(models.Model):
     update_time=models.CharField(max_length=128,null=True, blank=True)
 
     def __str__(self):
-        return self.ip
+        return self.host_ip
 
 #models.TextField(null=True, blank=True)

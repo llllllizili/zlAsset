@@ -41,9 +41,15 @@ app.conf.update(
         #     'schedule': 7200.0,
         #     'args': (7000,200)
         # },
-        'ipmi_sync_hd': {
+        # ipmi & ilo
+        'sync_hd': {
             'task': 'hdServer.tasks.hddata_sync',
-            'schedule': 86400.0,
+            # 'schedule': 86400.0,
+            'schedule': 60.0,
+        },
+        'sync_os': {
+            'task': 'operSystem.tasks.osdata_sync',
+            'schedule': 20.0,
         },
     }
 )

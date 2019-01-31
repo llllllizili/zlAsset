@@ -12,6 +12,7 @@ from django.contrib.auth.hashers import make_password, check_password
 # Create your views here.
 import time,datetime
 import json
+import base64
 from .sync_hddata import SyncHdInfo
 from .models import *
 
@@ -212,7 +213,8 @@ def set_cert(request,id):
         ip=request.POST['ip']
         way=request.POST['way']
         username=request.POST['username']
-        password=request.POST['password']
+        password_b=request.POST['password']
+        password=bytes.decode(base64.b64encode(bytes(password_b,encoding='utf-8')))
         hdServer_data =Data.objects.get(id=id)
         val = Cert.objects.filter(hd_name=hdServer_data.name)
         if not val:
@@ -250,7 +252,11 @@ def set_sync(request,id):
             way = val.way
 
             if way=='ipmi':
-                ipmi_login = SyncHdInfo(username=val.username,password=val.password,server=val.ip)
+                ipmi_login = SyncHdInfo(
+                    username=val.username,
+                    password=bytes.decode(base64.b64decode(bytes(val.password,encoding='utf-8'))),
+                    server=val.ip
+                    )
                 ipmi_info = ipmi_login.get_hd_info_ipmi()
                 if 'error' in ipmi_info:
                      sync_result[ip] = ipmi_info['error']
@@ -284,7 +290,11 @@ def set_sync(request,id):
                             update_time=update_time
                         )
             if way=='ilo':
-                ilo_login = SyncHdInfo(username=val.username,password=val.password,server=val.ip)
+                ilo_login = SyncHdInfo(
+                    username=val.username,
+                    password=bytes.decode(base64.b64decode(bytes(val.password,encoding='utf-8'))),
+                    server=val.ip
+                    )
                 ilo_info = ilo_login.get_hd_info_ilo()
 
                 update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -335,7 +345,11 @@ def hd_data_sync():
         for c in cert_data:
             if c.sync=='on':
                 if c.way=='ipmi':
-                    ipmi_login = SyncHdInfo(username=c.username,password=c.password,server=c.ip)
+                    ipmi_login = SyncHdInfo(
+                        username=c.username,
+                        password=bytes.decode(base64.b64decode(bytes(c.password,encoding='utf-8'))),
+                        server=c.ip
+                        )
                     ipmi_info = ipmi_login.get_hd_info_ipmi()
 
                     if 'error' in ipmi_info:
@@ -372,7 +386,11 @@ def hd_data_sync():
                             )
                             sync_result[c.ip] = 'ipmi sync update success'
                 if c.way=='ilo':
-                    ilo_login = SyncHdInfo(username=c.username,password=c.password,server=c.ip)
+                    ilo_login = SyncHdInfo(
+                        username=c.username,
+                        password=bytes.decode(base64.b64decode(bytes(c.password,encoding='utf-8'))),
+                        server=c.ip
+                        )
                     ilo_info = ilo_login.get_hd_info_ilo()
 
                     update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')

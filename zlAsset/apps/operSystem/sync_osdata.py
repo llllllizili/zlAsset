@@ -35,3 +35,10 @@ class GetSysDataL(object):
     def get_os_info(self):
         data = self.ansible_run.run_script('operSystem/os_base_info.sh','')
         return data
+
+if __name__ == '__main__':
+    l = GetSysDataL(ip='192.168.1.55',username='root',password='centos',port='22',os_type='linux')
+    data = l.get_os_info()
+    data2 = l.cmd_test()
+    print(data)
+    print(data2)
