@@ -169,6 +169,16 @@
           </div>
 
 
+       <!-- process relationship -->
+      <div class="col-md-12">
+          <div class="col-md-12">
+            <div class="modal-header">
+              <h4 class="modal-title"><i class="fa fa-tags"></i>连接信息</h4>
+            </div>
+              <div id="main" style="width: 100%;height:400px;"></div>
+          </div>
+       </div>
+
 
         <div class="col-md-12">
           <div class="col-md-12">
@@ -233,6 +243,8 @@
 
 
 
+
+
     </div>
   </div>
 </div>
@@ -257,18 +269,154 @@
   </div>
 </div>
 
+
+
 {% endblock %}
 
 <!-- sync -->
 {% block js %}
 
-<style type="text/css"> 
-body{font:12px/1.8 arial;} 
-a,a:visited{color:#3366cc;text-decoration:none;} 
-a:hover{color:#f60;text-decoration:underline;} 
-.tip{width:200px;border:2px solid #ddd;padding:8px;background:#f1f1f1;color:#666;} 
-img{border:none;} 
-</style> 
+<script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        // 指定图表的配置项和数据
+        var option = {
+    title: {
+        text: 'Graph 简单示例'
+    },
+    tooltip: {},
+    animationDurationUpdate: 1500,
+    animationEasingUpdate: 'quinticInOut',
+    series : [
+        {
+            type: 'graph',
+            layout: 'none',
+            color: '#61a0a8', // 圆圈颜色
+            symbolSize: 33, // 圆圈大小
+            roam: true,
+            focusNodeAdjacency: true,
+            label: {
+                normal: {
+                    show: true
+                }
+            },
+            edgeSymbol: ['circle', 'arrow'], // 连线两端图形
+            edgeSymbolSize: [14, 10],
+            edgeLabel: {
+                normal: {
+                    textStyle: {
+                        fontSize: 15 // 线上字体大小
+                    }
+                }
+            },
+            data: [{
+                name: '192.168.1.1',
+                label: {
+                    position: 'bottom',
+                },
+                x: 300,
+                y: 300
+            }, {
+                name: '192.168.1.2',
+                label: {
+                    position: 'bottom',
+                },
+                x: 200,
+                y: 400
+            }, {
+                name: "{{ Cert_data.ip }}",
+                symbol: 'rect',  // 可以是图片等
+                label: {
+                    position: 'bottom',
+                },
+                x: 800,
+                y: 300
+            }, {
+                name: '172.10.10.8',
+                label: {
+                    position: 'bottom',
+                },
+                x: 1200,
+                y: 300
+            }],
+            // links: [],
+            links: [{
+                source: '192.168.1.1',
+                target: "{{ Cert_data.ip }}",
+                value: '',
+                symbolSize: [5, 20],
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: 'port: 22',
+                    }
+                },
+                lineStyle: {
+                    normal: {
+                        width: 4,
+                        opacity: 0.8, // 透明
+                        curveness: 0 // 弧度
+                    }
+                }
+            },{
+                source: '192.168.1.2',
+                target: "{{ Cert_data.ip }}",
+                value: '',
+                symbolSize: [5, 20],
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: 'port: 22',
+                    }
+                },
+                lineStyle: {
+                    normal: {
+                        width: 4,
+                        opacity: 0.8, // 透明
+                        curveness: 0 // 弧度
+                    }
+                }
+            },{
+                source: "{{ Cert_data.ip }}",
+                target: '172.10.10.8',
+                value: '',
+                symbolSize: [5, 20],
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: 'port: 22',
+                    }
+                },
+                lineStyle: {
+                    normal: {
+                        width: 4,
+                        opacity: 0.8, // 透明
+                        curveness: 0 // 弧度
+                    }
+                }
+            }],
+        }
+    ]
+};
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+body{font:12px/1.8 arial;}
+a,a:visited{color:#3366cc;text-decoration:none;}
+a:hover{color:#f60;text-decoration:underline;}
+.tip{width:200px;border:2px solid #ddd;padding:8px;background:#f1f1f1;color:#666;}
+img{border:none;}
+</style>
 
 <script>
   function sync() {

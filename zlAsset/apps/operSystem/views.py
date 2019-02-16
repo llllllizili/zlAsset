@@ -163,11 +163,18 @@ def sync_detail(request,id):
             cpu_model=ast.literal_eval(sync_data.cpu_model)
             disk_data=ast.literal_eval(sync_data.logicdisk)
             network_data=ast.literal_eval(sync_data.network)
+            netstat_data=ast.literal_eval(sync_data.netstat)
         else:
             sync_data=None
+            cpu_model=None
+            disk_data=None
+            network_data=None
     else:
         Cert_data = None
         sync_data = None
+        cpu_model=None
+        disk_data=None
+        network_data=None
     return render(request,'operSystem/sync_detail.html',{
         'operSystem_data':operSystem_data,
         'Cert_data':Cert_data,
@@ -238,11 +245,11 @@ def set_sync(request,id):
                     password=bytes.decode(base64.b64decode(bytes(val.password,encoding='utf-8'))),
                     os_type=val.os_type,
                     )
-                print(bytes.decode(base64.b64decode(bytes(val.password,encoding='utf-8'))))
 
                 sync_info=sync_login.get_os_info()
 
                 if sync_info['status']=='success':
+                    print(sync_info['result'])
                     sync_info_result = json.loads(sync_info['result'])
                     sync_data = SyncData.objects.filter(cert_ip=val.ip)
                     update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -264,6 +271,7 @@ def set_sync(request,id):
                             logicdisk=sync_info_result['logicdisk'],
                             install_date=sync_info_result['install_date'],
                             network=sync_info_result['network'],
+                            netstat=sync_info_result['netstat'],
                             update_time=update_time
                         )
                     else:
@@ -283,6 +291,7 @@ def set_sync(request,id):
                             logicdisk=sync_info_result['logicdisk'],
                             install_date=sync_info_result['install_date'],
                             network=sync_info_result['network'],
+                            netstat=sync_info_result['netstat'],
                             update_time=update_time
                             )
                 else:
@@ -309,12 +318,12 @@ def os_data_sync():
                             os_type=c.os_type,
                         )
                     sync_info=sync_login.get_os_info()
-                    
+
                     if sync_info['status']=='success':
                         update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                         sync_data = SyncData.objects.filter(cert_ip=c.ip)
                         sync_info_result = json.loads(sync_info['result'])
-                        
+
                         if not sync_data:
                             SyncData.objects.create(
                                 cert_ip=c.ip,

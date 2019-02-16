@@ -91,7 +91,7 @@ check_os_release()
       elif echo "$os_release"|grep "Ubuntu 16.04" >/dev/null 2>&1
       then
         os_release=ubuntu1604
-        echo "$os_release" 
+        echo "$os_release"
       else
         os_release=""
         echo "$os_release"
@@ -165,7 +165,7 @@ get_disk(){
   echo -e "[\c"
     DEV=`df -hPl | grep '^/dev/*' | cut -d' ' -f1 | sort`
     for I in $DEV
-    do 
+    do
       dev=`df -TPhl | grep $I | awk '{print $1}'`
       dev_type=`df -TPhl | grep $I | awk '{print $2}'`
       size=`df -TPhl | grep $I | awk '{print $3}'`
@@ -179,6 +179,32 @@ get_disk(){
   echo -e "]\c"
 }
 
+#获取 netsta信息
+get_netstat(){
+  local IFS=$'\n'
+  local OLDIFS="$IFS"
+  SERVER=`netstat -ntulpa | grep -E 'tcp|udp' |awk -F' ' '{print $1,$4,$5,$6,$7}'`
+  echo -e "[\c"
+  for line in $SERVER
+    do
+      #echo $line
+      Protocol=`echo $line | grep ES | awk '{print $1}'`
+      LocalAddr=`echo $line | grep ES | awk '{print $2}'|awk -F: '{print $(NF-1)}'`
+      LocalPort=`echo $line | grep ES | awk '{print $2}'|awk -F: '{print $NF}'`
+      ForeignAddr=`echo $line |grep ES | awk '{print $3}'|awk -F: '{print $(NF-1)}'`
+      ForeignPort=`echo $line |grep ES | awk '{print $3}'|awk -F: '{print $NF}'`
+      State=`echo $line |grep ES | awk '{print $4}'`
+      PID=`echo $line |grep ES | awk '{print $5}'| awk -F'/' '{print $1}'`
+      App=`echo $line |grep ES | awk '{print $5}'| awk -F'/' '{print $2}'`
+      #Program=`echo $line | awk '{print $7}'| awk -F'/' '{print $2}'`
+      if [ "$PID" = "" ]; then
+          continue;
+      else
+         echo -e "{\"protocol\":\"$Protocol\",\"pid\":\"$PID\",\"localaddr\":\"$LocalAddr\",\"localport\":\"$LocalPort\",\"foreignaddr\":\"$ForeignAddr\",\"foreignport\":\"$ForeignPort\",\"state\":\"$State\"}"
+      fi
+    done | sed '$!s/$/,/'
+  echo -e "]\c"
+}
 
 # suse grep -i "SUSE" /etc/SuSE-release
 #获取centos信息
@@ -196,7 +222,6 @@ get_info(){
     os_version=`cat /etc/redhat-release`
   fi
   os_kernel=`uname -r`
-  cpu_model=`grep 'model name' /proc/cpuinfo |uniq |awk -F : '{print $2}'`
   cpu_num=`cat /proc/cpuinfo| grep 'physical id'| sort| uniq| wc -l`
   cpu_core=`grep 'cpu cores' /proc/cpuinfo |uniq |awk -F : '{print $2}'`
   cpu_load=`cat /proc/loadavg | awk '{print $1}'`
@@ -210,6 +235,7 @@ get_info(){
   net_detial=$(get_net)
   cpu_detial=$(get_cpu)
   disk_detial=$(get_disk)
+  netstat_detial=$(get_netstat)
   install_date=`ls -lact --full-time /etc/ | awk 'END {print $6,$7,$8}'`
 #dict
   echo "{\
@@ -217,7 +243,6 @@ get_info(){
     \"hostname\":\"$host_name\",
     \"os_version\":\"$os_version\",\
     \"os_kernel\":\"$os_kernel\",\
-    \"cpu_model\":\"$cpu_model\",\
     \"cpu_num\":\"$cpu_num\",\
     \"cpu_core\":\"$cpu_core\",\
     \"mem_total\":\"$[mem_total/1024]\",\
@@ -225,6 +250,7 @@ get_info(){
     \"disk_total\":\"$[disk_total/1024/1024]\",\
     \"install_date\":\"$install_date\",\
     \"network\":$net_detial,\
+    \"netstat\":$netstat_detial,\
     \"cpu_model\":$cpu_detial,\
     \"logicdisk\":$disk_detial
   }"

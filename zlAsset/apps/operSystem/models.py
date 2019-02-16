@@ -52,6 +52,7 @@ class SyncData(models.Model):
     install_date=models.CharField(max_length=128,null=True, blank=True)
     network = models.TextField(null=True, blank=True)
     update_time=models.CharField(max_length=128,null=True, blank=True)
+    netstat=models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.host_ip
