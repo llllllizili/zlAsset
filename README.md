@@ -73,5 +73,6 @@ pip3 install -U celery[redis]
 
 ![同步信息](https://github.com/dl1548/zlAsset/blob/master/zlAsset/readme_img/osSync.png)
 
+![同步信息-01](https://github.com/dl1548/zlAsset/blob/master/zlAsset/readme_img/osSync-01.png)
 
-
+![同步信息02](https://github.com/dl1548/zlAsset/blob/master/zlAsset/readme_img/osSync-02.png)

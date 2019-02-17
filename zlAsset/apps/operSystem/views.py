@@ -15,6 +15,7 @@ from django.contrib.auth.hashers import make_password, check_password
 import os
 import ast
 import base64
+import random
 import time,datetime
 import json
 from .models import *
@@ -164,24 +165,37 @@ def sync_detail(request,id):
             disk_data=ast.literal_eval(sync_data.logicdisk)
             network_data=ast.literal_eval(sync_data.network)
             netstat_data=ast.literal_eval(sync_data.netstat)
+            ip_list=list()
+            netstat_dict=dict()
+            for d in netstat_data:
+                if d['foreignaddr'] not in ip_list:
+                    ip_list.append(d['foreignaddr'])
+                    netstat_dict[d['foreignaddr']]=list()
+                    netstat_dict[d['foreignaddr']].append(int(d['localport']))
+                else:
+                    if int(d['localport']) not in netstat_dict[d['foreignaddr']]:
+                        netstat_dict[d['foreignaddr']].append(int(d['localport']))
         else:
             sync_data=None
             cpu_model=None
             disk_data=None
             network_data=None
+            netstat_data=None
     else:
         Cert_data = None
         sync_data = None
         cpu_model=None
         disk_data=None
         network_data=None
+        netstat_data=None
     return render(request,'operSystem/sync_detail.html',{
         'operSystem_data':operSystem_data,
         'Cert_data':Cert_data,
         'sync_data':sync_data,
         'cpu_model':cpu_model,
         'disk_data':disk_data,
-        'network_data':network_data
+        'network_data':network_data,
+        'netstat_data':netstat_dict
         })
 
 
@@ -249,7 +263,6 @@ def set_sync(request,id):
                 sync_info=sync_login.get_os_info()
 
                 if sync_info['status']=='success':
-                    print(sync_info['result'])
                     sync_info_result = json.loads(sync_info['result'])
                     sync_data = SyncData.objects.filter(cert_ip=val.ip)
                     update_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')

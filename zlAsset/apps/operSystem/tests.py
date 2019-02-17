@@ -103,19 +103,33 @@ str = [
 ]
 
 l =list()
-for n,d in enumerate(str):
-    n =dict()
-    n['addr']=d['foreignaddr']
-    n['port']=d['localport']
-    l.append(n)
-print(l)
 
-print('=======')
-print([dict(t) for t in set([tuple(d.items()) for d in l])])
+# for n,d in enumerate(str):
+#     n =dict()
+#     n['addr']=d['foreignaddr']
+#     n['port']=d['localport']
+#     l.append(n)
+# print(l)
+
+# print('=======')
+# print([dict(t) for t in set([tuple(d.items()) for d in l])])
 
 
-# [dict(t) for t in set([tuple(d.items()) for d in str])]
+# print('=======')
 
-# for d in str:
-#     for t in set(d.items()):
-#         print([tuple(d.items())])
+ip_list=list()
+ip_dict=dict()
+for d in str:
+    if d['foreignaddr'] not in ip_list:
+        ip_list.append(d['foreignaddr'])
+        ip_dict[d['foreignaddr']]=list()
+        ip_dict[d['foreignaddr']].append(d['localport'])
+
+    else:
+        if d['localport'] not in ip_dict[d['foreignaddr']]:
+            ip_dict[d['foreignaddr']].append(d['localport'])
+        # print(ip_dict[d['foreignaddr']])
+
+
+
+print([ip_dict])
