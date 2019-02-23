@@ -1,0 +1,106 @@
+{% extends 'common/base.html' %}
+{% block title %}作业添加{% endblock %}
+{% block page_head %}{% endblock %}
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+<div class="col-md-12">
+    <div class="box box-primary">
+    <div class="row">
+      <form role="form" action="{% url 'hdServer_add_hd_action' %}" method="post">{% csrf_token %}
+        <!-- >基本信息 -->
+        <div class="col-md-12">
+          <div class="col-md-6">
+            <div class="modal-header">
+              <h4 class="modal-title"><i class="fa fa-tags"></i>添加作业</h4>
+            </div>
+              <div class="form-group">
+                <label>名称</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-smile-o"></i>
+                  </div>
+                  <input type="text" class="form-control" placeholder="作业名称 ..."  value='' name="name">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>描述</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-smile-o"></i>
+                  </div>
+                  <input type="text" class="form-control" placeholder="作业描述..."  value='' name="description">
+                </div>
+              </div>
+          </div>
+
+
+
+          <div class="col-md-10">
+            <!--代码输入框（注意请务必设置高度，否则无法显示）-->
+            <pre id="code" class="ace_editor" style="min-height:400px">
+            <textarea class="ace_text-input"></textarea>
+            </pre>
+          </div>
+
+
+
+          </div>
+        <div class="modal-footer">
+            <button class="btn btn-default"><a href="{% url 'hdServer_index' %}" target="_self">测试</a></button>
+            <button class="btn btn-default"><a href="{% url 'hdServer_index' %}" target="_self">取消</a></button>
+            <input type="submit" value="创建" name="create" class="btn btn-primary" >
+        </div>
+      </form>
+    </div>
+    </div>
+</div>
+
+
+
+
+
+        
+
+
+{% endblock %}
+
+{% block js %}
+         <script>
+            //初始化对象
+            editor = ace.edit("code");
+
+            //设置风格和语言（更多风格和语言，请到github上相应目录查看）
+            theme = "monokai"
+            language = "python"
+            editor.setTheme("ace/theme/" + theme);
+            editor.session.setMode("ace/mode/" + language);
+
+            //字体大小
+            editor.setFontSize(18);
+
+            //设置只读（true时只读，用于展示代码）
+            editor.setReadOnly(false);
+
+            //自动换行,设置为off关闭
+            editor.setOption("wrap", "free")
+
+            // 设置光标所在的激活行是否高亮
+            editor.setHighlightActiveLine(true);
+
+            // 设置代码自动换行
+            editor.getSession().setUseWrapMode(true);
+
+             // 设置是否开启代码折叠效果
+            editor.getSession().setUseWrapMode(true);
+            editor.getSession().setUseSoftTabs(true);
+            // 开启代码自动提示补全
+            // editor.setOptions({
+            //     enableBasicAutocompletion: true,
+            //     enableSnippets: true,
+            //     enableLiveAutocompletion: true
+            // });
+        </script>
+
+{% endblock %}

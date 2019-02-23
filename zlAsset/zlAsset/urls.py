@@ -23,4 +23,5 @@ urlpatterns = [
     path('setOrg/', include('setOrg.urls')),
     path('hdServer/', include('hdServer.urls')),
     path('operSystem/', include('operSystem.urls')),
+    path('automation/', include('automation.urls')),
 ]

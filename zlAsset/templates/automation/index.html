@@ -1,0 +1,67 @@
+{% extends 'common/base.html' %}
+{% block title %}主页-作业{% endblock %}
+{% block page_head %} {% endblock %}
+{% block content %}
+
+
+<div class="col-md-12">
+  <div class="box box-primary">
+    <span><h4><font color="red">{{ error_data }}</font></h4></span>
+    <div class="box-body no-padding">
+      <div class="table-responsive mailbox-messages">
+        <div class="box-body">
+          <a href="{% url 'automation_add_job' %}" title="添加按钮"><i class="fa fa-plus pull-right"></i></a>
+          <table id="hdServer_data" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th style="display:none">id</th>
+              <th>名称</th>
+              <th>描述</th>
+              <th>创建时间</th>
+              <th>创建者</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for hdServer in hdServer_data %}
+            <tr>
+              <td style="display:none">{{ hdServer.id }}</td>
+              <td>{{ hdServer.name }}</td>
+              <td>{{ hdServer.manager_ip }}</td>
+              <td>{{ hdServer.brand }}</td>
+              <td>{{ hdServer.brand_type }}</td>
+              <td>
+                <a href="{% url 'hdServer_delete_hd' hdServer.id %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
+                <a href="{% url 'hdServer_modify_hd' hdServer.id %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>&nbsp;&nbsp;
+                <a href="{% url 'hdServer_base_detail' hdServer.id %}" title="查看更多"><i class="fa fa-eye"></i></a>
+              </td>
+              </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    $(function () {
+      $('#hdServer_data').DataTable()
+    })
+
+      function del() {
+        var msg = "您确定要删除吗？";
+          if (confirm(msg)==true){
+            return true;
+          }else{
+            return false;
+        }
+      }
+</script>
+{% endblock %}

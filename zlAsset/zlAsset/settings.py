@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'operSystem',
     'setData',
     'setOrg',
+    'automation',
 ]
 
 MIDDLEWARE = [
