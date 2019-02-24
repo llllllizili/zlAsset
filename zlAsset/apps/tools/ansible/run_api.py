@@ -2,7 +2,7 @@
 
 import os
 from .ansible_api import MyApi as AnsibleApi
-
+# from ansible_api import MyApi as AnsibleApi #if __name__使用
 
 class RemoteRun(object):
     global script_path
@@ -14,7 +14,7 @@ class RemoteRun(object):
         self.port=kwargs.get('port',22)
         self.os_type=kwargs.get('os_type')
         self.time_out = kwargs.get('time_out',10)
-        self.run_user = kwargs.get('become_user','root')
+        self.run_user = kwargs.get('become_user','test')
 
         if not self.os_type :
             return 'OS TYPE 未配置'
@@ -48,6 +48,7 @@ class RemoteRun(object):
                 ansible_run.run(self.ip, 'shell', 'source /etc/profile;'+cmd +
                     ' chdir='+chdir if chdir else cmd )
                 data=ansible_run.get_result()
+                print(self.sources)
 
                 success_data=data['success']
                 failed_data=data['failed']
@@ -106,10 +107,14 @@ class RemoteRun(object):
     def run_copy(self):
         pass
 
+def get_script_path():
+    path = os.path.dirname(__file__) + '/script/'
+    return path
 if __name__ == '__main__':
-    run = RemoteRun(ip='192.168.1.100',username='root',password='centos',port=22,os_type='linux')
-    d = run.run_cmd('ls /opt')
-    # print(d)
+    # from ansible_api import MyApi as AnsibleApi #if __name__使用 开头替换
+    run = RemoteRun(ip='192.168.1.55',username='test',password='centos',port=22,os_type='linux')
+    d = run.run_cmd('rm -rf /123')
+    print(d)
     # dd = run.run_cmd('ls /opt123')
     # print(dd)
 

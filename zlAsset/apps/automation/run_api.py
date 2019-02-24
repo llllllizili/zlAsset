@@ -5,6 +5,7 @@ import sys
 import json
 sys.path.append('../')
 from tools.ansible.run_api import RemoteRun as RunAnsibleApi
+from tools.ansible.run_api import get_script_path
 
 
 class RunAutomation(object):
@@ -35,8 +36,11 @@ class RunAutomation(object):
     #     data = self.ansible_run.run_script('operSystem/os_base_info.sh','')
     #     return data
 
+def script_path():
+    p = get_script_path()
+    return p
 if __name__ == '__main__':
-    l = RunAutomation(ip='192.168.1.55',username='root',password='centos',port='22',os_type='linux')
-    cmd="ip addr | grep 'eth'"
+    l = RunAutomation(ip='192.168.1.55',username='test',password='centos',port='22',os_type='linux')
+    cmd="ip addr"
     data = l.command(str(cmd))
     print(data)

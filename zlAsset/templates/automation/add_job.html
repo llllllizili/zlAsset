@@ -7,7 +7,7 @@
 <div class="col-md-12">
     <div class="box box-primary">
     <div class="row">
-      <form role="form" action="{% url 'hdServer_add_hd_action' %}" method="post">{% csrf_token %}
+      <form role="form" id='job_form' name='job_form' method="post">{% csrf_token %}
         <!-- >基本信息 -->
         <div class="col-md-12">
           <div class="col-md-6">
@@ -33,74 +33,125 @@
                   <input type="text" class="form-control" placeholder="作业描述..."  value='' name="description">
                 </div>
               </div>
-          </div>
 
+              <!-- radio -->
+              <div >
+                <label>代码语言</label><p>
+                <label>
+                  <input type="radio" name="language"  value="python" onclick="getLan()"> python &nbsp&nbsp&nbsp
+                </label>
+                <label>
+                  <input type="radio" name="language" onclick="getLan()" value="sh" > shell &nbsp&nbsp&nbsp
+                </label>
+                <label>
+                  <input type="radio" name="language"  disabled  onclick="getLan()" value="batchfile"> bat &nbsp&nbsp&nbsp
+                </label>
+                <label>
+                  <input type="radio" name="language"  disabled  onclick="getLan()" value="powershell" > powershell &nbsp&nbsp&nbsp
+                </label>
+              </div>
+              </div>
 
-
-          <div class="col-md-10">
-            <!--代码输入框（注意请务必设置高度，否则无法显示）-->
-            <pre id="code" class="ace_editor" style="min-height:400px">
-            <textarea class="ace_text-input"></textarea>
-            </pre>
-          </div>
-
-
-
-          </div>
-        <div class="modal-footer">
-            <button class="btn btn-default"><a href="{% url 'hdServer_index' %}" target="_self">测试</a></button>
-            <button class="btn btn-default"><a href="{% url 'hdServer_index' %}" target="_self">取消</a></button>
-            <input type="submit" value="创建" name="create" class="btn btn-primary" >
-        </div>
+              <div class="col-md-10">
+                <!--代码输入框（注意请务必设置高度，否则无法显示）-->
+                <pre id="code" class="ace_editor" style="min-height:400px">
+                <textarea id="script_content" class="ace_text-input"></textarea>
+                </pre>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" onclick="test()" >测试</button>
+                <button class="btn btn-default"><a href="{% url 'atuomation_index' %}" target="_self">取消</a></button>
+                <button class="btn btn-primary" onclick="save()" >添加</button>
+                <!-- <input type="submit" value="添加" name="create" class="btn btn-primary" > -->
+            </div>
       </form>
+      <pre style="display:none;">
+        <textarea id='script_content' name="script_content" form='job_form' ></textarea>
+      </pre>
+
     </div>
     </div>
 </div>
 
-
-
-
-
-        
-
-
 {% endblock %}
 
 {% block js %}
-         <script>
-            //初始化对象
-            editor = ace.edit("code");
 
-            //设置风格和语言（更多风格和语言，请到github上相应目录查看）
-            theme = "monokai"
-            language = "python"
-            editor.setTheme("ace/theme/" + theme);
-            editor.session.setMode("ace/mode/" + language);
 
-            //字体大小
-            editor.setFontSize(18);
+<script type="text/javascript">
+    function save(){
+      document.job_form.action="{% url 'automation_add_job_action' %}";
+      document.job_form.submit();
+    }
 
-            //设置只读（true时只读，用于展示代码）
-            editor.setReadOnly(false);
+    function test(){
+      document.job_form.action="{% url 'automation_test_job' %}";
+      document.job_form.submit();
+    }
 
-            //自动换行,设置为off关闭
-            editor.setOption("wrap", "free")
+    function getLan() {
+        var language = $("input[name='language']:checked").val();
+    // 获取语言的选择值
 
-            // 设置光标所在的激活行是否高亮
-            editor.setHighlightActiveLine(true);
+    // 代码编辑
+    //初始化对象
+    if (language == 'python') {
+        var theme = "monokai"
+        default_c = '#!/usr/bin/python\n# 脚本环境根据个人情况指定'
+    }
+    if (language == 'sh') {
+        var theme = "terminal"
+        default_c = '#!/usr/bin/bash\n# 脚本环境根据个人情况指定'
+    }
+    if (language == 'batchfile') {
+        var theme = "tomorrow_night_eighties"
+        default_c = '::bat脚本'
+    }
+    if (language == 'powershell') {
+        var theme = "tomorrow_night_blue"
+        default_c = '# powershell 脚本'
+    }
 
-            // 设置代码自动换行
-            editor.getSession().setUseWrapMode(true);
+    editor = ace.edit("code");
 
-             // 设置是否开启代码折叠效果
-            editor.getSession().setUseWrapMode(true);
-            editor.getSession().setUseSoftTabs(true);
-            // 开启代码自动提示补全
-            // editor.setOptions({
-            //     enableBasicAutocompletion: true,
-            //     enableSnippets: true,
-            //     enableLiveAutocompletion: true
-            // });
-        </script>
+    //设置风格和语言（更多风格和语言，请到github上相应目录查看）
+    editor.setTheme("ace/theme/" + theme);
+    editor.session.setMode("ace/mode/" + language);
+
+    //字体大小
+    editor.setFontSize(18);
+
+    //设置只读（true时只读，用于展示代码）
+    editor.setReadOnly(false);
+
+    //设置 默认内容
+    editor.setValue(default_c);
+    //自动换行,设置为off关闭
+    editor.setOption("wrap", "free")
+
+    // 设置光标所在的激活行是否高亮
+    editor.setHighlightActiveLine(true);
+
+    // 设置代码自动换行
+    editor.getSession().setUseWrapMode(true);
+
+     // 设置是否开启代码折叠效果
+    editor.getSession().setUseWrapMode(true);
+    editor.getSession().setUseSoftTabs(true);
+    // 开启代码自动提示补全
+    // editor.setOptions({
+    //     enableBasicAutocompletion: true,
+    //     enableSnippets: true,
+    //     enableLiveAutocompletion: true
+    // });
+
+    editor.getSession().on('change', function(e) {
+        var script_val =editor.getValue();//获取内容
+        $("#script_content").val(script_val)
+    });
+
+    }
+</script>
 
 {% endblock %}

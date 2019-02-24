@@ -20,7 +20,7 @@ class Data(models.Model):
     run_env = models.CharField(max_length=128,null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.host_ip
 
 class Cert(models.Model):
     os_host_ip=models.CharField(max_length=128,null=True, blank=True)

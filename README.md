@@ -7,6 +7,10 @@ zili的测试
 
 #### event
 
+##### 2019/2/24
+
+自动化-作业 完成50&  ,下次写作业测试.如果有时间吧执行也写了
+
 ##### 2019/1/30
 
 OS同步完成.
@@ -76,3 +80,13 @@ pip3 install -U celery[redis]
 ![同步信息-01](https://github.com/dl1548/zlAsset/blob/master/zlAsset/readme_img/osSync-01.png)
 
 ![同步信息02](https://github.com/dl1548/zlAsset/blob/master/zlAsset/readme_img/osSync-02.png)
+
+##### 自动化
+
+功能: 新建作业(也就是脚本). 后期调用作业名进行对主机的批量操作
+
+![作业主页](https://github.com/dl1548/zlAsset/blob/master/zlAsset/readme_img/jobs_index.png)
+
+![作业添加](https://github.com/dl1548/zlAsset/blob/master/zlAsset/readme_img/add_job.png)
+
+![作业测试](https://github.com/dl1548/zlAsset/blob/master/zlAsset/readme_img/test_job.png)
