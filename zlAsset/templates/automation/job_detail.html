@@ -1,0 +1,36 @@
+{% extends 'common/base.html' %}
+{% block title %}{{ jobs_data.name }}{% endblock %}
+{% block page_head %}{% endblock %}
+{% block content %}
+
+<style type="text/css">
+  textarea{
+    border:0;
+    background-color:transparent;
+    outline: none;
+    outline: none;
+    color: #666464;
+    height: auto;
+    width:80%;
+    height:300px;
+  }
+</style>
+<div >
+  <pre>
+      <textarea style='height:600px; max-height:600px; width:98%;' name="script_content" readonly="readonly" class="col-md-12">{{ jobs_data.script_content }}</textarea>
+  </pre>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block js %}
+
+
+<script type="text/javascript">
+
+</script>
+
+{% endblock %}

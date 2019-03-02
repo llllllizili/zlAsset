@@ -33,7 +33,9 @@
               <td>{{ jobs.create_time }}</td>
               <td>{{ jobs.user }}</td>
               <td>
-              </td>
+                <a href="{% url 'automation_delete_job' jobs.id %}" onclick='return del();' title="删除按钮"><i class="fa fa-minus-square" ></i></a>&nbsp;&nbsp;
+                <a href="{% url 'automation_modify_job' jobs.id %}" title="修改按钮"><i class="fa  fa-pencil-square"></i></a>&nbsp;&nbsp;
+                <a href="{% url 'automation_job_detail' jobs.id %}" title="查看更多" target="_blank"><i class="fa fa-eye"></i></a>
               </td>
             </tr>
             {% endfor %}

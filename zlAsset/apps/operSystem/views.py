@@ -22,7 +22,6 @@ from .models import *
 from .sync_osdata import GetSysDataL
 
 import sys
-sys.path.append("../")
 from hdServer.models import Data as hdData
 
 

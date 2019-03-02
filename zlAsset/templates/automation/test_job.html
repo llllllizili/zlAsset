@@ -1,5 +1,5 @@
 {% extends 'common/base.html' %}
-{% block title %}作业添加{% endblock %}
+{% block title %}作业测试{% endblock %}
 {% block page_head %}{% endblock %}
 {% block content %}
 <style type="text/css">
@@ -17,7 +17,7 @@
 <div class="col-md-12">
     <div class="box box-primary">
     <div class="row">
-      <form role="form" id='job_form' action="{% url 'automation_test_job_save' %}" method="post">{% csrf_token %}
+      <form role="form" id='job_form' action="#" method="post">{% csrf_token %}
         <!-- >基本信息 -->
         <div class="col-md-12">
           <div class="col-md-10">
@@ -75,11 +75,10 @@
               </div>
           </div>
       <!--代码-->
-              <div class="col-md-12">
-                <label>脚本内容(只读)</label><p>
+              <div >
                 <label><font color="red">取消前请复制脚本内容,否则,将丢失</font></label><p>
                 <pre>
-                    <textarea id='script_content' name="script_content" form='job_form' readonly="readonly">{{ job_script_content }}</textarea>
+                    <textarea id='script_content' name="script_content" form='job_form' readonly="readonly" class="col-md-10">{{ job_script_content }}</textarea>
                 </pre>
               </div>
         </div>

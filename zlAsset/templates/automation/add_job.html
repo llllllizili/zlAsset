@@ -7,7 +7,7 @@
 <div class="col-md-12">
     <div class="box box-primary">
     <div class="row">
-      <form role="form" id='job_form' name='job_form' method="post">{% csrf_token %}
+      <form role="form" id='job_form' name='job_form' method="post" target="_blank">{% csrf_token %}
         <!-- >基本信息 -->
         <div class="col-md-12">
           <div class="col-md-6">
@@ -55,12 +55,32 @@
               <div class="col-md-10">
                 <!--代码输入框（注意请务必设置高度，否则无法显示）-->
                 <pre id="code" class="ace_editor" style="min-height:400px">
-                <textarea id="script_content" class="ace_text-input"></textarea>
+                <textarea class="ace_text-input"></textarea>
                 </pre>
               </div>
-            </div>
+              <br>
+
+              <div class="col-md-8" >
+              <br>
+
+              </div>
+              <div class="col-md-8" >
+                <div class="col-md-6" >
+                  <select id='host' name='host' class="form-control select2" multiple="multiple" data-placeholder="目标主机,未设置同步的主机不可选..."
+                          style="width: 100%;">
+                    {% for cert in cert_data %}
+                      <option value="{{ cert.ip }}">{{ cert.ip }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-xs-2" >
+                  <button class="btn btn-default" onclick="test()" >代码测试</button>
+                </div>
+              </div>
+
+
+          </div>
             <div class="modal-footer">
-                <button class="btn btn-default" onclick="test()" >测试</button>
                 <button class="btn btn-default"><a href="{% url 'atuomation_index' %}" target="_self">取消</a></button>
                 <button class="btn btn-primary" onclick="save()" >添加</button>
                 <!-- <input type="submit" value="添加" name="create" class="btn btn-primary" > -->
@@ -80,6 +100,8 @@
 
 
 <script type="text/javascript">
+      $('.select2').select2()
+
     function save(){
       document.job_form.action="{% url 'automation_add_job_action' %}";
       document.job_form.submit();
@@ -98,19 +120,19 @@
     //初始化对象
     if (language == 'python') {
         var theme = "monokai"
-        default_c = '#!/usr/bin/python\n# 脚本环境根据个人情况指定'
+        default_c = '#!/usr/bin/python\n# 脚本环境根据个人情况指定\n'
     }
     if (language == 'sh') {
         var theme = "terminal"
-        default_c = '#!/usr/bin/bash\n# 脚本环境根据个人情况指定'
+        default_c = '#!/usr/bin/bash\n# 脚本环境根据个人情况指定\n'
     }
     if (language == 'batchfile') {
-        var theme = "tomorrow_night_eighties"
+        var theme = "tomorrow_night_eighties\n"
         default_c = '::bat脚本'
     }
     if (language == 'powershell') {
         var theme = "tomorrow_night_blue"
-        default_c = '# powershell 脚本'
+        default_c = '# powershell 脚本\n'
     }
 
     editor = ace.edit("code");
