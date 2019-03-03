@@ -39,7 +39,6 @@ def add_job(request):
         logger.error('DB search error')
 @login_required(login_url='/login/')
 def add_job_action(request):
-    logger.info("一个更萌的请求过来了。。。。")
     if request.method == 'POST':
         name=request.POST['name']
         description=request.POST['description']
@@ -53,7 +52,7 @@ def add_job_action(request):
         if language == 'powershell':
             postfix = '.ps1'
         script_content=request.POST['script_content']
-        job_script_path=script_path()+'automation/jobs/test/'
+        job_script_path=script_path()+'automation/jobs/'
         # 随机22个字符串
         random_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(22))
         script_name = random_name+language+postfix
@@ -89,7 +88,6 @@ def add_job_action(request):
 
 
 def test_job(request):
-    print('tttttttttttttttttttt=================')
     if request.method == 'POST':
         name=request.POST['name']
         description=request.POST['description']
@@ -104,25 +102,30 @@ def test_job(request):
             postfix = '.ps1'
         host=request.POST.getlist('host')
 
-        print(name)
-        print(description)
-        print(language)
-        print(host)
-
-
         script_content=request.POST['script_content']
         job_script_path=script_path()+'automation/jobs/test/'
          # 随机22个字符串
-        random_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(22))
+        random_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(3))
         script_name = random_name+language+postfix
-
-        with open(job_script_path+script_name,'w+') as f:
+        with open(job_script_path+script_name,'w+', encoding="utf-8") as f:
+            script_content=script_content.replace('\r\n', '\n')
             f.writelines(script_content)
+
+        res=list()
+        for ip in host:
+            cert_data=osCert.objects.get(ip=ip)
+            test_conn=RunAutomation(
+                ip = cert_data.ip,
+                username = cert_data.username,
+                password = bytes.decode(base64.b64decode(bytes(cert_data.password,encoding='utf-8'))),
+                os_type = cert_data.os_type,
+                port=cert_data.port
+                )
+            jobs_data = test_conn.test_job(script_name)
+            jobs_data['ip'] =ip
+            res.append(jobs_data)
         return render(request,'automation/test_job.html',{
-            'job_name':name,
-            'job_description':description,
-            'job_script_content':script_content,
-            'job_script_name':script_name
+            'res':res,
         })
     else:
         jobs_data =Jobs.objects.all()

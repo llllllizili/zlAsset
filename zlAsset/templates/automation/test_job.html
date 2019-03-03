@@ -7,91 +7,42 @@
     border:0;
     background-color:transparent;
     outline: none;
-    outline: none;
+    resize:none;
     color: #666464;
     height: auto;
-    width:80%;
+    width:98%;
     height:300px;
+    max-height:400px
   }
 </style>
-<div class="col-md-12">
-    <div class="box box-primary">
-    <div class="row">
-      <form role="form" id='job_form' action="#" method="post">{% csrf_token %}
-        <!-- >基本信息 -->
-        <div class="col-md-12">
-          <div class="col-md-10">
-            <div class="modal-header">
-              <h4 class="modal-title"><i class="fa fa-tags"></i>脚本测试</h4>
+
+<div class="col-md-10">
+  <!-- /.box-header -->
+  <div class="box-body">
+    <div class="box-group" id="#accordion">
+  {% for os in res %}
+      <div class="panel box box-primary">
+        <div class="box-header with-border">
+          <h4 class="box-title">
+            <a data-toggle="collapse" data-parent="#accordion" href=#{{ forloop.counter }}>
+            {{ os.ip }}
+            </a>
+          </h4>
+        </div>
+        <div id="{{ forloop.counter }}" class="panel-collapse collapse">
+          <div class="box-body">
+            <div >
+              <pre>
+                  <textarea readonly="readonly" class="col-md-12">{{ os.result }}</textarea>
+              </pre>
             </div>
-             <div class="form-group">
-                <label>名称</label>
-                <div class="input-group">
-                  <div class="input-group-addon">
-                    <i class="fa fa-smile-o"></i>
-                  </div>
-                  <input type="text" class="form-control" placeholder="作业名称 ..."  value="{{ job_name }}" name="name">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label>描述</label>
-                <div class="input-group">
-                  <div class="input-group-addon">
-                    <i class="fa fa-smile-o"></i>
-                  </div>
-                  <input type="text" class="form-control" placeholder="作业描述..."  value="{{ job_description }}" name="description">
-                </div>
-              </div>
-            <!--  脚本名称 -->
-              <input type="text"  style="display:none;" value="{{ job_script_name }}" name="script_name">
-
-              <div class="form-group" >
-                <label>目标主机</label>
-                <select id='host' class="form-control select2" multiple="multiple" data-placeholder="选择主机..."
-                        style="width: 100%;">
-                  <option disabled>Alabama</option>
-                  <option>Alaska</option>
-                  <option>California</option>
-                  <option>Delaware</option>
-                  <option>Delaware2</option>
-                  <option>Delaware3</option>
-                  <option>Delaware4</option>
-                  <option>Delaware5</option>
-                  <option>Delaware6</option>
-                  <option>Delaware7</option>
-                  <option>Delaware8</option>
-                  <option>Delaware9</option>
-                  <option>Delaware0</option>
-                  <option>Delaware11</option>
-                  <option>Delaware12</option>
-                  <option>Delaware13</option>
-
-                  <option>Tennessee</option>
-                  <option>Texas</option>
-                  <option>Washington</option>
-                </select>
-                <button class="btn btn-default" onclick='return job_run();'><a href="{% url 'atuomation_index' %}" target="_self" >执行</a></button>
-              </div>
           </div>
-      <!--代码-->
-              <div >
-                <label><font color="red">取消前请复制脚本内容,否则,将丢失</font></label><p>
-                <pre>
-                    <textarea id='script_content' name="script_content" form='job_form' readonly="readonly" class="col-md-10">{{ job_script_content }}</textarea>
-                </pre>
-              </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-default"><a href="{% url 'atuomation_index' %}" target="_self">取消</a></button>
-            <input type="submit" value="创建" name="create" class="btn btn-primary" >
-        </div>
-      </form>
-
-      <!-- <pre style="display:none;"> -->
-
+      </div>
     </div>
-    </div>
+  {% endfor %}
+
+  </div>
 </div>
 
 {% endblock %}

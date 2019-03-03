@@ -28,6 +28,13 @@ class RunAutomation(object):
         cmd = cmd
         data = self.ansible_run.run_cmd(cmd)
         return data
+
+    def test_job(self,name):
+
+        data = self.ansible_run.run_script('automation/jobs/test/'+name,'')
+
+
+        return data
     # def script_test(self):
     #     data = self.ansible_run.run_script('operSystem/test.sh','')
     #     return data
@@ -40,7 +47,12 @@ def script_path():
     p = get_script_path()
     return p
 if __name__ == '__main__':
-    l = RunAutomation(ip='192.168.1.55',username='test',password='centos',port='22',os_type='linux')
-    cmd="ip addr"
-    data = l.command(str(cmd))
-    print(data)
+    l = RunAutomation(ip='192.168.1.55',username='root',password='centos',port='22',os_type='linux')
+    # cmd="hostname"
+    # data = l.command(cmd)
+    # print(data)
+    # import time
+    # time.sleep(3)
+    print('==================')
+    data2 = l.test_job('zili.sh')
+    print(data2)

@@ -179,9 +179,8 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 
 
-# 日子
+# 日志
 BASE_LOG_DIR = os.path.join(BASE_DIR, "log")
-print(BASE_LOG_DIR)
 LOGGING = {
     'version': 1,  # 保留字
     'disable_existing_loggers': False,  # 禁用已经存在的logger实例

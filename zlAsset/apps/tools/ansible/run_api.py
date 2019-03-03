@@ -4,6 +4,10 @@ import os
 from .ansible_api import MyApi as AnsibleApi
 # from ansible_api import MyApi as AnsibleApi #if __name__使用
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 class RemoteRun(object):
     global script_path
     script_path = os.path.dirname(__file__) + '/script/'
@@ -14,7 +18,7 @@ class RemoteRun(object):
         self.port=kwargs.get('port',22)
         self.os_type=kwargs.get('os_type')
         self.time_out = kwargs.get('time_out',10)
-        self.run_user = kwargs.get('become_user','test')
+        self.run_user = kwargs.get('become_user','root')
 
         if not self.os_type :
             return 'OS TYPE 未配置'
@@ -48,7 +52,6 @@ class RemoteRun(object):
                 ansible_run.run(self.ip, 'shell', 'source /etc/profile;'+cmd +
                     ' chdir='+chdir if chdir else cmd )
                 data=ansible_run.get_result()
-                print(self.sources)
 
                 success_data=data['success']
                 failed_data=data['failed']
@@ -79,6 +82,8 @@ class RemoteRun(object):
                     become_user=self.run_user,
                     timeout=self.time_out,
                 )
+            logger.info(str(script_path+script))
+            print(script_path+script)
             ansible_run.run(self.ip, 'script', script_path+script + ' ' + options)
             data=ansible_run.get_result()
 
@@ -91,15 +96,18 @@ class RemoteRun(object):
             if len(failed_data) > 0:
                 return_data['status']='failed'
                 return_data['result']=failed_data[self.ip]['script']
+                logger.error(self.ip + str(return_data))
                 return return_data
             if len(unreachable_data) >0:
 
                 return_data['status']='unreachable'
                 return_data['result']=unreachable_data[self.ip]['script']
+                logger.error(self.ip + str(return_data))
                 return return_data
             else:
                 return_data['status']='success'
                 return_data['result']=success_data[self.ip]['script']
+                logger.info(self.ip + str(return_data))
                 return return_data
         else:
             pass
