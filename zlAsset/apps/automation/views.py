@@ -207,7 +207,10 @@ def test_job(request):
 #         return render(request,'automation/index.html',{'jobs_data':jobs_data})
 
 def delete_job(request,id):
+
+    Jobs.objects.filter(id=id).delete()
     jobs_data =Jobs.objects.all()
+
     return render(request,'automation/index.html',{'jobs_data':jobs_data})
 
 def modify_job(request,id):

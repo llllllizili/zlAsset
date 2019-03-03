@@ -7,7 +7,7 @@
 <div class="col-md-12">
     <div class="box box-primary">
     <div class="row">
-      <form role="form" id='job_form' name='job_form' method="post" target="_blank">{% csrf_token %}
+      <form role="form" id='job_form' name='job_form' method="post">{% csrf_token %}
         <!-- >基本信息 -->
         <div class="col-md-12">
           <div class="col-md-6">
@@ -109,6 +109,7 @@
 
     function test(){
       document.job_form.action="{% url 'automation_test_job' %}";
+      document.job_form.target="_blank"
       document.job_form.submit();
     }
 

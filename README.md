@@ -87,6 +87,10 @@ pip3 install -U celery[redis]
 
 ![作业主页](https://github.com/dl1548/zlAsset/blob/master/zlAsset/readme_img/jobs_index.png)
 
+添加作业可运行代码测试,如果感觉自己的脚本没问题,当然也可以不运行
+
 ![作业添加](https://github.com/dl1548/zlAsset/blob/master/zlAsset/readme_img/add_job.png)
+
+执行结果展示.
 
 ![作业测试](https://github.com/dl1548/zlAsset/blob/master/zlAsset/readme_img/test_job.png)
