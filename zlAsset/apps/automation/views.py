@@ -53,13 +53,14 @@ def add_job_action(request):
             postfix = '.ps1'
         script_content=request.POST['script_content']
         job_script_path=script_path()+'automation/jobs/'
-        # 随机22个字符串
-        random_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(22))
+        # 随机11个字符串
+        random_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(11))
         script_name = random_name+language+postfix
         create_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         user = request.user
 
-        with open(job_script_path+script_name,'w+') as f:
+        with open(job_script_path+script_name,'w+', encoding="utf-8") as f:
+            script_content=script_content.replace('\r\n', '\n')
             f.writelines(script_content)
 
         job = Jobs.objects.filter(script_name=script_name)
@@ -104,8 +105,8 @@ def test_job(request):
 
         script_content=request.POST['script_content']
         job_script_path=script_path()+'automation/jobs/test/'
-         # 随机22个字符串
-        random_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(3))
+         # 随机6个字符串
+        random_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(6))
         script_name = random_name+language+postfix
         with open(job_script_path+script_name,'w+', encoding="utf-8") as f:
             script_content=script_content.replace('\r\n', '\n')
@@ -124,6 +125,10 @@ def test_job(request):
             jobs_data = test_conn.test_job(script_name)
             jobs_data['ip'] =ip
             res.append(jobs_data)
+        #删除测试生成的脚本,可能会遇到权限问题
+        import os
+        delete_test_script='rm -rf '+job_script_path+script_name
+        os.system(delete_test_script)
         return render(request,'automation/test_job.html',{
             'res':res,
         })
@@ -131,88 +136,12 @@ def test_job(request):
         jobs_data =Jobs.objects.all()
         return render(request,'automation/index.html',{'jobs_data':jobs_data})
 
-# def test_job_save(request):
-#     if request.method == 'POST':
-#         name=request.POST['name']
-#         description=request.POST['description']
-#         script_content=request.POST['script_content']
-#         script_name=request.POST['script_name']
-#         create_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-#         user = request.user
-
-#         job_script_path=script_path()+'automation/jobs/'
-
-#         with open(job_script_path+script_name,'w+') as f:
-#             f.writelines(script_content)
-
-#         job = Jobs.objects.filter(script_name=script_name)
-#         if not job:
-#             Jobs.objects.create(
-#                     name=name,
-#                     description=description,
-#                     script_name=script_name,
-#                     create_time=create_time,
-#                     user=user,
-#                     script_content=script_content
-#                     )
-#         else:
-#             Jobs.objects.filter(script_name=script_name).update(
-#                     name=name,
-#                     description=description,
-#                     create_time=create_time,
-#                     user=user,
-#                     script_content=script_content
-#             )
-#         jobs_data =Jobs.objects.all()
-#         return render(request,'automation/index.html',{'jobs_data':jobs_data})
-#     else:
-#         jobs_data =Jobs.objects.all()
-#         return render(request,'automation/index.html',{'jobs_data':jobs_data})
-
-# def test_job_action(request):
-#     if request.method == 'POST':
-#         name=request.POST['name']
-#         description=request.POST['description']
-#         script_content=request.POST['script_content']
-#         script_name=request.POST['script_name']
-#         create_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-#         user = request.user
-
-#         job_script_path=script_path()+'automation/jobs/'
-
-#         with open(job_script_path+script_name,'w+') as f:
-#             f.writelines(script_content)
-
-#         job = Jobs.objects.filter(script_name=script_name)
-#         if not job:
-#             Jobs.objects.create(
-#                     name=name,
-#                     description=description,
-#                     script_name=script_name,
-#                     create_time=create_time,
-#                     user=user
-#                     )
-#             jobs_data =Jobs.objects.all()
-#         else:
-#             Jobs.objects.filter(script_name=script_name).update(
-#                     name=name,
-#                     description=description,
-#                     create_time=create_time,
-#                     user=user
-#             )
-#         jobs_data =Jobs.objects.all()
-#         return render(request,'automation/index.html',{'jobs_data':jobs_data})
-#     else:
-#         jobs_data =Jobs.objects.all()
-#         return render(request,'automation/index.html',{'jobs_data':jobs_data})
-
 def delete_job(request,id):
-
     Jobs.objects.filter(id=id).delete()
     jobs_data =Jobs.objects.all()
-
     return render(request,'automation/index.html',{'jobs_data':jobs_data})
 
+# 暂不写.读取内容无法渲染到前端ace
 def modify_job(request,id):
     jobs_data =Jobs.objects.all()
     return render(request,'automation/index.html',{'jobs_data':jobs_data})
