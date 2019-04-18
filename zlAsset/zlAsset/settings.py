@@ -105,8 +105,8 @@ DATABASES = {
          #数据库名字
          'NAME': 'zl',
          'USER': 'root',
-         'PASSWORD': 'centos',
-         'HOST': '192.168.1.123',
+         'PASSWORD': '123qweASD',
+         'HOST': '172.16.17.129',
          'PORT': '3306',
          'OPTIONS': {
             'autocommit': True,
