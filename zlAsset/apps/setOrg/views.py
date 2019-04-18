@@ -233,3 +233,4 @@ def modify_member_action(request):
         return render(request,'setOrg/index.html',{'member_data':member_data })
     else:
         return HttpResponseRedirect ('/setData/index/')
+`
