@@ -20,4 +20,6 @@ urlpatterns = [
     path('delete_job/<int:id>/',views.delete_job,name='automation_delete_job'),
     path('modify_job/<int:id>/',views.modify_job,name='automation_modify_job'),
     path('job_detail/<int:id>/',views.job_detail,name='automation_job_detail'),
+    path('job_execute/<int:id>/',views.job_execute,name='automation_job_execute'),
+    path('job_execute_action/',views.job_execute_action,name='automation_job_execute_action'),
 ]+ static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)

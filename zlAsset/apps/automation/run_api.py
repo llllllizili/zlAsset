@@ -30,10 +30,11 @@ class RunAutomation(object):
         return data
 
     def test_job(self,name):
-
         data = self.ansible_run.run_script('automation/jobs/test/'+name,'')
+        return data
 
-
+    def execute_job(self,name):
+        data = self.ansible_run.run_script('automation/jobs/'+name,'')
         return data
     # def script_test(self):
     #     data = self.ansible_run.run_script('operSystem/test.sh','')

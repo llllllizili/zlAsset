@@ -179,14 +179,14 @@ def sync_detail(request,id):
             cpu_model=None
             disk_data=None
             network_data=None
-            netstat_data=None
+            netstat_dict=None
     else:
         Cert_data = None
         sync_data = None
         cpu_model=None
         disk_data=None
         network_data=None
-        netstat_data=None
+        netstat_dict=None
     return render(request,'operSystem/sync_detail.html',{
         'operSystem_data':operSystem_data,
         'Cert_data':Cert_data,

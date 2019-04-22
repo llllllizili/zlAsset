@@ -150,3 +150,45 @@ def job_detail(request,id):
     jobs_data =Jobs.objects.get(id=id)
     script_content=jobs_data.script_content
     return render(request,'automation/job_detail.html',{'jobs_data':jobs_data})
+def job_execute(request,id):
+    jobs_data=Jobs.objects.get(id=id)
+    job_name=jobs_data.name
+    script_name=jobs_data.script_name
+    script_description=jobs_data.description
+    lan_postfix=script_name.split('.')[1]
+    if lan_postfix == 'py':
+        script_language = 'python'
+    if lan_postfix == 'sh':
+        script_language = 'shell'
+    if lan_postfix == 'bat':
+        script_language = 'bat'
+    if lan_postfix == 'ps1':
+        script_language == 'powershell'
+    if lan_postfix=='py' or lan_postfix=='sh':
+        cert_data=osCert.objects.filter(os_type='linux')
+    if lan_postfix=='bat' or lan_postfix=='ps1':
+        cert_data=osCert.objects.filter(os_type='windows')
+    return render(request,'automation/job_execute.html',{
+            'job_name':job_name,'script_name':script_name,
+            'script_description':script_description,
+            'script_language':script_language,
+            'cert_data':cert_data
+        })
+def job_execute_action(request):
+    if request.method == 'POST':
+        script_name=request.POST['script_name']
+        host=request.POST.getlist('host')
+        res=list()
+        for ip in host:
+            cert_data=osCert.objects.get(ip=ip)
+            remote_run=RunAutomation(
+                ip = cert_data.ip,
+                username = cert_data.username,
+                password = bytes.decode(base64.b64decode(bytes(cert_data.password,encoding='utf-8'))),
+                os_type = cert_data.os_type,
+                port=cert_data.port
+                )
+            jobs_data = remote_run.execute_job(script_name)
+            jobs_data['ip'] =ip
+            res.append(jobs_data)
+    return render(request,'automation/test_job.html',{'res':res})

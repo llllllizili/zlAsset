@@ -284,8 +284,10 @@ class MyApi(object):
                     self.result_all['failed'][host] = dict()
                 task_name = result.task_name
                 _result = result._result
+                print(_result)
                 if not self.result_all['failed'][host].get(task_name):
                     self.result_all['failed'][host][task_name] = list()
+
                 self.result_all['failed'][host][task_name]=(_result['stdout'])
 
         for host, results in self.callback.status_unreachable.items():

@@ -138,7 +138,7 @@ AUTH_PASSWORD_VALIDATORS = [
 #celery
 
 CELERY_TIMEZONE='Asia/Shanghai' #与下面TIME_ZONE应该一致
-BROKER_URL='redis://:123qweASD@192.168.1.244:6379/1'   #消息队列
+BROKER_URL='redis://:123qweASD@172.16.17.129:6379/1'   #消息队列
 #CELERY_RESULT_BACKEND = 'redis://:123qweASD@192.168.1.244:6379/2' #任务结果存档到redis
 CELERY_RESULT_BACKEND = 'django-db' #存储到数据库
 CELERY_TASK_SERIALIZER = 'json' #任务序列化
